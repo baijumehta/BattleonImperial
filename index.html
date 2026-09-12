@@ -58,6 +58,9 @@
 
 <!-- ============================================================= HERO -- -->
 <section class="hero" id="top">
+  <div class="hero__bg">
+    <img src="assets/img/hero.jpg" alt="" fetchpriority="high" decoding="async">
+  </div>
   <div class="wrap">
     <div class="hero__inner">
       <p class="hero__badge"><b>New</b> Inaugural Season &middot; 20 Teams Only</p>
@@ -164,6 +167,21 @@
       </article>
     </div>
 
+    <div class="gallery reveal">
+      <figure>
+        <img src="assets/img/gallery-hs.jpg" alt="Two high school girls' lacrosse players in goggles running stride for stride during a game." loading="lazy" decoding="async">
+        <figcaption>Pool play into a bracket &mdash; every game counts</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/gallery-run.jpg" alt="A women's lacrosse player carrying the ball in her stick as she drives upfield." loading="lazy" decoding="async">
+        <figcaption>Three guaranteed games per team</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/gallery-celebrate.jpg" alt="Two girls' lacrosse teammates embracing on the field to celebrate after a goal." loading="lazy" decoding="async">
+        <figcaption>One site, one weekend, short drive home</figcaption>
+      </figure>
+    </div>
+
     <div class="split" style="margin-top: clamp(48px, 7vw, 84px);">
       <div class="reveal">
         <p class="eyebrow">Why Teams Are Switching</p>
@@ -201,6 +219,20 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ======================================================= PHOTO BAND -- -->
+<section class="band">
+  <div class="band__img">
+    <img src="assets/img/band.jpg" alt="Three women's lacrosse players battling for possession of the ball in the open field." loading="lazy" decoding="async">
+  </div>
+  <div class="wrap">
+    <blockquote>
+      Premier lacrosse belongs <em>in Orange County</em> &mdash; not at the other end of a
+      ninety-minute drive.
+    </blockquote>
+    <cite>Battle on Imperial &middot; Anaheim Hills</cite>
   </div>
 </section>
 
@@ -636,6 +668,12 @@
             <textarea id="notes" name="notes" placeholder="Number of teams you'd enter, scheduling constraints, questions about the format&hellip;"></textarea>
           </div>
 
+          <!-- Honeypot: hidden from people, irresistible to bots. -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
           <label class="form__consent">
             <input type="checkbox" id="consent" name="consent" required>
             <span>Send me tournament updates, including dates, schedule releases, and when registration opens.</span>
@@ -824,6 +862,7 @@
   </div>
 </footer>
 
+<script src="assets/config.js"></script>
 <script src="assets/script.js"></script>
 </body>
 </html>

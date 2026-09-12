@@ -169,33 +169,31 @@
   var status = document.getElementById('formStatus');
 
   if (form && status) {
+    var cfg = window.BOI_CONFIG || {};
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var btnLabel = submitBtn ? submitBtn.textContent : '';
+    var sending = false;
+
     var show = function (msg, isError) {
       status.textContent = msg;
       status.classList.add('is-shown');
       status.classList.toggle('is-error', !!isError);
     };
 
-    form.addEventListener('submit', function (e) {
-      // Native validation first.
-      if (!form.checkValidity()) {
-        e.preventDefault();
-        form.reportValidity();
-        return;
-      }
+    var setBusy = function (busy) {
+      sending = busy;
+      if (!submitBtn) return;
+      submitBtn.disabled = busy;
+      submitBtn.textContent = busy ? 'Sending…' : btnLabel;
+    };
 
-      // If the form has been wired to a real endpoint (Formspree, Netlify,
-      // Google Forms, etc.), let the browser POST it normally.
-      if (form.getAttribute('action')) return;
+    var get = function (name) {
+      var f = form.elements[name];
+      return f && f.value ? f.value.trim() : '';
+    };
 
-      // Otherwise fall back to composing an email — works with no backend.
-      e.preventDefault();
-
-      var to = form.getAttribute('data-mailto') || 'info@battleonimperial.com';
-      var get = function (name) {
-        var f = form.elements[name];
-        return f && f.value ? f.value.trim() : '';
-      };
-
+    var mailtoFallback = function (note) {
+      var to = cfg.CONTACT_EMAIL || form.getAttribute('data-mailto') || 'info@battleonimperial.com';
       var school = get('school');
       var lines = [
         'Team: ' + school,
@@ -210,14 +208,84 @@
         '— Sent from the Battle on Imperial website'
       ];
 
-      var href = 'mailto:' + to +
+      window.location.href = 'mailto:' + to +
         '?subject=' + encodeURIComponent('Battle on Imperial — Team Interest: ' + school) +
         '&body=' + encodeURIComponent(lines.join('\n'));
 
-      window.location.href = href;
+      show(note || 'Thanks! Your email app should be opening with your team details ' +
+           'filled in — just hit send and a tournament coordinator will follow up.');
+    };
 
-      show('Thanks! Your email app should be opening with your team details filled in — ' +
-           'just hit send and a tournament coordinator will follow up.');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (sending) return;
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Honeypot: a real person never fills a field they cannot see.
+      // Pretend it worked so bots get no signal about being caught.
+      if (get('website')) {
+        show('Thanks! A tournament coordinator will follow up shortly.');
+        form.reset();
+        return;
+      }
+
+      var url = (cfg.SUPABASE_URL || '').replace(/\/+$/, '');
+      var key = cfg.SUPABASE_ANON_KEY || '';
+
+      // Not wired to Supabase yet — compose an email instead.
+      if (!url || !key) {
+        mailtoFallback();
+        return;
+      }
+
+      setBusy(true);
+      status.classList.remove('is-shown');
+
+      fetch(url + '/rest/v1/registrations', {
+        method: 'POST',
+        headers: {
+          'apikey': key,
+          'Authorization': 'Bearer ' + key,
+          'Content-Type': 'application/json',
+          // RLS grants INSERT only, with no SELECT — asking PostgREST to return
+          // the new row would make it try to read back and fail.
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          school: get('school'),
+          level: get('level'),
+          contact: get('contact'),
+          email: get('email'),
+          phone: get('phone') || null,
+          notes: get('notes') || null,
+          consent: !!(form.elements.consent && form.elements.consent.checked)
+        })
+      })
+        .then(function (res) {
+          if (!res.ok) {
+            return res.text().then(function (body) {
+              throw new Error('HTTP ' + res.status + ' ' + body.slice(0, 200));
+            });
+          }
+          setBusy(false);
+          form.reset();
+          show('Thanks — your team is on the list. A tournament coordinator will ' +
+               'follow up at the email you gave us with the entry packet and dates.');
+        })
+        .catch(function (err) {
+          setBusy(false);
+          if (window.console && console.warn) {
+            console.warn('[Battle on Imperial] registration POST failed:', err);
+          }
+          // Never lose a submission to a backend problem — hand it to email.
+          mailtoFallback('We could not reach our sign-up system just now, so we have ' +
+            'opened an email with your details instead — please hit send and we will ' +
+            'pick it up from there.');
+        });
     });
   }
 

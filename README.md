@@ -7,9 +7,13 @@ Anaheim, CA 92807.
 Plain static HTML/CSS/JS. No build step, no dependencies.
 
 ```
-index.html          the whole site (one page, anchored sections)
-assets/styles.css   all styling; brand colors are CSS variables at the top
-assets/script.js    mobile nav, scroll reveals, stat count-up, interest form
+index.html            the whole site (one page, anchored sections)
+assets/styles.css     all styling; brand colors are CSS variables at the top
+assets/script.js      mobile nav, scroll reveals, stat count-up, interest form
+assets/config.js      Supabase URL + anon key go here
+assets/img/           photos (see CREDITS.md)
+supabase/schema.sql   registrations table + row level security
+dev-server.js         zero-dependency local preview server
 ```
 
 ## Running it locally
@@ -25,26 +29,61 @@ npx serve .
 | What | Where |
 |---|---|
 | Tournament dates (currently "Dates to be announced · Spring 2027") | `index.html` — hero `.hero__note`, and the "When is the tournament?" FAQ |
-| Contact email (currently `info@battleonimperial.com`) | `index.html` — footer, final CTA, and `data-mailto` on the form |
+| Contact email (currently `info@battleonimperial.com`) | `assets/config.js`, plus the footer and final CTA in `index.html` |
+| Supabase URL + anon key | `assets/config.js` |
+| Stock photos → real Canyon team photos | `assets/img/` (see [CREDITS.md](CREDITS.md)) |
 | Number of fields (the map schematic shows two) | `index.html` — the location SVG |
 | Drive-time table — verify against your own routes | `index.html` — `.compare` table |
 | Spectator admission policy | FAQ, "Is there a cost for spectators?" |
 
-## Turning on real registration
+## Registration backend (Supabase)
 
-The interest form currently opens the visitor's email client with their team
-details pre-filled, so it works with no server. To collect submissions instead,
-add an `action` to the form in `index.html`:
+Submissions go to a Supabase table. Until it's configured the form falls back to
+composing an email, so the site works either way.
 
-```html
-<form class="form" id="regForm" action="https://formspree.io/f/YOUR_ID" method="POST">
+**1. Create the table.** In your Supabase project: SQL Editor → New query → paste
+[`supabase/schema.sql`](supabase/schema.sql) → Run.
+
+**2. Add your keys.** Project Settings → API, then fill in
+[`assets/config.js`](assets/config.js):
+
+```js
+window.BOI_CONFIG = {
+  SUPABASE_URL: 'https://YOUR-PROJECT.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJ...',
+  CONTACT_EMAIL: 'info@battleonimperial.com',
+};
 ```
 
-The script detects the `action` attribute and lets the browser POST normally —
-no JS changes needed. Same approach works for Netlify Forms or a Google Form
-endpoint. For card payments, the usual options are Stripe Payment Links or
-TeamSnap/LeagueApps; those can replace the submit button entirely once the
-entry packet is finalized.
+**3. Read submissions** in Table Editor → `registrations`, or:
+
+```sql
+select created_at, school, level, contact, email, phone, notes, status
+from public.registrations order by created_at desc;
+```
+
+### Why the anon key in public source is fine
+
+That key is *designed* to be public — it identifies the project, it doesn't
+grant trust. Row Level Security decides what it can do, and the schema grants
+the anonymous role `INSERT` and nothing else. There is no `SELECT` policy, so
+nobody can read other teams' submissions back out through the API. You read them
+in the dashboard, which uses the service role and bypasses RLS.
+
+**Never put the `service_role` key in `config.js`** — that one does bypass RLS.
+
+### Spam handling
+
+The form carries an off-screen honeypot field. If it's filled the submission is
+silently dropped with a normal-looking success message, so bots get no signal.
+If you start seeing spam anyway, Supabase supports Turnstile/hCaptcha, or you can
+put a Cloudflare Worker in front of the insert.
+
+### Taking payment
+
+Out of scope for the form as written. When the entry packet is final, the usual
+options are a Stripe Payment Link on the confirmation email, or moving entry to
+TeamSnap/LeagueApps and pointing the button there.
 
 ## Branding
 
