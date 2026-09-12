@@ -34,11 +34,20 @@ Hosted on **Vercel**, deploying automatically from `main`:
 Push to `main` and Vercel builds it. There is no build step — it serves the
 repo as static files.
 
-`vercel.json` sets cache headers: photos get a day of freshness plus a week of
-stale-while-revalidate, while CSS and JS stay on `must-revalidate` because their
-filenames aren't content-hashed and a long cache would strand visitors on stale
-code. If you replace a photo and need it live immediately, change the filename
-rather than waiting out the cache.
+`vercel.json` sets cache and security headers:
+
+- **`/assets/img/*`** — one day fresh, then a week of `stale-while-revalidate`.
+  Photos are most of the page weight and rarely change. Renaming a file busts
+  its cache immediately, so swap a photo by changing the filename if you need
+  it live at once.
+- **`/assets/*.css`, `/assets/*.js`** — deliberately left on `must-revalidate`.
+  These filenames aren't content-hashed, so a long cache would strand visitors
+  on stale code after an edit.
+- **Everything** — `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`.
+
+Note that `vercel.json` is validated strictly and JSON has no comments — adding
+a `comment` key to a headers entry makes the whole deployment fail schema
+validation, which silently leaves the previous build serving.
 
 ## Things to fill in before launch
 
