@@ -513,6 +513,65 @@ h2.title {
 .form__status.is-shown { display: block; }
 .form__status.is-error { background: rgba(211,51,51,.07); border-color: rgba(211,51,51,.3); }
 
+/* ------------------------------------------------------ meet the team -- */
+/* 258px keeps all three across down to the 940px mobile-nav breakpoint; at 280
+   the third card orphaned onto its own row between roughly 940 and 980. */
+.people {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 24px;
+}
+.person {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px 26px;
+  display: flex; flex-direction: column;
+  transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.person:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.07);
+}
+.person__avatar {
+  width: 64px; height: 64px; border-radius: 50%; margin-bottom: 20px;
+  display: grid; place-items: center; flex: none;
+  background: linear-gradient(140deg, var(--blue-500), #1a3fb0);
+  box-shadow: 0 8px 22px rgba(46,107,255,.30);
+}
+.person__avatar span {
+  font-family: var(--font-display); font-size: 23px; font-weight: 700;
+  letter-spacing: .06em; color: #fff;
+}
+.person__avatar--amber {
+  background: linear-gradient(140deg, var(--amber), var(--amber-dk));
+  box-shadow: 0 8px 22px rgba(255,176,32,.28);
+}
+.person__avatar--amber span { color: var(--navy-900); }
+.person__avatar--slate {
+  background: linear-gradient(140deg, #5b8cff, #2b3f6b);
+  box-shadow: 0 8px 22px rgba(91,140,255,.24);
+}
+.person h3 {
+  font-family: var(--font-display); font-size: 26px; color: #fff;
+  text-transform: uppercase; letter-spacing: .02em; margin-bottom: 4px;
+}
+.person__role {
+  font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 16px;
+}
+.person__bio { font-size: 15.5px; color: #9fb2cd; margin-bottom: 22px; }
+.person__bio b { color: #dbe6fa; font-weight: 600; }
+.person__link {
+  margin-top: auto; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 16px; border-radius: 8px; text-decoration: none;
+  font-size: 14px; font-weight: 600; color: #c3d0e6;
+  border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05);
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.person__link svg { width: 17px; height: 17px; flex: none; }
+.person__link:hover { color: #fff; border-color: var(--blue-400); background: rgba(46,107,255,.18); }
+
 /* ------------------------------------------------- deposit / balance -- */
 .paysplit { padding: 4px 30px 0; }
 .paysplit__row {
