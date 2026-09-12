@@ -60,6 +60,7 @@ validation, which silently leaves the previous build serving.
 | Number of fields (the map schematic shows two) | `index.html` — the location SVG |
 | Drive-time table — verify against your own routes | `index.html` — `.compare` table |
 | Spectator admission policy | FAQ, "Is there a cost for spectators?" |
+| **Refund policy — have the board sign off** | `index.html` — the `#policy` block |
 
 ## Registration backend (Supabase)
 
@@ -106,9 +107,30 @@ put a Cloudflare Worker in front of the insert.
 
 ### Taking payment
 
-Out of scope for the form as written. When the entry packet is final, the usual
-options are a Stripe Payment Link on the confirmation email, or moving entry to
-TeamSnap/LeagueApps and pointing the button there.
+Payment is handled **outside** the site, by invoice. There is deliberately no
+card checkout in the page.
+
+```
+form submit  ->  registrations row (status: new)
+             ->  coordinator reviews, confirms a spot
+             ->  Stripe invoice for the $250 deposit   (status: contacted)
+             ->  deposit clears                        (status: confirmed)
+             ->  Stripe invoice for the $750 balance, due 30 days out
+```
+
+Why invoices rather than a checkout button: most public high school programs pay
+through a district purchase order, which needs an invoice and a W-9 — not a
+checkout page. Invoices also let a team pay by ACH, which on Stripe costs $5 per
+$1,000 against $29.30 for a card. Across a full 20-team field that is roughly
+$100 versus $586.
+
+Use the `status` column on `registrations` to track where each team is. At 20
+teams, reconciling Stripe against that table by hand is entirely manageable.
+
+If you later want self-serve card payment, it needs two Vercel serverless
+functions — one to create a Stripe Checkout Session, one to receive the webhook
+and mark the row paid (verifying Stripe's signature, and idempotent because
+Stripe retries). That is the only part of this that requires real backend code.
 
 ## Branding
 
@@ -130,3 +152,24 @@ event — fields, officials, athletic training, AI cameras, insurance, and opera
 It does not describe the tournament as a fundraiser or revenue source for Canyon
 Lacrosse. Keep that framing if you edit the Registration section or the
 "Where does the entry fee go?" FAQ.
+
+## The refund policy is a draft
+
+The `#policy` section on the site is a reasonable starting point, not legal
+advice. Before the first dollar arrives, have the booster club board read it and
+decide two things in particular:
+
+1. **Organizer cancellation.** As written, if the tournament is called off before
+   any games are played, teams get everything back including the deposit. That is
+   generous and good for goodwill, but it puts the club on the hook for costs
+   already committed — officials, trainers, and camera rental are largely spent by
+   then. If the club cannot absorb that, change it to a refund less the deposit,
+   or offer a credit toward the following year.
+2. **The 30/60-day thresholds.** These should sit outside the dates you commit to
+   officials and vendors. If you book officials 45 days out, a team withdrawing at
+   40 days with a near-full refund costs you real money.
+
+The site states plainly that the entry fee is not a tax-deductible charitable
+contribution. Keep that line — it is payment for a service, and a 501(c)(3)
+receipt implying otherwise creates a problem. Confirm the specifics with the
+club's treasurer or CPA.

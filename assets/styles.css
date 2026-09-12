@@ -513,6 +513,90 @@ h2.title {
 .form__status.is-shown { display: block; }
 .form__status.is-error { background: rgba(211,51,51,.07); border-color: rgba(211,51,51,.3); }
 
+/* ------------------------------------------------- deposit / balance -- */
+.paysplit { padding: 4px 30px 0; }
+.paysplit__row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--line);
+}
+.paysplit__row:last-child { border-bottom: 0; }
+.paysplit__row strong {
+  font-family: var(--font-display); font-size: 26px; color: var(--ink);
+  letter-spacing: .01em; margin-right: 8px;
+}
+.paysplit__row span { font-size: 14.5px; color: var(--body); }
+.paysplit__row em { font-style: normal; font-size: 13px; color: var(--muted); text-align: right; }
+
+/* ---------------------------------------------------------- how it works -- */
+.steps { margin-top: clamp(52px, 7vw, 84px); }
+.steps__title {
+  font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 32px);
+  text-transform: uppercase; letter-spacing: .02em; margin-bottom: 26px;
+}
+.steps__list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px;
+}
+.steps__list li {
+  position: relative; margin: 0; padding: 26px 22px 24px;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.steps__n {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--navy-900); color: #fff; margin-bottom: 14px;
+  font-family: var(--font-display); font-size: 17px; font-weight: 700;
+}
+.steps__list h4 { font-size: 17.5px; margin: 0 0 6px; color: var(--ink); }
+.steps__list p { margin: 0; font-size: 15px; color: var(--body); }
+.steps__foot { margin: 20px 0 0; font-size: 14.5px; color: var(--muted); max-width: 70ch; }
+
+/* ------------------------------------------------------ refund policy -- */
+.policy {
+  margin-top: clamp(48px, 6vw, 72px);
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface-2); overflow: hidden;
+}
+.policy__head { padding: clamp(26px, 3.6vw, 36px) clamp(24px, 3.6vw, 38px) 0; }
+.policy__head h3 {
+  font-family: var(--font-display); font-size: clamp(22px, 3vw, 30px);
+  text-transform: uppercase; letter-spacing: .02em; margin-bottom: 10px;
+}
+.policy__head p { font-size: 15.5px; max-width: 78ch; margin-bottom: 0; }
+
+.policy__grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 30px);
+  padding: clamp(24px, 3.4vw, 34px) clamp(24px, 3.6vw, 38px);
+}
+@media (max-width: 780px) { .policy__grid { grid-template-columns: 1fr; } }
+.policy__col {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 24px 22px;
+}
+.policy__col h4 {
+  font-size: 16px; margin-bottom: 16px; color: var(--ink);
+  padding-bottom: 12px; border-bottom: 2px solid var(--amber);
+}
+.tiers { margin: 0; }
+.tiers > div { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.tiers > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.tiers dt { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+.tiers dd { margin: 0; font-size: 15.5px; color: var(--body); }
+.tiers dd b { color: var(--ink); }
+
+.policy__notes {
+  list-style: none; margin: 0; padding: 0 clamp(24px, 3.6vw, 38px) clamp(26px, 3.6vw, 34px);
+}
+.policy__notes li {
+  position: relative; padding-left: 20px; margin-bottom: 11px; font-size: 14.5px;
+}
+.policy__notes li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--blue-500);
+}
+.policy__notes li:last-child { margin-bottom: 0; }
+.policy__notes b { color: var(--ink); }
+
 /* ------------------------------------------------------------------ faq -- */
 .faq { max-width: 840px; margin-inline: auto; }
 .faq details {
