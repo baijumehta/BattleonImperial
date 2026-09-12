@@ -14,15 +14,31 @@ assets/config.js      Supabase URL + anon key go here
 assets/img/           photos (see CREDITS.md)
 supabase/schema.sql   registrations table + row level security
 dev-server.js         zero-dependency local preview server
+vercel.json           cache + security headers for the deployed site
 ```
 
 ## Running it locally
 
-Just open `index.html` in a browser. Or serve it:
+Just open `index.html` in a browser. Or serve it (no install needed):
 
 ```bash
-npx serve .
+node dev-server.js
 ```
+
+## Deployment
+
+Hosted on **Vercel**, deploying automatically from `main`:
+
+<https://battleon-imperial.vercel.app>
+
+Push to `main` and Vercel builds it. There is no build step — it serves the
+repo as static files.
+
+`vercel.json` sets cache headers: photos get a day of freshness plus a week of
+stale-while-revalidate, while CSS and JS stay on `must-revalidate` because their
+filenames aren't content-hashed and a long cache would strand visitors on stale
+code. If you replace a photo and need it live immediately, change the filename
+rather than waiting out the cache.
 
 ## Things to fill in before launch
 

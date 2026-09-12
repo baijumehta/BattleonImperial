@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "comment": "Photos are the bulk of the page weight and rarely change. One day fresh, then a week of serving stale while revalidating in the background. Renaming a file busts its cache immediately, so swap photos by changing the filename if you need it live at once.",
+      "source": "/assets/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "comment": "CSS and JS are deliberately NOT cached long. The filenames are not content-hashed, so a long max-age would strand visitors on stale code after an edit. Vercel's edge still caches these; only the browser revalidates.",
+      "source": "/assets/(.*)\\.(css|js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
+  ]
+}
