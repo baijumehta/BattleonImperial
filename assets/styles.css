@@ -523,8 +523,7 @@ h2.title {
   background: rgba(255,255,255,.045);
   border: 1px solid rgba(255,255,255,.13);
   border-radius: var(--radius-lg);
-  padding: 32px 28px 26px;
-  display: flex; flex-direction: column;
+  padding: 32px 28px;
   transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
 }
 .person:hover {
@@ -559,18 +558,8 @@ h2.title {
   font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
   color: var(--amber); margin-bottom: 16px;
 }
-.person__bio { font-size: 15.5px; color: #9fb2cd; margin-bottom: 22px; }
+.person__bio { font-size: 15.5px; color: #9fb2cd; margin-bottom: 0; }
 .person__bio b { color: #dbe6fa; font-weight: 600; }
-.person__link {
-  margin-top: auto; align-self: flex-start;
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 9px 16px; border-radius: 8px; text-decoration: none;
-  font-size: 14px; font-weight: 600; color: #c3d0e6;
-  border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05);
-  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
-}
-.person__link svg { width: 17px; height: 17px; flex: none; }
-.person__link:hover { color: #fff; border-color: var(--blue-400); background: rgba(46,107,255,.18); }
 
 /* ------------------------------------------------- deposit / balance -- */
 .paysplit { padding: 4px 30px 0; }
