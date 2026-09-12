@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "battle-on-imperial",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["dev-server.js", "4321"],
+      "port": 4321
+    }
+  ]
+}
