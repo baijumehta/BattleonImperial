@@ -53,7 +53,7 @@ validation, which silently leaves the previous build serving.
 
 | What | Where |
 |---|---|
-| Tournament dates (currently "Dates to be announced · Spring 2027") | `index.html` — hero `.hero__note`, and the "When is the tournament?" FAQ |
+| Exact weekend (the site says "March 2027", weekend TBA) | `index.html` — hero badge, `.hero__rule`, `.hero__note`, the "When is the tournament?" FAQ, and the `description` + `og:description` meta tags |
 | Contact email (currently `info@battleonimperial.com`) | `assets/config.js`, plus the footer and final CTA in `index.html` |
 | Supabase URL + anon key | `assets/config.js` |
 | Stock photos → real Canyon team photos | `assets/img/` (see [CREDITS.md](CREDITS.md)) |

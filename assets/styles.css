@@ -233,6 +233,13 @@ h2.title {
   font-family: var(--font-display); font-size: clamp(15px, 2.2vw, 19px); font-weight: 600;
   letter-spacing: .3em; text-transform: uppercase; color: #9fb6d8; padding-left: .3em;
 }
+/* On narrow screens the flanking rules leave the date line too little room and
+   it wraps to three cramped lines. Drop them and give the text the full width. */
+@media (max-width: 560px) {
+  .hero__rule span { display: none; }
+  .hero__rule b { padding-left: 0; line-height: 1.5; letter-spacing: .16em; }
+}
+
 .hero__sub { font-size: clamp(17px, 2.3vw, 21px); color: #c6d4ea; max-width: 640px; margin: 0 auto 34px; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 .hero__note { margin: 22px 0 0; font-size: 14px; color: #8fa3c2; }
