@@ -27,6 +27,46 @@
   // Filter state lives out here so a refresh does not reset the user's choice.
   var filterLevel = 'all', filterTeam = 'all';
 
+  /* ------------------------------------------------- remembered filter -- */
+  // A parent checking one team on match day should not re-pick it every visit.
+  // Stored per browser only; nothing here is shared or sent anywhere.
+  var FILTER_KEY = 'boi.schedule.filter';
+
+  function loadFilter() {
+    try {
+      var raw = localStorage.getItem(FILTER_KEY);
+      if (!raw) return;
+      var saved = JSON.parse(raw);
+      if (saved && typeof saved === 'object') {
+        filterLevel = saved.level || 'all';
+        filterTeam = saved.team || 'all';
+      }
+    } catch (e) { /* private mode, or blocked storage — just use the defaults */ }
+  }
+
+  function saveFilter() {
+    try {
+      if (filterLevel === 'all' && filterTeam === 'all') localStorage.removeItem(FILTER_KEY);
+      else localStorage.setItem(FILTER_KEY, JSON.stringify({ level: filterLevel, team: filterTeam }));
+    } catch (e) { /* not worth surfacing; the page works either way */ }
+  }
+
+  // A remembered team that no longer exists would filter everything out and
+  // leave the page looking broken, so drop anything the current data cannot
+  // satisfy. Happens whenever the team list is replaced.
+  function validateFilter(teams) {
+    if (filterTeam !== 'all' && !teams.some(function (t) { return t.id === filterTeam; })) {
+      filterTeam = 'all';
+      saveFilter();
+    }
+    if (filterLevel !== 'all' && !teams.some(function (t) { return t.level === filterLevel; })) {
+      filterLevel = 'all';
+      saveFilter();
+    }
+  }
+
+  loadFilter();
+
   /* ------------------------------------------------------------ helpers -- */
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -164,6 +204,7 @@
   function renderSchedule(teams, games) {
     var byId = {};
     teams.forEach(function (t) { byId[t.id] = t; });
+    validateFilter(teams);
 
     // Controls
     var bar = document.getElementById('filters');
@@ -194,11 +235,17 @@
       var reset = el('button', 'btn btn--outline filter__reset', 'Show all');
       bar.appendChild(reset);
 
-      lvl.addEventListener('change', function () { filterLevel = lvl.value; draw(); });
-      tm.addEventListener('change', function () { filterTeam = tm.value; draw(); });
+      lvl.addEventListener('change', function () { filterLevel = lvl.value; saveFilter(); draw(); });
+      tm.addEventListener('change', function () { filterTeam = tm.value; saveFilter(); draw(); });
       reset.addEventListener('click', function () {
-        filterLevel = 'all'; filterTeam = 'all'; lvl.value = 'all'; tm.value = 'all'; draw();
+        filterLevel = 'all'; filterTeam = 'all'; lvl.value = 'all'; tm.value = 'all';
+        saveFilter(); draw();
       });
+
+      // Show the remembered choice in the controls, or the selects would read
+      // "All teams" while the list below is filtered.
+      lvl.value = filterLevel;
+      tm.value = filterTeam;
     }
 
     function matches(g) {
@@ -211,6 +258,11 @@
     }
 
     function draw() {
+      var lvlEl = document.getElementById('f-level');
+      var tmEl = document.getElementById('f-team');
+      if (lvlEl && lvlEl.value !== filterLevel) lvlEl.value = filterLevel;
+      if (tmEl && tmEl.value !== filterTeam) tmEl.value = filterTeam;
+
       root.innerHTML = '';
       var shown = games.filter(matches);
 
