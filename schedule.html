@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule | Battle on Imperial</title>
+<meta name="description" content="Game schedule for Battle on Imperial — five round-robin pools across three fields, one day in March 2027 at Canyon High School, Anaheim Hills.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#061021">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23061021'/%3E%3Cpath d='M20 46 L44 18' stroke='%23ffb020' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M20 18 L44 46' stroke='%232e6bff' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0b1b33" stroke="rgba(255,255,255,.18)"/>
+        <path d="M19 47 L45 17" stroke="#ffb020" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M19 17 L45 47" stroke="#5b8cff" stroke-width="5.5" stroke-linecap="round"/>
+        <circle cx="32" cy="32" r="5" fill="#fff"/>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__name">Battle on Imperial</span>
+        <span class="brand__sub">Anaheim Hills, CA</span>
+      </span>
+    </a>
+
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+      <span></span>
+    </button>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html">Tournament</a></li>
+      <li><a class="is-active" href="schedule.html">Schedule</a></li>
+      <li><a href="standings.html">Standings</a></li>
+      <li><a href="index.html#location">Location</a></li>
+      <li><a class="btn btn--primary nav__cta" href="index.html#register">Reserve a Spot</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="pagehead">
+  <div class="wrap">
+    <p class="eyebrow">One Day &middot; Three Fields</p>
+    <h1>Schedule</h1>
+    <p class="lede">
+      Five round-robin pools, thirty games, first whistle at 8:00 AM. Every team plays
+      three &mdash; find yours below.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <p class="sample-banner" role="note">
+    <b>Sample schedule.</b> These are invented teams and results, published so the
+    tournament staff can review the page before real entries exist. Nothing here is
+    a real fixture.
+  </p>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="board" id="board" data-mode="schedule"></div>
+
+  <p class="board__legend">
+    Pools A, B and C are Varsity. Pools D and E are JV. Times are approximate and may
+    shift on the day &mdash; check in at the tournament table on arrival.
+  </p>
+</div>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__bottom" style="border-top:0; padding-top:0;">
+      <span>&copy; <span id="year">2026</span> Canyon High School Lacrosse Booster Club.</span>
+      <span><a href="index.html">Back to the tournament</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/script.js"></script>
+<script src="assets/tournament.js"></script>
+</body>
+</html>
