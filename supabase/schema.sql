@@ -10,9 +10,9 @@ create table if not exists public.registrations (
   created_at  timestamptz not null default now(),
 
   school      text not null check (char_length(school) between 2 and 120),
-  level       text not null check (level in (
-                'Boys Varsity', 'Boys JV', 'Girls Varsity', 'Girls JV', 'Multiple teams'
-              )),
+  -- Girls-only event, so gender is not part of the value. Matches the
+  -- Varsity / JV vocabulary used by tournament_teams.
+  level       text not null check (level in ('Varsity', 'JV', 'Multiple teams')),
   contact     text not null check (char_length(contact) between 2 and 120),
   email       text not null check (
                 char_length(email) <= 200
