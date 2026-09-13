@@ -60,14 +60,14 @@
   }
 
   /* --------------------------------------------------------- standings -- */
-  // Sorted by wins, then goal difference, then goals for, then name.
+  // Ranked on points (win 2, tie 1), then goal difference, then goals for.
   // Head-to-head is deliberately not applied here: with a 3-game round robin
   // it resolves only some ties, and the entry packet is where the official
   // tiebreaker order belongs.
   function computeStandings(teams, games) {
     var rows = {};
     teams.forEach(function (t) {
-      rows[t.id] = { team: t, p: 0, w: 0, l: 0, gf: 0, ga: 0 };
+      rows[t.id] = { team: t, p: 0, w: 0, l: 0, ties: 0, gf: 0, ga: 0 };
     });
 
     games.forEach(function (g) {
@@ -79,14 +79,16 @@
       a.gf += g.away_score; a.ga += g.home_score;
       if (g.home_score > g.away_score) { h.w++; a.l++; }
       else if (g.away_score > g.home_score) { a.w++; h.l++; }
+      else { h.ties++; a.ties++; }   // pool play has no overtime — ties are real
     });
 
     return Object.keys(rows).map(function (k) {
       var r = rows[k];
       r.gd = r.gf - r.ga;
+      r.pts = r.w * 2 + r.ties;   // ranking on wins alone would tie 2-0-1 with 2-1-0
       return r;
     }).sort(function (x, y) {
-      return (y.w - x.w) || (y.gd - x.gd) || (y.gf - x.gf)
+      return (y.pts - x.pts) || (y.gd - x.gd) || (y.gf - x.gf)
         || x.team.name.localeCompare(y.team.name);
     });
   }
@@ -122,6 +124,7 @@
         '<th scope="col" title="Games played">GP</th>' +
         '<th scope="col" title="Wins">W</th>' +
         '<th scope="col" title="Losses">L</th>' +
+        '<th scope="col" title="Ties">T</th>' +
         '<th scope="col" title="Goals for">GF</th>' +
         '<th scope="col" title="Goals against">GA</th>' +
         '<th scope="col" title="Goal difference">GD</th>' +
@@ -137,7 +140,7 @@
         name.appendChild(el('span', 'name', r.team.name));
         tr.appendChild(name);
 
-        [r.p, r.w, r.l, r.gf, r.ga].forEach(function (v) {
+        [r.p, r.w, r.l, r.ties, r.gf, r.ga].forEach(function (v) {
           tr.appendChild(el('td', null, String(v)));
         });
         var gd = el('td', 'c-gd ' + (r.gd > 0 ? 'is-pos' : r.gd < 0 ? 'is-neg' : ''),
