@@ -274,7 +274,7 @@ h2.title {
 .gallery figure {
   margin: 0; position: relative; overflow: hidden;
   border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
-  aspect-ratio: 4 / 5; background: var(--surface-2);
+  aspect-ratio: 4 / 3; background: var(--surface-2);
 }
 .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.3,1); }
 .gallery figure:hover img { transform: scale(1.055); }
@@ -285,11 +285,13 @@ h2.title {
 }
 @media (max-width: 780px) {
   .gallery { grid-template-columns: 1fr 1fr; }
-  .gallery figure:last-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  /* Only stretch the last tile when it would otherwise sit alone in a row.
+     With an even number of photos it must stay in the grid. */
+  .gallery figure:last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 }
 @media (max-width: 460px) {
   .gallery { grid-template-columns: 1fr; }
-  .gallery figure, .gallery figure:last-child { grid-column: auto; aspect-ratio: 4 / 3; }
+  .gallery figure, .gallery figure:last-child:nth-child(odd) { grid-column: auto; aspect-ratio: 4 / 3; }
 }
 
 /* ---------------------------------------------------------- photo band -- */

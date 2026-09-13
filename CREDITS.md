@@ -1,24 +1,44 @@
 # Photo credits
 
-All photos are free-to-use stock under licenses that permit commercial use
-without attribution. Credit is given here anyway as good practice.
+All photography on the site is from the Canyon High School girls lacrosse
+program's own 2025–26 season, supplied by the booster club.
 
-| File | Source | Photographer | License |
-|---|---|---|---|
-| `assets/img/hero.jpg` | [Unsplash](https://unsplash.com/photos/women-playing-lacrosse-at-the-open-field-kr-DQLN5RDY) | Jeffrey F Lin ([@jeffreyflin](https://unsplash.com/@jeffreyflin)) | Unsplash License |
-| `assets/img/band.jpg` | [Unsplash](https://unsplash.com/photos/group-of-woman-playing-lacrosse-CUK8i7lr3l8) | Jeffrey F Lin ([@jeffreyflin](https://unsplash.com/@jeffreyflin)) | Unsplash License |
-| `assets/img/gallery-run.jpg` | [Unsplash](https://unsplash.com/photos/woman-lacrosse-player-running-on-field-at-daytime-ySOHlhijmfM) | Jeffrey F Lin ([@jeffreyflin](https://unsplash.com/@jeffreyflin)) | Unsplash License |
-| `assets/img/gallery-hs.jpg` | [Pexels](https://www.pexels.com/photo/woman-and-girl-playing-lacrosse-207714/) | Pixabay | Pexels License |
-| `assets/img/gallery-celebrate.jpg` | [Pexels](https://www.pexels.com/photo/man-hugging-woman-on-field-262491/) | Pixabay | Pexels License |
+| File | Shows |
+|---|---|
+| `assets/img/hero-canyon.jpg` | Canyon attacker driving past a defender |
+| `assets/img/band-canyon.jpg` | Two players leaping for the draw, hills behind |
+| `assets/img/gallery-draw.jpg` | Close-up of the draw, sticks crossed |
+| `assets/img/gallery-save.jpg` | Goalkeeper reaching to make a save |
+| `assets/img/gallery-goalie.jpg` | Goalkeeper set in front of the goal |
+| `assets/img/gallery-squad.jpg` | Five players outside the school |
+| `assets/img/gallery-balls.jpg` | Balls lined up along the practice line |
+| `assets/img/gallery-team.jpg` | The squad together in front of the school |
 
-## Worth replacing
+Originals came from the club's Dropbox and are untouched apart from being
+resized for the web (hero and band 2000px on the long edge, gallery 1400px,
+JPEG quality 78–80). Total weight on the page is about 1.7 MB.
 
-These are stock photos of other programs' players. As soon as the booster club
-has its own game photography, swap these out — real Canyon players and a real
-Canyon field will always sell the tournament better than stock, and it avoids
-any question about using images of identifiable minors from elsewhere in
-promotional material.
+## Before these go in front of a wider audience
 
-To swap: drop a replacement at the same path and filename, or change the `src`
-in `index.html`. Keep roughly the same aspect ratio — the hero and band images
-are wide crops, the gallery tiles are 4:5.
+**Media releases.** These are identifiable minors on a public website. Most
+districts require a signed photo release before a student's image is used in
+promotional material, and some families opt out. Worth checking the roster
+against whatever release the school holds before the site is promoted beyond
+the booster club.
+
+**Two photos were deliberately left out.** The 2026 Varsity and JV banner
+portraits in the Dropbox folder carry an "EPIC IMAGES" watermark. Those are a
+professional photographer's work, usually licensed to families for personal use
+rather than to the club for marketing. Get written permission before publishing
+them.
+
+**Unused but available.** The Dropbox folder holds 25 photos; eight are on the
+site. The rest include more game action, several player group shots and a video.
+Ask if you want the selection changed.
+
+## Replacing a photo
+
+Drop a replacement at the same path and filename, keeping a similar aspect
+ratio — the hero and band are wide crops, the gallery tiles are 4:3. Because
+`vercel.json` caches `/assets/img/*` for a day, **change the filename** if you
+need the new image live immediately, and update the `src` in `index.html`.
