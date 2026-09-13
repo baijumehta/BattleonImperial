@@ -4,6 +4,12 @@
    Relies on the tokens and .btn / .field / .table-scroll rules in styles.css.
    ========================================================================== */
 
+/* The UA rule for the hidden attribute is [hidden]{display:none}, specificity
+   0,1,0 — exactly the same as a class. Any later class rule that sets display
+   (.login sets grid, .tabs sets flex) therefore beats it and the element stays
+   on screen with hidden="" set. This must come first and carry !important. */
+[hidden] { display: none !important; }
+
 .adminbody { background: var(--surface-2); }
 
 .toast {
