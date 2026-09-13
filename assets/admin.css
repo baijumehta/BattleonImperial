@@ -178,3 +178,22 @@
   .adm-side { flex: 1 1 100%; }
   .adm-status { width: 100%; }
 }
+
+/* ---------------------------------------------------- load failure box -- */
+.loaderr {
+  background: #fff; border: 1px solid rgba(194,59,78,.45);
+  border-left: 4px solid #c23b4e; border-radius: 6px;
+  padding: 18px 20px; margin-bottom: 22px;
+}
+.loaderr strong { display: block; color: #a32438; font-size: 16px; margin-bottom: 8px; }
+.loaderr p { margin: 0 0 6px; font-size: 14px; color: var(--body); }
+.loaderr code {
+  display: block; font-family: ui-monospace, Consolas, monospace; font-size: 13px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px;
+  padding: 9px 11px; color: var(--ink); overflow-x: auto; margin-bottom: 12px;
+}
+.loaderr code.inline {
+  display: inline-block; margin: 4px 0 0; padding: 3px 7px; font-size: 12.5px;
+}
+.loaderr__hint { font-size: 13.5px; color: var(--muted); margin-bottom: 0; }
+.loaderr__hint b { color: var(--ink); }

@@ -75,6 +75,18 @@
 
   <main class="adminmain">
 
+    <div class="loaderr" id="loadError" hidden>
+      <strong>Signed in, but the data would not load.</strong>
+      <p>The server said:</p>
+      <code></code>
+      <p class="loaderr__hint">
+        A permission error here usually means the account is missing from
+        <b>public.admins</b>. Check with:
+        <code class="inline">select email from public.admins;</code>
+      </p>
+    </div>
+
+
     <!-- --------------------------------------------------------- scores -- -->
     <section class="panel" id="panel-scores" role="tabpanel">
       <p class="panel__hint">

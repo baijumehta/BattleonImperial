@@ -391,8 +391,12 @@
     appView.hidden = false;
     whoami.textContent = (session && session.user && session.user.email) || '';
     loadAll().catch(function (err) {
-      // Signed in but not on the allowlist: the tables simply return nothing.
+      // A toast fades; a failure to load the whole panel should not. Leave it
+      // on screen with the actual message, so a problem here is never silent.
       say(err.message || 'Could not load data', 'error');
+      var box = document.getElementById('loadError');
+      box.hidden = false;
+      box.querySelector('code').textContent = err.message || String(err);
     });
   }
 
@@ -402,6 +406,20 @@
     loginMsg.className = 'formmsg is-error';
     return;
   }
+
+  // Nothing should ever fail without the operator seeing why. Without these, a
+  // throw anywhere outside a promise chain leaves the page looking inert.
+  window.addEventListener('error', function (e) {
+    say('Unexpected error: ' + (e.message || 'see console'), 'error');
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var m = (e.reason && e.reason.message) || String(e.reason || '');
+    say('Unexpected error: ' + m, 'error');
+    if (!loginView.hidden) {
+      loginMsg.textContent = m || 'Something went wrong. Check the browser console.';
+      loginMsg.className = 'formmsg is-error';
+    }
+  });
 
   loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
