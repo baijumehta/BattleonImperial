@@ -4,3 +4,6 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Generated social graphics — regenerate with social/make-posts.ps1
+social/out/
