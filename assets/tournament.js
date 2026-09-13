@@ -60,7 +60,7 @@
   }
 
   /* --------------------------------------------------------- standings -- */
-  // Ranked on points (win 2, tie 1), then goal difference, then goals for.
+  // Ranked on points (win 3, tie 1, loss 0), then goal difference, then goals for.
   // Head-to-head is deliberately not applied here: with a 3-game round robin
   // it resolves only some ties, and the entry packet is where the official
   // tiebreaker order belongs.
@@ -85,7 +85,7 @@
     return Object.keys(rows).map(function (k) {
       var r = rows[k];
       r.gd = r.gf - r.ga;
-      r.pts = r.w * 2 + r.ties;   // ranking on wins alone would tie 2-0-1 with 2-1-0
+      r.pts = r.w * 3 + r.ties;   // 3-1-0, with goal difference as the first tiebreak
       return r;
     }).sort(function (x, y) {
       return (y.pts - x.pts) || (y.gd - x.gd) || (y.gf - x.gf)
@@ -125,6 +125,7 @@
         '<th scope="col" title="Wins">W</th>' +
         '<th scope="col" title="Losses">L</th>' +
         '<th scope="col" title="Ties">T</th>' +
+        '<th class="c-pts" scope="col" title="Points — 3 for a win, 1 for a tie">PTS</th>' +
         '<th scope="col" title="Goals for">GF</th>' +
         '<th scope="col" title="Goals against">GA</th>' +
         '<th scope="col" title="Goal difference">GD</th>' +
@@ -140,7 +141,11 @@
         name.appendChild(el('span', 'name', r.team.name));
         tr.appendChild(name);
 
-        [r.p, r.w, r.l, r.ties, r.gf, r.ga].forEach(function (v) {
+        [r.p, r.w, r.l, r.ties].forEach(function (v) {
+          tr.appendChild(el('td', null, String(v)));
+        });
+        tr.appendChild(el('td', 'c-pts', String(r.pts)));
+        [r.gf, r.ga].forEach(function (v) {
           tr.appendChild(el('td', null, String(v)));
         });
         var gd = el('td', 'c-gd ' + (r.gd > 0 ? 'is-pos' : r.gd < 0 ? 'is-neg' : ''),

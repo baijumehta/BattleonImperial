@@ -880,3 +880,7 @@ h2.title {
 .game__status.is-cancelled { color: #a3364a; background: rgba(194,59,78,.12); }
 .game.is-cancelled { background: var(--surface-2); opacity: .72; }
 .game.is-cancelled .game__team { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* Points column — the number that actually decides the pool. */
+.standings .c-pts { font-weight: 700; color: var(--ink); background: rgba(46,107,255,.05); }
+.standings th.c-pts { color: var(--blue-500); background: rgba(46,107,255,.08); }
