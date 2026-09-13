@@ -41,6 +41,12 @@ alter table public.admins enable row level security;
 drop policy if exists "admins read the admin list" on public.admins;
 create policy "admins read the admin list" on public.admins
   for select to authenticated using (public.is_admin());
+
+-- Supabase grants table privileges to anon by default on new tables in the
+-- public schema. RLS already returns nothing to anon here, but there is no
+-- reason for the public role to hold privileges on the admin list at all —
+-- take them away so the table is not one disabled policy from being readable.
+revoke all on public.admins from anon;
 grant select on public.admins to authenticated;
 
 -- -----------------------------------------------------------------------------
