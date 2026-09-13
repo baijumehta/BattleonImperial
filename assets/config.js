@@ -17,9 +17,11 @@
 window.BOI_CONFIG = {
   SUPABASE_URL: 'https://gduaigjclvqsraesnvrh.supabase.co',
 
-  // Paste the project's anon / publishable key here. Until it is filled in,
-  // the registration form falls back to composing an email.
-  SUPABASE_ANON_KEY: '',
+  // Publishable key. Safe in public source by design — it identifies the
+  // project, it does not grant trust. Row Level Security (supabase/schema.sql)
+  // limits it to INSERT on registrations and nothing else: no read, no update,
+  // no delete. Never replace this with the service_role / secret key.
+  SUPABASE_ANON_KEY: 'sb_publishable_OTUf_7xjT8ArfCMsAfzThA_thkqPgPy',
 
   // Where the mailto fallback sends, and the address shown on the site.
   CONTACT_EMAIL: 'info@battleonimperial.com',
