@@ -886,3 +886,9 @@ h2.title {
 /* Points column — the number that actually decides the pool. */
 .standings .c-pts { font-weight: 700; color: var(--ink); background: rgba(46,107,255,.05); }
 .standings th.c-pts { color: var(--blue-500); background: rgba(46,107,255,.08); }
+
+/* The team you picked, so it is findable at a glance in its pool. */
+.standings tr.is-you td { background: rgba(46,107,255,.10); }
+.standings tr.is-you .name { font-weight: 700; color: var(--ink); }
+.standings tr.is-you .c-team { box-shadow: inset 3px 0 0 var(--blue-500); }
+.standings tr.is-leader.is-you td { background: rgba(46,107,255,.16); }

@@ -99,6 +99,57 @@
     });
   }
 
+  /* ------------------------------------------------ shared controls -- */
+  // Schedule and standings offer the same two filters and share one stored
+  // choice, so a parent who picks their team on one page finds the other
+  // already filtered to it.
+  function buildFilters(teams, onChange) {
+    var bar = document.getElementById('filters');
+    if (!bar || bar.dataset.ready) { syncFilters(); return; }
+    bar.dataset.ready = '1';
+
+    var levels = ['all'].concat(teams.map(function (t) { return t.level; })
+      .filter(function (v, i, a) { return a.indexOf(v) === i; }));
+    var lvl = el('select');
+    lvl.id = 'f-level';
+    levels.forEach(function (v) {
+      var o = el('option', null, v === 'all' ? 'All levels' : v);
+      o.value = v; lvl.appendChild(o);
+    });
+
+    var tm = el('select');
+    tm.id = 'f-team';
+    var optAll = el('option', null, 'All teams'); optAll.value = 'all'; tm.appendChild(optAll);
+    teams.slice().sort(function (a, b) { return a.name.localeCompare(b.name); })
+      .forEach(function (t) {
+        var o = el('option', null, t.name); o.value = t.id; tm.appendChild(o);
+      });
+
+    var l1 = el('label', 'filter'); l1.appendChild(el('span', null, 'Level')); l1.appendChild(lvl);
+    var l2 = el('label', 'filter'); l2.appendChild(el('span', null, 'Team')); l2.appendChild(tm);
+    bar.appendChild(l1); bar.appendChild(l2);
+
+    var reset = el('button', 'btn btn--outline filter__reset', 'Show all');
+    bar.appendChild(reset);
+
+    lvl.addEventListener('change', function () { filterLevel = lvl.value; saveFilter(); onChange(); });
+    tm.addEventListener('change', function () { filterTeam = tm.value; saveFilter(); onChange(); });
+    reset.addEventListener('click', function () {
+      filterLevel = 'all'; filterTeam = 'all'; saveFilter(); syncFilters(); onChange();
+    });
+
+    syncFilters();
+  }
+
+  // Keep the controls showing what is actually applied, or they read
+  // "All teams" above a filtered page.
+  function syncFilters() {
+    var lvlEl = document.getElementById('f-level');
+    var tmEl = document.getElementById('f-team');
+    if (lvlEl && lvlEl.value !== filterLevel) lvlEl.value = filterLevel;
+    if (tmEl && tmEl.value !== filterTeam) tmEl.value = filterTeam;
+  }
+
   /* --------------------------------------------------------- standings -- */
   // Ranked on points (win 3, tie 1, loss 0), then goal difference, then goals for.
   // Head-to-head is deliberately not applied here: with a 3-game round robin
@@ -134,9 +185,34 @@
   }
 
   function renderStandings(teams, games) {
+    validateFilter(teams);
+    buildFilters(teams, function () { renderStandings(teams, games); });
+    draw();
+
+    function draw() {
+    syncFilters();
     root.innerHTML = '';
     var pools = {};
     teams.forEach(function (t) { (pools[t.pool] = pools[t.pool] || []).push(t); });
+
+    // Picking a team shows that team's whole pool, not a lone row — the table
+    // only means anything next to the teams it is being measured against.
+    var keep = Object.keys(pools).sort().filter(function (pool) {
+      var members = pools[pool];
+      if (filterTeam !== 'all') {
+        return members.some(function (t) { return t.id === filterTeam; });
+      }
+      if (filterLevel !== 'all') {
+        return members.some(function (t) { return t.level === filterLevel; });
+      }
+      return true;
+    });
+
+    if (!keep.length) {
+      setState('empty', 'No pools match that filter.',
+        'Try a different team or level, or choose Show all.');
+      return;
+    }
 
     var anyFinal = games.some(function (g) { return g.status === 'final'; });
     if (!anyFinal) {
@@ -145,7 +221,7 @@
       );
     }
 
-    Object.keys(pools).sort().forEach(function (pool) {
+    keep.forEach(function (pool) {
       var poolTeams = pools[pool];
       var rows = computeStandings(poolTeams, games);
       var level = poolTeams[0] ? poolTeams[0].level : '';
@@ -175,6 +251,7 @@
       rows.forEach(function (r, i) {
         var tr = el('tr');
         if (i === 0 && r.p > 0) tr.className = 'is-leader';
+        if (r.team.id === filterTeam) tr.classList.add('is-you');
 
         var name = el('td', 'c-team');
         name.appendChild(el('span', 'rank', String(i + 1)));
@@ -198,6 +275,7 @@
       card.appendChild(scroll);
       root.appendChild(card);
     });
+    }
   }
 
   /* ---------------------------------------------------------- schedule -- */
@@ -206,47 +284,7 @@
     teams.forEach(function (t) { byId[t.id] = t; });
     validateFilter(teams);
 
-    // Controls
-    var bar = document.getElementById('filters');
-    if (bar && !bar.dataset.ready) {
-      bar.dataset.ready = '1';
-
-      var levels = ['all'].concat(teams.map(function (t) { return t.level; })
-        .filter(function (v, i, a) { return a.indexOf(v) === i; }));
-      var lvl = el('select');
-      lvl.id = 'f-level';
-      levels.forEach(function (v) {
-        var o = el('option', null, v === 'all' ? 'All levels' : v);
-        o.value = v; lvl.appendChild(o);
-      });
-
-      var tm = el('select');
-      tm.id = 'f-team';
-      var optAll = el('option', null, 'All teams'); optAll.value = 'all'; tm.appendChild(optAll);
-      teams.slice().sort(function (a, b) { return a.name.localeCompare(b.name); })
-        .forEach(function (t) {
-          var o = el('option', null, t.name); o.value = t.id; tm.appendChild(o);
-        });
-
-      var l1 = el('label', 'filter'); l1.appendChild(el('span', null, 'Level')); l1.appendChild(lvl);
-      var l2 = el('label', 'filter'); l2.appendChild(el('span', null, 'Team')); l2.appendChild(tm);
-      bar.appendChild(l1); bar.appendChild(l2);
-
-      var reset = el('button', 'btn btn--outline filter__reset', 'Show all');
-      bar.appendChild(reset);
-
-      lvl.addEventListener('change', function () { filterLevel = lvl.value; saveFilter(); draw(); });
-      tm.addEventListener('change', function () { filterTeam = tm.value; saveFilter(); draw(); });
-      reset.addEventListener('click', function () {
-        filterLevel = 'all'; filterTeam = 'all'; lvl.value = 'all'; tm.value = 'all';
-        saveFilter(); draw();
-      });
-
-      // Show the remembered choice in the controls, or the selects would read
-      // "All teams" while the list below is filtered.
-      lvl.value = filterLevel;
-      tm.value = filterTeam;
-    }
+    buildFilters(teams, draw);
 
     function matches(g) {
       if (filterTeam !== 'all' && g.home_id !== filterTeam && g.away_id !== filterTeam) return false;
@@ -258,11 +296,7 @@
     }
 
     function draw() {
-      var lvlEl = document.getElementById('f-level');
-      var tmEl = document.getElementById('f-team');
-      if (lvlEl && lvlEl.value !== filterLevel) lvlEl.value = filterLevel;
-      if (tmEl && tmEl.value !== filterTeam) tmEl.value = filterTeam;
-
+      syncFilters();
       root.innerHTML = '';
       var shown = games.filter(matches);
 
