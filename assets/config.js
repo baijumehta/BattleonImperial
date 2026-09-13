@@ -15,7 +15,10 @@
  * email instead, so the site keeps working before the database is set up.
  */
 window.BOI_CONFIG = {
-  SUPABASE_URL: '',
+  SUPABASE_URL: 'https://gduaigjclvqsraesnvrh.supabase.co',
+
+  // Paste the project's anon / publishable key here. Until it is filled in,
+  // the registration form falls back to composing an email.
   SUPABASE_ANON_KEY: '',
 
   // Where the mailto fallback sends, and the address shown on the site.
