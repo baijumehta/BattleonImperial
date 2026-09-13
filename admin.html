@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournament Control | Battle on Imperial</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#061021">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/admin.css">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23061021'/%3E%3Cpath d='M20 46 L44 18' stroke='%23ffb020' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M20 18 L44 46' stroke='%232e6bff' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body class="adminbody">
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============================================================== LOGIN -- -->
+<section class="login" id="login">
+  <div class="login__card">
+    <svg class="login__mark" viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="#0b1b33"/>
+      <path d="M19 47 L45 17" stroke="#ffb020" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M19 17 L45 47" stroke="#5b8cff" stroke-width="5.5" stroke-linecap="round"/>
+      <circle cx="32" cy="32" r="5" fill="#fff"/>
+    </svg>
+    <h1>Tournament Control</h1>
+    <p class="login__sub">Staff sign-in. Scores entered here appear on the public standings.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn--primary btn--block" type="submit">Sign In</button>
+      <p class="formmsg" id="loginMsg"></p>
+    </form>
+
+    <p class="login__foot">
+      Accounts are created by an organiser in Supabase. There is no public sign-up.
+      <a href="index.html">Back to the site</a>
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================ APP -- -->
+<div id="app" hidden>
+
+  <header class="adminbar">
+    <div class="adminbar__inner">
+      <div class="adminbar__brand">
+        <strong>Tournament Control</strong>
+        <span id="counts" class="muted"></span>
+      </div>
+      <div class="adminbar__right">
+        <span class="muted" id="whoami"></span>
+        <a class="linkbtn" href="index.html" target="_blank" rel="noopener">View site</a>
+        <button class="linkbtn" id="signOut" type="button">Sign out</button>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" data-panel="scores" role="tab" aria-selected="true" type="button">Scores</button>
+      <button class="tab" data-panel="teams" role="tab" aria-selected="false" type="button">Teams</button>
+      <button class="tab" data-panel="regs" role="tab" aria-selected="false" type="button">Registrations</button>
+    </div>
+  </header>
+
+  <main class="adminmain">
+
+    <!-- --------------------------------------------------------- scores -- -->
+    <section class="panel" id="panel-scores" role="tabpanel">
+      <p class="panel__hint">
+        Type a score and tab away &mdash; it saves on its own. Set a game to
+        <b>Final</b> once it counts; standings only include finals.
+      </p>
+      <div id="scores"></div>
+    </section>
+
+    <!-- ---------------------------------------------------------- teams -- -->
+    <section class="panel" id="panel-teams" role="tabpanel" hidden>
+      <p class="panel__hint">
+        Edit a field and it saves when you leave it. Pools A&ndash;C are Varsity and
+        D&ndash;E are JV by convention, but nothing enforces that &mdash; set the level
+        explicitly on each team.
+      </p>
+
+      <form class="addteam" id="addTeam">
+        <div class="field">
+          <label for="t-name">Add a team</label>
+          <input type="text" id="t-name" name="name" placeholder="School name" required>
+        </div>
+        <div class="field">
+          <label for="t-level">Level</label>
+          <select id="t-level" name="level">
+            <option>Varsity</option>
+            <option>JV</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="t-pool">Pool</label>
+          <select id="t-pool" name="pool">
+            <option>A</option><option>B</option><option>C</option>
+            <option>D</option><option>E</option><option>F</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="t-seed">Seed</label>
+          <input type="number" id="t-seed" name="seed" value="0" min="0" max="20">
+        </div>
+        <button class="btn btn--dark" type="submit">Add</button>
+      </form>
+
+      <div class="table-scroll">
+        <table class="admtable">
+          <thead>
+            <tr>
+              <th scope="col">ID</th><th scope="col">Name</th><th scope="col">Level</th>
+              <th scope="col">Pool</th><th scope="col">Seed</th><th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody id="teamRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------- registrations -- -->
+    <section class="panel" id="panel-regs" role="tabpanel" hidden>
+      <p class="panel__hint">
+        Teams that submitted the form on the site. Move a team through
+        <b>New &rarr; Contacted &rarr; Confirmed</b> as Mike invoices them.
+        <span id="regCount" class="muted"></span>
+      </p>
+      <div class="table-scroll">
+        <table class="admtable">
+          <thead>
+            <tr>
+              <th scope="col">Received</th><th scope="col">School</th><th scope="col">Level</th>
+              <th scope="col">Contact</th><th scope="col">Reach them</th>
+              <th scope="col">Notes</th><th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="regRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/admin.js"></script>
+</body>
+</html>

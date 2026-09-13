@@ -1,0 +1,180 @@
+/* ==========================================================================
+   Tournament control (admin only)
+   Loaded by admin.html alone, so public visitors never download it.
+   Relies on the tokens and .btn / .field / .table-scroll rules in styles.css.
+   ========================================================================== */
+
+.adminbody { background: var(--surface-2); }
+
+.toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 14px);
+  z-index: 300; padding: 11px 20px; border-radius: 100px;
+  background: var(--navy-900); color: #fff; font-size: 14.5px; font-weight: 500;
+  box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.toast.is-shown { opacity: 1; transform: translate(-50%, 0); }
+.toast--error { background: #a32438; }
+
+/* --------------------------------------------------------------- login -- */
+.login {
+  min-height: 100vh; display: grid; place-items: center; padding: 28px 20px;
+  background:
+    radial-gradient(720px 400px at 70% 0%, rgba(46,107,255,.30), transparent 62%),
+    linear-gradient(160deg, #08152a, var(--navy-900));
+}
+.login__card {
+  width: 100%; max-width: 400px; background: #fff;
+  border-radius: var(--radius-lg); padding: 34px 32px 26px; box-shadow: var(--shadow-lg);
+}
+.login__mark { width: 46px; height: 46px; margin-bottom: 16px; }
+.login__card h1 {
+  font-family: var(--font-display); font-size: 30px; text-transform: uppercase;
+  letter-spacing: .02em; margin: 0 0 6px;
+}
+.login__sub { font-size: 14.5px; color: var(--muted); margin: 0 0 22px; }
+.login__card .field input {
+  width: 100%; font-family: inherit; font-size: 16px; color: var(--ink);
+  padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
+}
+.login__card .field input:focus {
+  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14);
+}
+.login__foot {
+  margin: 22px 0 0; padding-top: 16px; border-top: 1px solid var(--line);
+  font-size: 13px; color: var(--muted);
+}
+.formmsg { margin: 14px 0 0; font-size: 14px; min-height: 1em; }
+.formmsg.is-error { color: #a32438; }
+
+/* -------------------------------------------------------------- chrome -- */
+.adminbar { background: var(--navy-900); position: sticky; top: 0; z-index: 50; }
+.adminbar__inner {
+  max-width: 1240px; margin-inline: auto; padding: 14px clamp(16px, 3vw, 28px);
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.adminbar__brand { display: flex; align-items: baseline; gap: 12px; margin-right: auto; }
+.adminbar__brand strong {
+  font-family: var(--font-display); font-size: 21px; color: #fff;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.adminbar .muted { color: #8fa3c2; font-size: 13px; }
+.adminbar__right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+.linkbtn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: inherit; font-size: 13.5px; color: #c3d0e6; text-decoration: underline;
+}
+.linkbtn:hover { color: #fff; }
+.linkbtn--danger { color: #b3364a; }
+.linkbtn--danger:hover { color: #8d1d31; }
+
+.tabs {
+  display: flex; gap: 2px; max-width: 1240px; margin-inline: auto;
+  padding: 0 clamp(16px, 3vw, 28px); overflow-x: auto;
+}
+.tab {
+  background: none; border: 0; cursor: pointer; font-family: var(--font-display);
+  font-size: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: #8fa3c2; padding: 11px 18px; border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+.tab:hover { color: #fff; }
+.tab.is-active { color: var(--amber); border-bottom-color: var(--amber); }
+
+.adminmain { max-width: 1240px; margin-inline: auto; padding: 26px clamp(16px, 3vw, 28px) 90px; }
+.panel__hint {
+  font-size: 14.5px; color: var(--body); background: #fff;
+  border: 1px solid var(--line); border-left: 3px solid var(--blue-500);
+  border-radius: 4px; padding: 12px 16px; margin: 0 0 22px;
+}
+.panel__hint b { color: var(--ink); }
+.muted { color: var(--muted); }
+.nowrap { white-space: nowrap; }
+.mono { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; color: var(--muted); }
+
+/* -------------------------------------------------------------- scores -- */
+.adm-slot { margin-bottom: 26px; }
+.adm-slot__head { border-bottom: 2px solid var(--ink); padding-bottom: 7px; margin-bottom: 12px; }
+.adm-slot__head h3 {
+  font-family: var(--font-display); font-size: 22px; text-transform: uppercase;
+  letter-spacing: .03em; margin: 0;
+}
+.adm-game {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px 15px; margin-bottom: 10px;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.adm-game.is-final { background: #fbfcfe; }
+.adm-game.is-saving { border-color: var(--blue-400); }
+.adm-game.is-saved  { border-color: #2f9e6b; }
+.adm-game.is-failed { border-color: #c23b4e; background: rgba(194,59,78,.05); }
+
+.adm-game__meta { display: flex; gap: 8px; margin-bottom: 9px; }
+.tag {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); background: var(--surface-2); padding: 2px 8px; border-radius: 3px;
+}
+.tag--field { color: var(--blue-500); background: rgba(46,107,255,.1); }
+
+.adm-game__line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.adm-side { display: flex; align-items: center; gap: 10px; flex: 1 1 210px; min-width: 0; }
+.adm-side__name {
+  font-size: 15px; color: var(--ink); font-weight: 500;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+}
+.adm-score {
+  width: 62px; flex: none; text-align: center;
+  font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--ink);
+  padding: 8px 6px; border: 1.5px solid var(--line); border-radius: 9px; background: #fff;
+}
+.adm-score:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14); }
+.adm-vs { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+.adm-status {
+  font-family: inherit; font-size: 14px; padding: 9px 11px;
+  border: 1.5px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink);
+}
+
+/* -------------------------------------------------------------- tables -- */
+.admtable { width: 100%; border-collapse: collapse; background: #fff; min-width: 720px; }
+.admtable th, .admtable td {
+  padding: 10px 12px; text-align: left; font-size: 14px;
+  border-bottom: 1px solid var(--line); vertical-align: top;
+}
+.admtable th {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); background: var(--surface-2);
+}
+.admtable td.strong { font-weight: 600; color: var(--ink); }
+.admtable td.notes { max-width: 260px; font-size: 13px; color: var(--muted); }
+.admtable input, .admtable select {
+  font-family: inherit; font-size: 14px; padding: 7px 9px; width: 100%;
+  border: 1.5px solid var(--line); border-radius: 7px; background: #fff; color: var(--ink);
+}
+.admtable input:focus, .admtable select:focus {
+  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(46,107,255,.13);
+}
+.admtable tr.is-saving td { background: rgba(46,107,255,.05); }
+.admtable tr.is-saved  td { background: rgba(47,158,107,.09); }
+.admtable tr.is-failed td { background: rgba(194,59,78,.07); }
+
+.addteam {
+  display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px 18px; margin-bottom: 20px;
+}
+.addteam .field { margin: 0; }
+.addteam input, .addteam select {
+  font-family: inherit; font-size: 15px; padding: 9px 12px;
+  border: 1.5px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink);
+}
+.addteam input:focus, .addteam select:focus {
+  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14);
+}
+.addteam .btn { padding: 11px 24px; font-size: 16px; }
+
+@media (max-width: 600px) {
+  .adm-game__line { gap: 8px; }
+  .adm-side { flex: 1 1 100%; }
+  .adm-status { width: 100%; }
+}
