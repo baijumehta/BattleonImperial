@@ -14,6 +14,19 @@
   if (!root) return;
   var mode = root.getAttribute('data-mode');   // "schedule" | "standings"
 
+  // Every status the admin panel can set needs its own treatment here, or
+  // changing one has no visible effect on the public page.
+  var STATUS = {
+    scheduled:   { label: 'Upcoming',    cls: 'is-upcoming',  showScore: false },
+    in_progress: { label: 'In progress', cls: 'is-live',      showScore: true },
+    final:       { label: 'Final',       cls: 'is-final',     showScore: true },
+    cancelled:   { label: 'Cancelled',   cls: 'is-cancelled', showScore: false }
+  };
+  function statusOf(g) { return STATUS[g.status] || STATUS.scheduled; }
+
+  // Filter state lives out here so a refresh does not reset the user's choice.
+  var filterLevel = 'all', filterTeam = 'all';
+
   /* ------------------------------------------------------------ helpers -- */
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -144,8 +157,6 @@
     var byId = {};
     teams.forEach(function (t) { byId[t.id] = t; });
 
-    var filterLevel = 'all', filterTeam = 'all';
-
     // Controls
     var bar = document.getElementById('filters');
     if (bar && !bar.dataset.ready) {
@@ -218,15 +229,18 @@
           list.forEach(function (g) {
             var home = byId[g.home_id] || { name: g.home_id };
             var away = byId[g.away_id] || { name: g.away_id };
+            var st = statusOf(g);
             var isFinal = g.status === 'final';
 
-            var card = el('article', 'game' + (isFinal ? ' is-final' : ''));
+            var card = el('article', 'game ' + st.cls);
 
             var meta = el('div', 'game__meta');
             meta.appendChild(el('span', 'game__field', 'Field ' + g.field));
             meta.appendChild(el('span', 'game__pool', 'Pool ' + g.pool));
-            meta.appendChild(el('span', 'game__status ' + (isFinal ? 'is-final' : 'is-upcoming'),
-              isFinal ? 'Final' : 'Upcoming'));
+            var badge = el('span', 'game__status ' + st.cls);
+            if (g.status === 'in_progress') badge.appendChild(el('span', 'livedot'));
+            badge.appendChild(el('span', null, st.label));
+            meta.appendChild(badge);
             card.appendChild(meta);
 
             [[home, g.home_score], [away, g.away_score]].forEach(function (pair, idx) {
@@ -235,7 +249,9 @@
                                     (idx === 1 && g.away_score > g.home_score));
               if (won) side.classList.add('is-win');
               side.appendChild(el('span', 'game__team', pair[0].name));
-              side.appendChild(el('span', 'game__score', isFinal ? String(pair[1]) : '–'));
+              var score = (st.showScore && pair[1] !== null && pair[1] !== undefined)
+                ? String(pair[1]) : '–';
+              side.appendChild(el('span', 'game__score', score));
               card.appendChild(side);
             });
 
@@ -271,11 +287,35 @@
 
   setState('loading', 'Loading…', null);
 
-  Promise.all([
-    get('tournament_teams?select=id,name,level,pool,seed&order=pool.asc,seed.asc'),
-    get('games?select=*&order=slot.asc,field.asc')
-  ]).then(function (r) {
+  function fetchAll() {
+    return Promise.all([
+      get('tournament_teams?select=id,name,level,pool,seed&order=pool.asc,seed.asc'),
+      get('games?select=*&order=slot.asc,field.asc')
+    ]);
+  }
+
+  // While games are still running, refresh quietly so a parent watching on a
+  // phone sees scores move without reloading. Stops once everything is decided,
+  // and pauses while the tab is in the background.
+  function scheduleRefresh(games) {
+    var liveish = games.some(function (g) {
+      return g.status === 'scheduled' || g.status === 'in_progress';
+    });
+    if (!liveish) return;
+    setTimeout(function () {
+      if (document.hidden) { scheduleRefresh(games); return; }
+      fetchAll().then(function (r) {
+        render(r[0] || [], r[1] || []);
+        scheduleRefresh(r[1] || []);
+      }).catch(function () {
+        scheduleRefresh(games);   // transient failure: keep trying, stay quiet
+      });
+    }, 60000);
+  }
+
+  fetchAll().then(function (r) {
     render(r[0] || [], r[1] || []);
+    scheduleRefresh(r[1] || []);
   }).catch(function (err) {
     if (window.console && console.warn) console.warn('[Battle on Imperial] schedule load failed:', err);
     // A missing table means the schedule simply has not been set up yet —

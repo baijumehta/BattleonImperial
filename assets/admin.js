@@ -20,6 +20,7 @@
   var toast = document.getElementById('toast');
 
   var session = null;
+  var role = 'admin';      // narrowed at sign-in from the staff row
   var teams = [];
   var games = [];
 
@@ -372,24 +373,51 @@
 
   /* ---------------------------------------------------------------- load -- */
   function loadAll() {
+    var isAdmin = role === 'admin';
     return Promise.all([
       authFetch('/rest/v1/tournament_teams?select=*&order=pool.asc,seed.asc'),
       authFetch('/rest/v1/games?select=*&order=slot.asc,field.asc'),
-      authFetch('/rest/v1/registrations?select=*&order=created_at.desc')
+      isAdmin ? authFetch('/rest/v1/registrations?select=*&order=created_at.desc')
+              : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
       renderTeams();
       renderScores();
-      renderRegs(r[2] || []);
+      if (isAdmin) renderRegs(r[2] || []);
       document.getElementById('counts').textContent =
         teams.length + ' teams · ' + games.length + ' games';
     });
+  }
+
+  function applyRole() {
+    var admin = role === 'admin';
+
+    // Tabs get shown or hidden by role. Panels are NOT un-hidden here — which
+    // tab is open owns that, and setting hidden=false on every admin panel
+    // would reveal all three at once.
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.tab[data-admin-only]'),
+      function (n) { n.hidden = !admin; }
+    );
+
+    if (!admin) {
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.panel[data-admin-only]'),
+        function (p) { p.hidden = true; }
+      );
+      var scores = document.querySelector('.tab[data-panel="scores"]');
+      if (scores) scores.click();
+    }
+
+    var badge = document.getElementById('rolebadge');
+    if (badge) badge.textContent = admin ? 'Admin' : 'Scorekeeper';
   }
 
   function enterApp() {
     loginView.hidden = true;
     appView.hidden = false;
     whoami.textContent = (session && session.user && session.user.email) || '';
+    applyRole();
     loadAll().catch(function (err) {
       // A toast fades; a failure to load the whole panel should not. Leave it
       // on screen with the actual message, so a problem here is never silent.
@@ -432,11 +460,12 @@
     signIn(loginForm.elements.email.value.trim(), loginForm.elements.password.value)
       .then(function (d) {
         saveSession(d);
-        return authFetch('/rest/v1/admins?select=user_id&limit=1').then(function (rows) {
+        return authFetch('/rest/v1/admins?select=user_id,role&limit=1').then(function (rows) {
           if (!rows || !rows.length) {
             saveSession(null);
-            throw new Error('That account is not on the admin list. Ask an organiser to add it.');
+            throw new Error('That account is not on the staff list. Ask an organiser to add it.');
           }
+          role = rows[0].role || 'admin';
           enterApp();
         });
       })
@@ -451,9 +480,9 @@
 
   session = loadSession();
   if (session && session.access_token) {
-    authFetch('/rest/v1/admins?select=user_id&limit=1')
+    authFetch('/rest/v1/admins?select=user_id,role&limit=1')
       .then(function (rows) {
-        if (rows && rows.length) enterApp();
+        if (rows && rows.length) { role = rows[0].role || 'admin'; enterApp(); }
         else signOut();
       })
       .catch(function () { signOut(); });

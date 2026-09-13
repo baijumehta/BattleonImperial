@@ -861,3 +861,22 @@ h2.title {
   .standings td:last-child, .standings th:last-child { padding-right: 14px; }
   .standings th, .standings td { padding: 10px 7px; }
 }
+
+/* --------------------------------------------- live / cancelled games -- */
+.game__status.is-live {
+  color: #0f6b45; background: rgba(31,122,77,.14);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.livedot {
+  width: 7px; height: 7px; border-radius: 50%; background: #1f7a4d;
+  animation: livepulse 1.6s ease-in-out infinite;
+}
+@keyframes livepulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .livedot { animation: none; } }
+
+.game.is-live { border-color: rgba(31,122,77,.45); box-shadow: 0 0 0 3px rgba(31,122,77,.08); }
+.game.is-live .game__score { color: var(--ink); }
+
+.game__status.is-cancelled { color: #a3364a; background: rgba(194,59,78,.12); }
+.game.is-cancelled { background: var(--surface-2); opacity: .72; }
+.game.is-cancelled .game__team { text-decoration: line-through; text-decoration-thickness: 1px; }
