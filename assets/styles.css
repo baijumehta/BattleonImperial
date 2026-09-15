@@ -499,6 +499,8 @@ h2.title {
 .capacity__row span { font-size: 14px; color: var(--muted); }
 .capacity__track { display: flex; gap: 3px; height: 12px; }
 .capacity__slot { flex: 1; border-radius: 2px; background: repeating-linear-gradient(45deg, #e9e5db 0 4px, #f4f1ea 4px 8px); }
+.capacity__note { margin: 12px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.capacity__note b { color: var(--ink); }
 
 .form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(26px, 4vw, 38px); box-shadow: var(--shadow-md); }
 .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }

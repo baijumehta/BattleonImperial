@@ -154,10 +154,10 @@
     });
   }
 
-  /* ---------------------------------------------- 20-slot capacity bar -- */
+  /* ---------------------------------------------- 18-slot capacity bar -- */
   var track = document.getElementById('capacityTrack');
   if (track) {
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 18; i++) {
       var slot = document.createElement('span');
       slot.className = 'capacity__slot';
       track.appendChild(slot);
