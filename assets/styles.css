@@ -518,6 +518,9 @@ h2.title {
   outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(232,185,58,.14);
 }
 .field__hint { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+.field__hint b { color: var(--ink); }
+.field__hint--warn { color: #8d1d31; }
+.field__hint--warn b { color: #8d1d31; }
 /* Honeypot — off-screen rather than display:none, which some bots skip. */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 

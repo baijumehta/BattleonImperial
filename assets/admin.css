@@ -153,6 +153,8 @@
 }
 .admtable td.strong { font-weight: 600; color: var(--ink); }
 .admtable td.notes { max-width: 260px; font-size: 13px; color: var(--muted); }
+/* Needs a human to check the division before this team is offered a spot. */
+.admtable td.flag { color: #8d1d31; font-weight: 600; }
 .admtable input, .admtable select {
   font-family: inherit; font-size: 14px; padding: 7px 9px; width: 100%;
   border: 1.5px solid var(--line); border-radius: 7px; background: #fff; color: var(--ink);

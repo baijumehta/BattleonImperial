@@ -736,6 +736,25 @@
             </div>
           </div>
 
+          <!-- EDIT: these four values are mirrored by a CHECK constraint in
+               supabase/cif-division.sql. Change one and you must change both,
+               or the insert is rejected and the visitor is bounced to the
+               mailto fallback with no idea why. -->
+          <div class="field">
+            <label for="cif_division">CIF Division <span class="req">*</span></label>
+            <select id="cif_division" name="cif_division" required aria-describedby="cifHint">
+              <option value="">Select&hellip;</option>
+              <option>Division 2</option>
+              <option>Division 3</option>
+              <option>Not sure</option>
+              <option>Another division</option>
+            </select>
+            <p class="field__hint" id="cifHint">
+              Battle on Imperial is open to <b>Division 2 and Division 3</b> programs.
+              Not sure is a fine answer &mdash; we will check it with you.
+            </p>
+          </div>
+
           <div class="form__row">
             <div class="field">
               <label for="contact">Head Coach / Contact <span class="req">*</span></label>

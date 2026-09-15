@@ -329,7 +329,7 @@
     if (!rows.length) {
       var tr = el('tr');
       var td = el('td', 'muted', 'No submissions yet.');
-      td.colSpan = 7;
+      td.colSpan = 8;
       tr.appendChild(td); body.appendChild(tr);
       return;
     }
@@ -340,6 +340,17 @@
         { month: 'short', day: 'numeric' })));
       tr.appendChild(el('td', 'strong', r.school));
       tr.appendChild(el('td', null, r.level));
+
+      // Null means the row predates the question, which is not the same as a
+      // coach answering "Not sure" — flag it so it gets chased rather than read
+      // as an answer. Anything outside D2/D3 is flagged too.
+      var cif = r.cif_division;
+      var cifCell = el('td', 'nowrap', cif || 'Not asked');
+      if (!cif || cif === 'Another division' || cif === 'Not sure') {
+        cifCell.className += ' flag';
+      }
+      tr.appendChild(cifCell);
+
       tr.appendChild(el('td', null, r.contact));
 
       var contact = el('td');

@@ -192,12 +192,31 @@
       return f && f.value ? f.value.trim() : '';
     };
 
+    /* A program outside D2/D3 should find that out here, not in a reply three
+       weeks later. Warn, never block: an honest "another division" on the form
+       is worth more than a guess that fits, and the coordinator still wants the
+       submission. */
+    var cifSel = form.elements.cif_division;
+    var cifHint = document.getElementById('cifHint');
+    if (cifSel && cifHint) {
+      var cifDefaultHint = cifHint.innerHTML;
+      cifSel.addEventListener('change', function () {
+        var outside = cifSel.value === 'Another division';
+        cifHint.innerHTML = outside
+          ? 'This year’s field is <b>Division 2 and Division 3</b> only. Send it ' +
+            'anyway — a coordinator will come back to you either way.'
+          : cifDefaultHint;
+        cifHint.classList.toggle('field__hint--warn', outside);
+      });
+    }
+
     var mailtoFallback = function (note) {
       var to = cfg.CONTACT_EMAIL || form.getAttribute('data-mailto') || 'info@battleonimperial.com';
       var school = get('school');
       var lines = [
         'Team: ' + school,
         'Level: ' + get('level'),
+        'CIF division: ' + (get('cif_division') || '—'),
         'Contact: ' + get('contact'),
         'Email: ' + get('email'),
         'Phone: ' + (get('phone') || '—'),
@@ -258,6 +277,7 @@
         body: JSON.stringify({
           school: get('school'),
           level: get('level'),
+          cif_division: get('cif_division') || null,
           contact: get('contact'),
           email: get('email'),
           phone: get('phone') || null,

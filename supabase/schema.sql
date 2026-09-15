@@ -13,6 +13,12 @@ create table if not exists public.registrations (
   -- Girls-only event, so gender is not part of the value. Matches the
   -- Varsity / JV vocabulary used by tournament_teams.
   level       text not null check (level in ('Varsity', 'JV', 'Multiple teams')),
+  -- The event is open to CIF Division 2 and 3. Nullable, because rows created
+  -- before the question existed cannot be back-filled honestly — see
+  -- cif-division.sql, which adds this to a table already in service.
+  cif_division text check (cif_division is null or cif_division in (
+                'Division 2', 'Division 3', 'Not sure', 'Another division'
+              )),
   contact     text not null check (char_length(contact) between 2 and 120),
   email       text not null check (
                 char_length(email) <= 200
@@ -64,7 +70,8 @@ grant insert on public.registrations to anon;
 
 -- =============================================================================
 -- Reading your submissions
---   select created_at, school, level, contact, email, phone, notes, status
+--   select created_at, school, level, cif_division, contact, email, phone,
+--          notes, status
 --   from public.registrations
 --   order by created_at desc;
 -- =============================================================================
