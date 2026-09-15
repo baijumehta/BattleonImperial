@@ -715,6 +715,25 @@ h2.title {
 .footer li { margin-bottom: 9px; }
 .footer a { color: #a8a195; text-decoration: none; }
 .footer a:hover { color: var(--gold); text-decoration: underline; }
+
+/* A list, not a single link, so TikTok drops in beside it without a rewrite.
+   Must come after .footer a:hover, which is the same specificity and would
+   otherwise put an underline through the pill. */
+.social { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.social li { margin: 0; }
+.social a {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 15px 9px 12px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.14);
+  color: #d2ccc0; font-size: 14px; font-weight: 500;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.social a:hover {
+  color: var(--gold); border-color: rgba(232,185,58,.5);
+  background: rgba(232,185,58,.08); text-decoration: none;
+}
+.social svg { width: 19px; height: 19px; flex: none; }
+.btn svg { width: 20px; height: 20px; flex: none; }
 .footer__bottom {
   border-top: 1px solid rgba(255,255,255,.09); padding-top: 24px;
   display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; font-size: 13px; color: #79736a;
