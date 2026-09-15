@@ -25,7 +25,7 @@ Every template is rendered at three sizes:
 
 | Template | Says |
 |---|---|
-| `announce` | Battle on Imperial / March 2027 / Canyon High School |
+| `announce` | Battle on Imperial / March 13, 2027 / Canyon High School |
 | `format` | 20 teams, 3 games guaranteed |
 | `register` | Claim one of 20 spots |
 | `film` | AI cameras on every field |

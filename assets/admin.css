@@ -15,7 +15,7 @@
 .toast {
   position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 14px);
   z-index: 300; padding: 11px 20px; border-radius: 100px;
-  background: var(--navy-900); color: #fff; font-size: 14.5px; font-weight: 500;
+  background: var(--black-900); color: #fff; font-size: 14.5px; font-weight: 500;
   box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none;
   transition: opacity .18s ease, transform .18s ease;
 }
@@ -26,8 +26,8 @@
 .login {
   min-height: 100vh; display: grid; place-items: center; padding: 28px 20px;
   background:
-    radial-gradient(720px 400px at 70% 0%, rgba(46,107,255,.30), transparent 62%),
-    linear-gradient(160deg, #08152a, var(--navy-900));
+    radial-gradient(720px 400px at 70% 0%, rgba(232,185,58,.30), transparent 62%),
+    linear-gradient(160deg, #0e0e11, var(--black-900));
 }
 .login__card {
   width: 100%; max-width: 400px; background: #fff;
@@ -44,7 +44,7 @@
   padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
 }
 .login__card .field input:focus {
-  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14);
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(232,185,58,.14);
 }
 .login__foot {
   margin: 22px 0 0; padding-top: 16px; border-top: 1px solid var(--line);
@@ -54,7 +54,7 @@
 .formmsg.is-error { color: #a32438; }
 
 /* -------------------------------------------------------------- chrome -- */
-.adminbar { background: var(--navy-900); position: sticky; top: 0; z-index: 50; }
+.adminbar { background: var(--black-900); position: sticky; top: 0; z-index: 50; }
 .adminbar__inner {
   max-width: 1240px; margin-inline: auto; padding: 14px clamp(16px, 3vw, 28px);
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -64,12 +64,12 @@
   font-family: var(--font-display); font-size: 21px; color: #fff;
   text-transform: uppercase; letter-spacing: .05em;
 }
-.adminbar .muted { color: #8fa3c2; font-size: 13px; }
+.adminbar .muted { color: #9c968a; font-size: 13px; }
 .adminbar__right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
 .linkbtn {
   background: none; border: 0; padding: 0; cursor: pointer;
-  font-family: inherit; font-size: 13.5px; color: #c3d0e6; text-decoration: underline;
+  font-family: inherit; font-size: 13.5px; color: #d2ccc0; text-decoration: underline;
 }
 .linkbtn:hover { color: #fff; }
 .linkbtn--danger { color: #b3364a; }
@@ -82,16 +82,16 @@
 .tab {
   background: none; border: 0; cursor: pointer; font-family: var(--font-display);
   font-size: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-  color: #8fa3c2; padding: 11px 18px; border-bottom: 3px solid transparent;
+  color: #9c968a; padding: 11px 18px; border-bottom: 3px solid transparent;
   white-space: nowrap;
 }
 .tab:hover { color: #fff; }
-.tab.is-active { color: var(--amber); border-bottom-color: var(--amber); }
+.tab.is-active { color: var(--gold); border-bottom-color: var(--gold); }
 
 .adminmain { max-width: 1240px; margin-inline: auto; padding: 26px clamp(16px, 3vw, 28px) 90px; }
 .panel__hint {
   font-size: 14.5px; color: var(--body); background: #fff;
-  border: 1px solid var(--line); border-left: 3px solid var(--blue-500);
+  border: 1px solid var(--line); border-left: 3px solid var(--accent);
   border-radius: 4px; padding: 12px 16px; margin: 0 0 22px;
 }
 .panel__hint b { color: var(--ink); }
@@ -111,8 +111,8 @@
   padding: 12px 15px; margin-bottom: 10px;
   transition: border-color .2s ease, background-color .2s ease;
 }
-.adm-game.is-final { background: #fbfcfe; }
-.adm-game.is-saving { border-color: var(--blue-400); }
+.adm-game.is-final { background: #fdfcf9; }
+.adm-game.is-saving { border-color: var(--accent-lt); }
 .adm-game.is-saved  { border-color: #2f9e6b; }
 .adm-game.is-failed { border-color: #c23b4e; background: rgba(194,59,78,.05); }
 
@@ -121,7 +121,7 @@
   font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); background: var(--surface-2); padding: 2px 8px; border-radius: 3px;
 }
-.tag--field { color: var(--blue-500); background: rgba(46,107,255,.1); }
+.tag--field { color: var(--accent); background: rgba(232,185,58,.1); }
 
 .adm-game__line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .adm-side { display: flex; align-items: center; gap: 10px; flex: 1 1 210px; min-width: 0; }
@@ -134,7 +134,7 @@
   font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--ink);
   padding: 8px 6px; border: 1.5px solid var(--line); border-radius: 9px; background: #fff;
 }
-.adm-score:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14); }
+.adm-score:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(232,185,58,.14); }
 .adm-vs { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 .adm-status {
   font-family: inherit; font-size: 14px; padding: 9px 11px;
@@ -158,9 +158,9 @@
   border: 1.5px solid var(--line); border-radius: 7px; background: #fff; color: var(--ink);
 }
 .admtable input:focus, .admtable select:focus {
-  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(46,107,255,.13);
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,185,58,.13);
 }
-.admtable tr.is-saving td { background: rgba(46,107,255,.05); }
+.admtable tr.is-saving td { background: rgba(232,185,58,.05); }
 .admtable tr.is-saved  td { background: rgba(47,158,107,.09); }
 .admtable tr.is-failed td { background: rgba(194,59,78,.07); }
 
@@ -175,7 +175,7 @@
   border: 1.5px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink);
 }
 .addteam input:focus, .addteam select:focus {
-  outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(46,107,255,.14);
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(232,185,58,.14);
 }
 .addteam .btn { padding: 11px 24px; font-size: 16px; }
 
@@ -208,5 +208,5 @@
 .rolebadge {
   font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
   padding: 3px 9px; border-radius: 3px;
-  background: rgba(255,176,32,.18); color: var(--amber);
+  background: rgba(232,185,58,.18); color: var(--gold);
 }

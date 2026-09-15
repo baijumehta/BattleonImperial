@@ -12,7 +12,7 @@ domain and handles once they exist. Written to be posted as-is.
 > Battle on Imperial. One day, twenty girls' lacrosse teams, three guaranteed
 > games each, all on one campus in Anaheim Hills.
 >
-> March 2027. Exact date announced soon.
+> Saturday, March 13, 2027.
 >
 > 🥍 Canyon High School, 220 S Imperial Hwy
 > 🔗 Details in bio
@@ -40,7 +40,7 @@ domain and handles once they exist. Written to be posted as-is.
 > site, one day, and your families actually in the stands because the drive is
 > twenty minutes instead of ninety.
 >
-> Battle on Imperial. March 2027, Anaheim Hills.
+> Battle on Imperial. March 13, 2027, Anaheim Hills.
 
 ---
 
@@ -72,7 +72,7 @@ domain and handles once they exist. Written to be posted as-is.
 
 > {TEAM} is in. 🥍
 >
-> Welcome to Battle on Imperial — March 2027, Anaheim Hills.
+> Welcome to Battle on Imperial — March 13, 2027, Anaheim Hills.
 >
 > @{teamhandle}
 

@@ -27,11 +27,11 @@ $ErrorActionPreference = "Stop"
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 # ---------------------------------------------------------------- brand ----
-$NAVY   = [System.Drawing.Color]::FromArgb(6, 16, 33)
-$AMBER  = [System.Drawing.Color]::FromArgb(255, 176, 32)
-$BLUE   = [System.Drawing.Color]::FromArgb(91, 140, 255)
+$BLACK   = [System.Drawing.Color]::FromArgb(11, 11, 13)
+$GOLD  = [System.Drawing.Color]::FromArgb(232, 185, 58)
+$GOLDLT   = [System.Drawing.Color]::FromArgb(242, 206, 107)
 $WHITE  = [System.Drawing.Color]::White
-$MUTED  = [System.Drawing.Color]::FromArgb(198, 212, 234)
+$MUTED  = [System.Drawing.Color]::FromArgb(210, 204, 192)
 
 # Barlow Condensed, the site's display face. Loaded privately so nothing has to
 # be installed on the machine running this.
@@ -107,10 +107,10 @@ function Draw-Mark {
   $path.AddArc($rect.Right-$r*2, $rect.Bottom-$r*2, $r*2, $r*2, 0, 90)
   $path.AddArc($rect.X, $rect.Bottom-$r*2, $r*2, $r*2, 90, 90)
   $path.CloseFigure()
-  $g.FillPath((New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(235,11,27,51))), $path)
+  $g.FillPath((New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(235,22,22,26))), $path)
   $pad = $size * 0.30
-  $penA = New-Object System.Drawing.Pen ($AMBER, ($size*0.095)); $penA.StartCap='Round'; $penA.EndCap='Round'
-  $penB = New-Object System.Drawing.Pen ($BLUE,  ($size*0.095)); $penB.StartCap='Round'; $penB.EndCap='Round'
+  $penA = New-Object System.Drawing.Pen ($GOLD, ($size*0.095)); $penA.StartCap='Round'; $penA.EndCap='Round'
+  $penB = New-Object System.Drawing.Pen ($GOLDLT,  ($size*0.095)); $penB.StartCap='Round'; $penB.EndCap='Round'
   $g.DrawLine($penA, ($x+$pad), ($y+$size-$pad), ($x+$size-$pad), ($y+$pad))
   $g.DrawLine($penB, ($x+$pad), ($y+$pad), ($x+$size-$pad), ($y+$size-$pad))
   $g.FillEllipse((New-Object System.Drawing.SolidBrush $WHITE), ($x+$size/2-$size*0.075), ($y+$size/2-$size*0.075), ($size*0.15), ($size*0.15))
@@ -132,7 +132,7 @@ function New-Post {
   $g.TextRenderingHint = [System.Drawing.Text.TextRenderingHint]::AntiAliasGridFit
   $g.PixelOffsetMode   = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
 
-  $g.Clear($NAVY)
+  $g.Clear($BLACK)
   $img = $null
   if (-not $NoPhoto) {
     $img = Load-Photo $Photo
@@ -146,8 +146,8 @@ function New-Post {
   $rectB = New-Object System.Drawing.Rectangle 0, ($H - $botH), $W, $botH
   $gb = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
           $rectB,
-          [System.Drawing.Color]::FromArgb(0, 6, 16, 33),
-          [System.Drawing.Color]::FromArgb(247, 6, 16, 33),
+          [System.Drawing.Color]::FromArgb(0, 11, 11, 13),
+          [System.Drawing.Color]::FromArgb(247, 11, 11, 13),
           [System.Drawing.Drawing2D.LinearGradientMode]::Vertical)
   $blend = New-Object System.Drawing.Drawing2D.Blend 3
   $blend.Positions = @(0.0, 0.45, 1.0); $blend.Factors = @(0.0, 0.55, 1.0)
@@ -158,8 +158,8 @@ function New-Post {
   $rectT = New-Object System.Drawing.Rectangle 0, 0, $W, $topH
   $gt = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
           $rectT,
-          [System.Drawing.Color]::FromArgb(170, 6, 16, 33),
-          [System.Drawing.Color]::FromArgb(0, 6, 16, 33),
+          [System.Drawing.Color]::FromArgb(170, 11, 11, 13),
+          [System.Drawing.Color]::FromArgb(0, 11, 11, 13),
           [System.Drawing.Drawing2D.LinearGradientMode]::Vertical)
   $g.FillRectangle($gt, $rectT)
 
@@ -212,8 +212,8 @@ function New-Post {
     $y -= ($W * 0.030)
     $y -= $eyeFont.Height
     $barW = $W * 0.055
-    $g.FillRectangle((New-Object System.Drawing.SolidBrush $AMBER), $pad, ($y + $eyeFont.Height*0.48), $barW, ($W*0.0042))
-    Draw-Tracked $g $Eyebrow $eyeFont (New-Object System.Drawing.SolidBrush $AMBER) ($pad + $barW + $W*0.022) $y $eyeTrack
+    $g.FillRectangle((New-Object System.Drawing.SolidBrush $GOLD), $pad, ($y + $eyeFont.Height*0.48), $barW, ($W*0.0042))
+    Draw-Tracked $g $Eyebrow $eyeFont (New-Object System.Drawing.SolidBrush $GOLD) ($pad + $barW + $W*0.022) $y $eyeTrack
   }
 
   $enc = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq 'image/jpeg' }
@@ -242,7 +242,7 @@ $TEMPLATES = @(
   @{ key="announce"; photo="hero-canyon.jpg";    focus=0.40; focusx=0.62
      eyebrow="GIRLS HIGH SCHOOL LACROSSE"
      head=@("BATTLE","ON IMPERIAL")
-     sub="March 2027  $DOT  Canyon High School, Anaheim Hills" },
+     sub="March 13, 2027  $DOT  Canyon High School, Anaheim Hills" },
 
   @{ key="format";   photo="gallery-draw.jpg";   focus=0.30; focusx=0.62
      eyebrow="ONE DAY  $DOT  THREE FIELDS"
@@ -262,7 +262,7 @@ $TEMPLATES = @(
   @{ key="teamin";   photo="gallery-squad.jpg";  focus=0.30; focusx=0.55
      eyebrow="TEAM CONFIRMED"
      head=@($Team.ToUpper(), "IS IN")
-     sub="Battle on Imperial  $DOT  March 2027  $DOT  Anaheim Hills" },
+     sub="Battle on Imperial  $DOT  March 13, 2027  $DOT  Anaheim Hills" },
 
   @{ key="countdown"; photo="gallery-team.jpg";  focus=0.28; focusx=0.50
      eyebrow="COUNTDOWN"
@@ -284,7 +284,7 @@ foreach ($t in $TEMPLATES) {
 $bmp = New-Object System.Drawing.Bitmap 1080, 1080
 $g = [System.Drawing.Graphics]::FromImage($bmp)
 $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
-$g.Clear($NAVY)
+$g.Clear($BLACK)
 Draw-Mark $g 230 200 620
 $f = New-Font $FamBold 86
 $fmt = New-Object System.Drawing.StringFormat; $fmt.Alignment = 'Center'
