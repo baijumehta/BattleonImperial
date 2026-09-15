@@ -713,6 +713,16 @@ h2.title {
 .footer__brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .footer__brand svg { width: 34px; height: 34px; }
 .footer__brand b { font-family: var(--font-display); font-size: 19px; letter-spacing: .06em; text-transform: uppercase; color: #fff; }
+/* The logo carries the wordmark itself, so no text beside it here. Its own
+   background is black; the footer's #050506 is close enough that the seam does
+   not read, which is the only reason this works outside a pure-black band. */
+.footer__brand img { width: 132px; height: auto; }
+
+/* --------------------------------------------------------------- crest -- */
+/* Pure #000, not --black-900 — see the comment on the .crest markup. */
+.crest { background: #000; padding: clamp(36px, 5.5vw, 68px) 0; }
+.crest .wrap { display: grid; place-items: center; }
+.crest img { width: min(420px, 74vw); height: auto; }
 
 /* -------------------------------------------------------------- reveal -- */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s cubic-bezier(.2,.7,.3,1), transform .6s cubic-bezier(.2,.7,.3,1); }

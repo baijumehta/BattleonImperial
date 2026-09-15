@@ -42,3 +42,27 @@ Drop a replacement at the same path and filename, keeping a similar aspect
 ratio — the hero and band are wide crops, the gallery tiles are 4:3. Because
 `vercel.json` caches `/assets/img/*` for a day, **change the filename** if you
 need the new image live immediately, and update the `src` in `index.html`.
+
+## Logo
+
+`logo-master.png` is Lydie's original artwork, 1254&nbsp;px square, kept as the
+source of truth. Nothing on the site links it; every file below is generated
+from it and should be regenerated rather than edited:
+
+| File | Used by |
+|---|---|
+| `logo-480.*`, `logo.*` | the crest band on the home page (1x and 2x) |
+| `logo-240.*` | the footer on every page |
+| `og-battle-on-imperial.jpg` | the social preview card, 1200&times;630 |
+
+**The black background is part of the artwork and cannot be removed.** 95% of
+the file's near-black pixels connect to its border, so a background knockout
+takes the palm silhouettes and the crest outlines with it. Anywhere the logo
+appears, the surrounding colour has to be black — the crest band is pure `#000`
+for exactly this reason, not `--black-900`.
+
+To regenerate after a new master, from `battleofimperial-ops/tools`:
+
+```
+node logo.js
+```
