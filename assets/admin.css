@@ -33,7 +33,7 @@
   width: 100%; max-width: 400px; background: #fff;
   border-radius: var(--radius-lg); padding: 34px 32px 26px; box-shadow: var(--shadow-lg);
 }
-.login__mark { width: 46px; height: 46px; margin-bottom: 16px; }
+.login__mark { width: 120px; height: auto; margin-bottom: 16px; border-radius: 12px; }
 .login__card h1 {
   font-family: var(--font-display); font-size: 30px; text-transform: uppercase;
   letter-spacing: .02em; margin: 0 0 6px;

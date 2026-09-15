@@ -136,7 +136,16 @@ h2.title {
 }
 .nav__inner { display: flex; align-items: center; gap: 20px; height: 72px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
-.brand__mark { width: 38px; height: 38px; flex: none; }
+/* The crest is opaque black; the nav behind it is not (rgba + backdrop blur),
+   so the image would read as a hard square floating on frosted glass. Rounding
+   and hairlining it turns that into a deliberate badge — the same shape the
+   monogram tile used to be. 42px is the floor: below about 32 the wordmark
+   inside the crest stops resolving. */
+.brand__mark {
+  width: 42px; height: auto; flex: none;
+  border-radius: 9px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+}
 .brand__text { display: flex; flex-direction: column; line-height: 1; }
 .brand__name {
   font-family: var(--font-display); font-weight: 700; font-size: 21px;

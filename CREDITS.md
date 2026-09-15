@@ -52,7 +52,10 @@ from it and should be regenerated rather than edited:
 | File | Used by |
 |---|---|
 | `logo-480.*`, `logo.*` | the crest band on the home page (1x and 2x) |
-| `logo-240.*` | the footer on every page |
+| `logo-240.*` | the footer on every page, and the sign-in card |
+| `logo-96.*` | the nav badge on every page (2x of 42px) |
+| `favicon-32.png` | the browser tab |
+| `apple-touch-icon.png` | home-screen and bookmark icon, 180px |
 | `og-battle-on-imperial.jpg` | the social preview card, 1200&times;630 |
 
 **The black background is part of the artwork and cannot be removed.** 95% of
