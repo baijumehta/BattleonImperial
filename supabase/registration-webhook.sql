@@ -71,12 +71,18 @@ create trigger registrations_email_notify
 -- =============================================================================
 -- Checking it
 --
--- Every call and its response is logged by pg_net. After submitting the form:
+-- pg_net logs every response. After submitting the form:
 --
---   select id, created, url, status_code, content
+--   select id, created, status_code, timed_out, error_msg,
+--          left(content, 400) as content
 --   from net._http_response
 --   order by created desc
 --   limit 5;
+--
+-- There is no url column on this table — the URL lives on
+-- net.http_request_queue, which drains as requests complete, so a finished
+-- call is only ever visible here. Responses are also garbage-collected after
+-- a few hours; an empty table hours later means nothing is wrong.
 --
 -- status_code 200  → the function ran; read `content` for what SMTP2GO said
 -- status_code 403  → the secret here does not match WEBHOOK_SECRET
