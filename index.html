@@ -11,9 +11,13 @@
 <meta property="og:description" content="Saturday, March 13, 2027 in Anaheim Hills. Girls high school lacrosse — 18 teams, three guaranteed games, AI cameras on every field, with film delivered to every coaching staff.">
 <meta property="og:type" content="website">
 <!-- EDIT: og:image and og:url must be absolute — a relative path is ignored by
-     every scraper. Change both if the site moves to battleonimperial.com. -->
-<meta property="og:url" content="https://battleon-imperial.vercel.app/">
-<meta property="og:image" content="https://battleon-imperial.vercel.app/assets/img/og-battle-on-imperial.jpg">
+     every scraper. The host is www: the apex 308s to it, and pointing a
+     scraper at a redirect is a needless hop. The canonical below is what stops
+     the old battleon-imperial.vercel.app address, which still serves this same
+     site, from being indexed as a duplicate. -->
+<link rel="canonical" href="https://www.battleonimperial.com/">
+<meta property="og:url" content="https://www.battleonimperial.com/">
+<meta property="og:image" content="https://www.battleonimperial.com/assets/img/og-battle-on-imperial.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Battle on Imperial — Girls Lacrosse Showcase, Anaheim Hills, California.">

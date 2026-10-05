@@ -41,7 +41,7 @@ export interface Mail {
   html: string;
 }
 
-export const SITE = 'https://battleonimperial.com';
+export const SITE = 'https://www.battleonimperial.com';
 export const EVENT = 'Saturday, March 13, 2027';
 export const VENUE = 'Canyon High School, 220 S Imperial Hwy, Anaheim, CA 92807';
 

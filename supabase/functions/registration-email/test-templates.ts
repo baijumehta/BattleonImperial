@@ -9,7 +9,7 @@
  */
 import { coachEmail, organiserEmail, reviewFlags, teamSummary, type Registration } from './templates.ts';
 
-const ADMIN = 'https://battleon-imperial.vercel.app/admin.html';
+const ADMIN = 'https://www.battleonimperial.com/admin.html';
 
 const full: Registration = {
   school: 'Northwood High School Timberwolves',

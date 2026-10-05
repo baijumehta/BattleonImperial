@@ -34,7 +34,7 @@ supabase secrets set \
   MAIL_REPLY_TO="info@battleonimperial.com" \
   MAIL_TO_ORGANISERS="lydie@example.com,mike@example.com,baiju@rclick.com" \
   WEBHOOK_SECRET="$(openssl rand -hex 32)" \
-  ADMIN_URL="https://battleon-imperial.vercel.app/admin.html"
+  ADMIN_URL="https://www.battleonimperial.com/admin.html"
 ```
 
 Keep the `WEBHOOK_SECRET` value — step 4 needs it.

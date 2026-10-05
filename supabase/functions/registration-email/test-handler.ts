@@ -14,7 +14,7 @@ const SECRETS: Record<string, string> = {
   MAIL_FROM: 'Battle on Imperial <noreply@battleonimperial.com>',
   MAIL_REPLY_TO: 'info@battleonimperial.com',
   MAIL_TO_ORGANISERS: 'lydie@example.com, mike@example.com',
-  ADMIN_URL: 'https://battleon-imperial.vercel.app/admin.html'
+  ADMIN_URL: 'https://www.battleonimperial.com/admin.html'
 };
 
 let handler: (req: Request) => Promise<Response>;

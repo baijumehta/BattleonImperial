@@ -104,7 +104,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const from = env('MAIL_FROM', 'Battle on Imperial <noreply@battleonimperial.com>');
   const replyTo = env('MAIL_REPLY_TO', 'info@battleonimperial.com');
   const organisers = env('MAIL_TO_ORGANISERS').split(',').map((s) => s.trim()).filter(Boolean);
-  const adminUrl = env('ADMIN_URL', 'https://battleon-imperial.vercel.app/admin.html');
+  const adminUrl = env('ADMIN_URL', 'https://www.battleonimperial.com/admin.html');
   if (!apiKey) return json({ error: 'SMTP2GO_API_KEY is not set' }, 500);
 
   let payload: WebhookPayload;

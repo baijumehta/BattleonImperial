@@ -29,7 +29,7 @@ node dev-server.js
 
 Hosted on **Vercel**, deploying automatically from `main`:
 
-<https://battleon-imperial.vercel.app>
+<https://www.battleonimperial.com>
 
 Push to `main` and Vercel builds it. There is no build step — it serves the
 repo as static files.
