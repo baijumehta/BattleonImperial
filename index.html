@@ -741,11 +741,14 @@
         </div>
 
         <!--
-          TO GO LIVE WITH REGISTRATION:
-          This form currently opens the coordinator's email with the details filled in,
-          so it works with zero backend. To collect submissions automatically instead,
-          set action="https://formspree.io/f/YOUR_ID" method="POST" on the <form> below
-          and delete the data-mailto attribute.
+          Submissions go straight into public.registrations in Supabase and are
+          read in admin.html. The mailto path below is only a fallback for when
+          that POST fails.
+
+          NOT BUILT YET: nobody is emailed when a form comes in. No alert to the
+          coordinator, no confirmation to the coach — someone has to open
+          Tournament Control and look. Wiring that up needs a Supabase database
+          webhook into an edge function and a sending domain we do not own yet.
         -->
         <!-- EDIT: every name= here is a column in public.registrations. Adding a
              field means adding the column too (supabase/entry-form.sql) or the
