@@ -44,6 +44,10 @@ Generate the secret locally rather than reusing one from anywhere else:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
+**Keep that value somewhere.** Supabase stores secrets write-only: `secrets
+list` and the dashboard both show a hash, never the value. Lose the webhook
+secret and the only fix is to set a new one and edit the webhook to match.
+
 `MAIL_REPLY_TO` has to be a mailbox someone reads. A coach replying to the
 confirmation is the most likely way you will hear about a mistake in an entry.
 
