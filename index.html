@@ -747,62 +747,198 @@
           set action="https://formspree.io/f/YOUR_ID" method="POST" on the <form> below
           and delete the data-mailto attribute.
         -->
+        <!-- EDIT: every name= here is a column in public.registrations. Adding a
+             field means adding the column too (supabase/entry-form.sql) or the
+             whole insert is rejected and the visitor silently lands in the
+             mailto fallback. The option strings in the selects are mirrored by
+             CHECK constraints — change one, change both. -->
         <form class="form" id="regForm" data-mailto="info@battleonimperial.com" novalidate>
-          <div class="form__row">
+
+          <!-- ------------------------------------------------- the program -- -->
+          <fieldset class="formset">
+            <legend>Your program</legend>
+
             <div class="field">
-              <label for="school">School / Club <span class="req">*</span></label>
-              <input type="text" id="school" name="school" required autocomplete="organization">
+              <label for="school">High school name and mascot <span class="req">*</span></label>
+              <input type="text" id="school" name="school" required maxlength="120"
+                     autocomplete="organization" placeholder="Canyon High School Comanches">
             </div>
+
             <div class="field">
-              <label for="level">Level <span class="req">*</span></label>
-              <select id="level" name="level" required>
+              <label for="cif_division">CIF division <span class="req">*</span></label>
+              <select id="cif_division" name="cif_division" required aria-describedby="cifHint">
+                <option value="">Select&hellip;</option>
+                <option>Division 2</option>
+                <option>Division 3</option>
+                <option>Not sure</option>
+                <option>Another division</option>
+              </select>
+              <p class="field__hint" id="cifHint">
+                Battle on Imperial is open to <b>Division 2 and Division 3</b> programs.
+                Not sure is a fine answer &mdash; we will check it with you.
+              </p>
+            </div>
+          </fieldset>
+
+          <!-- --------------------------------------------------- about you -- -->
+          <fieldset class="formset">
+            <legend>About you</legend>
+            <p class="formset__hint">
+              Whoever is filling this in &mdash; coach, athletic director or team parent.
+              Coaches go in the next section.
+            </p>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="contact_first">First name <span class="req">*</span></label>
+                <input type="text" id="contact_first" name="contact_first" required maxlength="120" autocomplete="given-name">
+              </div>
+              <div class="field">
+                <label for="contact_last">Last name <span class="req">*</span></label>
+                <input type="text" id="contact_last" name="contact_last" required maxlength="120" autocomplete="family-name">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="role">Your role with the team <span class="req">*</span></label>
+              <input type="text" id="role" name="role" required maxlength="120"
+                     placeholder="Head coach, athletic director, team parent&hellip;">
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input type="email" id="email" name="email" required maxlength="200" autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="phone">Cell phone <span class="req">*</span></label>
+                <input type="tel" id="phone" name="phone" required maxlength="40" autocomplete="tel">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ----------------------------------------------------- coaches -- -->
+          <fieldset class="formset">
+            <legend>Coaches</legend>
+            <p class="formset__hint">
+              Who we contact on tournament day. Put the head coach first. If that is
+              you, fill it in again &mdash; we would rather have it twice than guess.
+            </p>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="coach1_first">Coach 1 first name <span class="req">*</span></label>
+                <input type="text" id="coach1_first" name="coach1_first" required maxlength="120">
+              </div>
+              <div class="field">
+                <label for="coach1_last">Coach 1 last name <span class="req">*</span></label>
+                <input type="text" id="coach1_last" name="coach1_last" required maxlength="120">
+              </div>
+            </div>
+            <div class="form__row">
+              <div class="field">
+                <label for="coach1_email">Coach 1 email <span class="req">*</span></label>
+                <input type="email" id="coach1_email" name="coach1_email" required maxlength="200">
+              </div>
+              <div class="field">
+                <label for="coach1_phone">Coach 1 cell phone <span class="req">*</span></label>
+                <input type="tel" id="coach1_phone" name="coach1_phone" required maxlength="40">
+              </div>
+            </div>
+
+            <p class="formset__divider">Second coach &mdash; optional</p>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="coach2_first">Coach 2 first name</label>
+                <input type="text" id="coach2_first" name="coach2_first" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="coach2_last">Coach 2 last name</label>
+                <input type="text" id="coach2_last" name="coach2_last" maxlength="120">
+              </div>
+            </div>
+            <div class="form__row">
+              <div class="field">
+                <label for="coach2_email">Coach 2 email</label>
+                <input type="email" id="coach2_email" name="coach2_email" maxlength="200">
+              </div>
+              <div class="field">
+                <label for="coach2_phone">Coach 2 cell phone</label>
+                <input type="tel" id="coach2_phone" name="coach2_phone" maxlength="40">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ------------------------------------------------- the team(s) -- -->
+          <fieldset class="formset">
+            <legend>Your team or teams</legend>
+            <p class="formset__hint">
+              A program may enter up to two teams. One day, one site &mdash; there is no
+              weekend to choose between.
+            </p>
+
+            <div class="field">
+              <label for="team1_level">Team 1 level <span class="req">*</span></label>
+              <select id="team1_level" name="team1_level" required>
                 <option value="">Select&hellip;</option>
                 <option>Varsity</option>
                 <option>JV</option>
-                <option>Multiple teams</option>
               </select>
             </div>
-          </div>
 
-          <!-- EDIT: these four values are mirrored by a CHECK constraint in
-               supabase/cif-division.sql. Change one and you must change both,
-               or the insert is rejected and the visitor is bounced to the
-               mailto fallback with no idea why. -->
-          <div class="field">
-            <label for="cif_division">CIF Division <span class="req">*</span></label>
-            <select id="cif_division" name="cif_division" required aria-describedby="cifHint">
-              <option value="">Select&hellip;</option>
-              <option>Division 2</option>
-              <option>Division 3</option>
-              <option>Not sure</option>
-              <option>Another division</option>
-            </select>
-            <p class="field__hint" id="cifHint">
-              Battle on Imperial is open to <b>Division 2 and Division 3</b> programs.
-              Not sure is a fine answer &mdash; we will check it with you.
-            </p>
-          </div>
-
-          <div class="form__row">
             <div class="field">
-              <label for="contact">Head Coach / Contact <span class="req">*</span></label>
-              <input type="text" id="contact" name="contact" required autocomplete="name">
+              <label for="team1_strength">Team 1 &mdash; where does this team sit?</label>
+              <textarea id="team1_strength" name="team1_strength" rows="2" maxlength="600"
+                placeholder="Higher or lower than most teams in your division, last season's record, anything that helps&hellip;"></textarea>
+              <p class="field__hint">
+                Only a guide for building pools. We draw them as competitively as we can,
+                and an honest answer here gets your team better games.
+              </p>
             </div>
+
             <div class="field">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" autocomplete="tel">
+              <label for="team2_level">Team 2 level</label>
+              <select id="team2_level" name="team2_level">
+                <option value="">Entering one team only</option>
+                <option>Varsity</option>
+                <option>JV</option>
+              </select>
             </div>
-          </div>
 
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input type="email" id="email" name="email" required autocomplete="email">
-          </div>
+            <div class="field" id="team2StrengthField" hidden>
+              <label for="team2_strength">Team 2 &mdash; where does this team sit?</label>
+              <textarea id="team2_strength" name="team2_strength" rows="2" maxlength="600"
+                placeholder="Same question for your second team&hellip;"></textarea>
+            </div>
+          </fieldset>
 
-          <div class="field">
-            <label for="notes">Anything we should know?</label>
-            <textarea id="notes" name="notes" placeholder="Number of teams you'd enter, scheduling constraints, questions about the format&hellip;"></textarea>
-          </div>
+          <!-- --------------------------------------------------- the money -- -->
+          <fieldset class="formset">
+            <legend>Deposit &amp; payment</legend>
+
+            <div class="field">
+              <label for="notes">Anything else we should know?</label>
+              <textarea id="notes" name="notes" maxlength="2000"
+                placeholder="Scheduling constraints, questions about the format&hellip;"></textarea>
+            </div>
+
+            <label class="form__consent">
+              <input type="checkbox" id="payment_ack" name="payment_ack" required>
+              <span>
+                I understand entry is <b>$1,000 per team</b>, that a <b>$250 deposit</b>
+                holds the place once we are offered one, and that the balance is due
+                30 days before the tournament. We will invoice you &mdash; there is
+                nothing to pay now and nothing to mail.
+                <a href="#policy">Deposit and refund terms</a>.
+              </span>
+            </label>
+
+            <label class="form__consent">
+              <input type="checkbox" id="consent" name="consent" required>
+              <span>Send me tournament updates, including schedule releases and when entry opens.</span>
+            </label>
+          </fieldset>
 
           <!-- Honeypot: hidden from people, irresistible to bots. -->
           <div class="hp" aria-hidden="true">
@@ -810,16 +946,11 @@
             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
           </div>
 
-          <label class="form__consent">
-            <input type="checkbox" id="consent" name="consent" required>
-            <span>Send me tournament updates, including dates, schedule releases, and when registration opens.</span>
-          </label>
-
           <button class="btn btn--primary btn--block btn--lg" type="submit">Request a Spot</button>
 
           <p class="field__hint" style="text-align:center; margin-top:14px;">
             Submitting does not reserve a place or create a payment obligation. A tournament
-            coordinator will follow up with details.
+            coordinator will follow up with the entry packet.
           </p>
 
           <div class="form__status" id="formStatus" role="status" aria-live="polite"></div>

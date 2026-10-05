@@ -329,7 +329,7 @@
     if (!rows.length) {
       var tr = el('tr');
       var td = el('td', 'muted', 'No submissions yet.');
-      td.colSpan = 8;
+      td.colSpan = 9;
       tr.appendChild(td); body.appendChild(tr);
       return;
     }
@@ -378,8 +378,85 @@
       });
       st.appendChild(sel);
       tr.appendChild(st);
+
+      // The entry form asks twenty-odd questions. They do not belong in a
+      // table, so the row carries the summary and expands for the rest.
+      var toggleCell = el('td', 'nowrap');
+      var toggle = el('button', 'linkbtn', 'Details');
+      toggle.type = 'button';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggleCell.appendChild(toggle);
+      tr.appendChild(toggleCell);
+
       body.appendChild(tr);
+
+      var detailRow = el('tr', 'detailrow');
+      detailRow.hidden = true;
+      var detailCell = el('td');
+      detailCell.colSpan = 9;
+      detailCell.appendChild(buildDetail(r));
+      detailRow.appendChild(detailCell);
+      body.appendChild(detailRow);
+
+      toggle.addEventListener('click', function () {
+        var open = detailRow.hidden;
+        detailRow.hidden = !open;
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.textContent = open ? 'Hide' : 'Details';
+      });
     });
+  }
+
+  /* Everything the row has no column for. Fields the earlier, shorter form
+     never asked come back null; those read "Not asked" rather than being left
+     blank, so a gap in the record is never mistaken for an answer. */
+  function buildDetail(r) {
+    var wrap = el('div', 'detail');
+    var person = function (first, last, email, phone) {
+      var name = [first, last].filter(Boolean).join(' ');
+      if (!name && !email) return null;
+      return [name || '(no name)', email || 'no email', phone || 'no phone'].join(' · ');
+    };
+
+    var groups = [
+      ['Submitted by', [
+        ['Name', [r.contact_first, r.contact_last].filter(Boolean).join(' ') || null],
+        ['Role', r.role],
+        ['Email', r.email],
+        ['Cell', r.phone]
+      ]],
+      ['Coaches', [
+        ['Coach 1', person(r.coach1_first, r.coach1_last, r.coach1_email, r.coach1_phone)],
+        ['Coach 2', person(r.coach2_first, r.coach2_last, r.coach2_email, r.coach2_phone)]
+      ]],
+      ['Teams', [
+        ['Team 1', r.team1_level],
+        ['Team 1 notes', r.team1_strength],
+        ['Team 2', r.team2_level],
+        ['Team 2 notes', r.team2_strength]
+      ]],
+      ['Entry', [
+        ['Deposit terms', r.payment_ack === true ? 'Acknowledged'
+          : r.payment_ack === false ? 'NOT acknowledged' : null],
+        ['Updates opt-in', r.consent ? 'Yes' : 'No'],
+        ['Notes', r.notes]
+      ]]
+    ];
+
+    groups.forEach(function (g) {
+      var box = el('div', 'detail__group');
+      box.appendChild(el('h4', null, g[0]));
+      var dl = el('dl');
+      g[1].forEach(function (pair) {
+        dl.appendChild(el('dt', null, pair[0]));
+        var empty = pair[1] === null || pair[1] === undefined || pair[1] === '';
+        dl.appendChild(el('dd', empty ? 'muted' : null, empty ? 'Not asked' : pair[1]));
+      });
+      box.appendChild(dl);
+      wrap.appendChild(box);
+    });
+
+    return wrap;
   }
 
   /* ---------------------------------------------------------------- load -- */

@@ -192,6 +192,20 @@
       return f && f.value ? f.value.trim() : '';
     };
 
+    /* Team 2's follow-up only makes sense once there is a team 2. Hiding it
+       keeps the form shorter for the programs entering one team, which is
+       most of them. */
+    var team2 = form.elements.team2_level;
+    var team2Field = document.getElementById('team2StrengthField');
+    if (team2 && team2Field) {
+      var syncTeam2 = function () {
+        team2Field.hidden = !team2.value;
+        if (!team2.value) form.elements.team2_strength.value = '';
+      };
+      team2.addEventListener('change', syncTeam2);
+      syncTeam2();
+    }
+
     /* A program outside D2/D3 should find that out here, not in a reply three
        weeks later. Warn, never block: an honest "another division" on the form
        is worth more than a guess that fits, and the coordinator still wants the
@@ -210,16 +224,49 @@
       });
     }
 
+    /* `contact` and `level` predate the long form and still back the admin
+       list and every row submitted before it. Derive them here rather than
+       asking twice, so one summary column keeps working across both shapes. */
+    var fullName = function () {
+      return [get('contact_first'), get('contact_last')].filter(Boolean).join(' ');
+    };
+    /* `level` is NOT NULL and CHECKed against exactly these three values in
+       schema.sql, so this has to collapse to one of them — "Varsity + JV"
+       would be rejected and the visitor would land in the mailto fallback
+       with no idea why. team1_level / team2_level carry the detail. */
+    var levelSummary = function () {
+      var a = get('team1_level'), b = get('team2_level');
+      if (a && b) return 'Multiple teams';
+      return a || 'Varsity';
+    };
+
     var mailtoFallback = function (note) {
       var to = cfg.CONTACT_EMAIL || form.getAttribute('data-mailto') || 'info@battleonimperial.com';
       var school = get('school');
+      var coach = function (n) {
+        var name = [get('coach' + n + '_first'), get('coach' + n + '_last')].filter(Boolean).join(' ');
+        if (!name) return null;
+        return 'Coach ' + n + ': ' + name + ' · ' + (get('coach' + n + '_email') || '—') +
+               ' · ' + (get('coach' + n + '_phone') || '—');
+      };
       var lines = [
-        'Team: ' + school,
-        'Level: ' + get('level'),
+        'School: ' + school,
         'CIF division: ' + (get('cif_division') || '—'),
-        'Contact: ' + get('contact'),
+        '',
+        'Submitted by: ' + fullName() + ' (' + (get('role') || 'role not given') + ')',
         'Email: ' + get('email'),
-        'Phone: ' + (get('phone') || '—'),
+        'Cell: ' + (get('phone') || '—'),
+        '',
+        coach(1) || 'Coach 1: —',
+        coach(2) || 'Coach 2: —',
+        '',
+        'Team 1: ' + (get('team1_level') || '—'),
+        '  ' + (get('team1_strength') || 'no notes'),
+        'Team 2: ' + (get('team2_level') || 'not entering a second team'),
+        '  ' + (get('team2_strength') || 'no notes'),
+        '',
+        'Deposit terms acknowledged: ' +
+          (form.elements.payment_ack && form.elements.payment_ack.checked ? 'yes' : 'no'),
         '',
         'Notes:',
         get('notes') || '—',
@@ -276,12 +323,34 @@
         },
         body: JSON.stringify({
           school: get('school'),
-          level: get('level'),
           cif_division: get('cif_division') || null,
-          contact: get('contact'),
+
+          // Derived, not asked — see fullName / levelSummary above.
+          contact: fullName(),
+          level: levelSummary(),
+
+          contact_first: get('contact_first') || null,
+          contact_last: get('contact_last') || null,
+          role: get('role') || null,
           email: get('email'),
           phone: get('phone') || null,
+
+          coach1_first: get('coach1_first') || null,
+          coach1_last: get('coach1_last') || null,
+          coach1_email: get('coach1_email') || null,
+          coach1_phone: get('coach1_phone') || null,
+          coach2_first: get('coach2_first') || null,
+          coach2_last: get('coach2_last') || null,
+          coach2_email: get('coach2_email') || null,
+          coach2_phone: get('coach2_phone') || null,
+
+          team1_level: get('team1_level') || null,
+          team1_strength: get('team1_strength') || null,
+          team2_level: get('team2_level') || null,
+          team2_strength: get('team2_strength') || null,
+
           notes: get('notes') || null,
+          payment_ack: !!(form.elements.payment_ack && form.elements.payment_ack.checked),
           consent: !!(form.elements.consent && form.elements.consent.checked)
         })
       })

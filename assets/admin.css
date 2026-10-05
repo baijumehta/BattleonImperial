@@ -212,3 +212,21 @@
   padding: 3px 9px; border-radius: 3px;
   background: rgba(232,185,58,.18); color: var(--gold);
 }
+
+/* ------------------------------------------------ registration details -- */
+/* The entry form asks far more than a table row can hold, so the extra sits
+   in a row underneath that opens on demand. */
+.admtable tr.detailrow > td { background: var(--surface-2); padding: 0; }
+.detail {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px 32px; padding: 20px 16px 22px;
+}
+.detail__group h4 {
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 10px;
+}
+.detail dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; }
+.detail dt { font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.detail dd { margin: 0; font-size: 13.5px; color: var(--ink); overflow-wrap: anywhere; }
+.detail dd.muted { color: #a3a09a; font-style: italic; }
