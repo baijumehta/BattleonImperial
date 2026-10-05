@@ -27,31 +27,50 @@ Then create an **API key** with the *send email* permission.
 
 ## 2. Secrets
 
-```bash
-supabase secrets set \
-  SMTP2GO_API_KEY="api-xxxxxxxxxxxxxxxx" \
-  MAIL_FROM="Battle on Imperial <noreply@battleonimperial.com>" \
-  MAIL_REPLY_TO="info@battleonimperial.com" \
-  MAIL_TO_ORGANISERS="lydie@example.com,mike@example.com,baiju@rclick.com" \
-  WEBHOOK_SECRET="$(openssl rand -hex 32)" \
-  ADMIN_URL="https://www.battleonimperial.com/admin.html"
-```
+Dashboard → **Project Settings → Edge Functions → Secrets**, six rows:
 
-Keep the `WEBHOOK_SECRET` value — step 4 needs it.
+| Name | Value |
+|---|---|
+| `SMTP2GO_API_KEY` | the send key from step 1 |
+| `MAIL_FROM` | `Battle on Imperial <noreply@battleonimperial.com>` |
+| `MAIL_REPLY_TO` | `info@battleonimperial.com` |
+| `MAIL_TO_ORGANISERS` | comma-separated; who gets the alert |
+| `WEBHOOK_SECRET` | a long random string — step 4 needs the same one |
+| `ADMIN_URL` | `https://www.battleonimperial.com/admin.html` |
+
+Generate the secret locally rather than reusing one from anywhere else:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 `MAIL_REPLY_TO` has to be a mailbox someone reads. A coach replying to the
 confirmation is the most likely way you will hear about a mistake in an entry.
 
+With the CLI instead: `supabase secrets set NAME=value NAME2=value2`.
+
 ## 3. Deploy
+
+Dashboard → **Edge Functions → Deploy a new function → via editor**. Name it
+`registration-email` and create both files, `index.ts` and `templates.ts`, with
+the contents from this directory. Turn **Verify JWT off**.
+
+With the CLI instead:
 
 ```bash
 supabase functions deploy registration-email --no-verify-jwt
 ```
 
-`--no-verify-jwt` is deliberate. A database webhook cannot mint a user JWT, so
+Verify-JWT-off is deliberate. A database webhook cannot mint a user JWT, so
 `WEBHOOK_SECRET` is the gate instead. **Without the secret set, the function
 refuses every request** rather than running unauthenticated — an open endpoint
 that sends email on demand is a spam relay.
+
+> On a machine where ThreatLocker or similar blocks the CLI binary, the
+> dashboard route above does every step. Do not allowlist the npx copy of the
+> CLI: it lives under a hashed npm cache path that changes on upgrade, so the
+> rule goes stale and you are left with a permanent exception that no longer
+> matches anything.
 
 ## 4. The webhook
 
