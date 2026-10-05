@@ -7,3 +7,6 @@ Thumbs.db
 
 # Generated social graphics — regenerate with social/make-posts.ps1
 social/out/
+
+# Supabase CLI scratch — project ref and version cache, rewritten on every run
+supabase/.temp/
