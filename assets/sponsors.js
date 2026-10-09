@@ -135,7 +135,7 @@
   }
 
   function mailtoFallback(note) {
-    var to = form.getAttribute('data-mailto') || cfg.CONTACT_EMAIL || 'info@battleonimperial.com';
+    var to = form.getAttribute('data-mailto') || cfg.CONTACT_EMAIL || 'battleonimperial@gmail.com';
     var lines = [
       'Business: ' + get('business'),
       'Website: ' + (get('website') || '—'),

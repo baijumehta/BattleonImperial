@@ -33,7 +33,7 @@ Dashboard → **Project Settings → Edge Functions → Secrets**, six rows:
 |---|---|
 | `SMTP2GO_API_KEY` | the send key from step 1 |
 | `MAIL_FROM` | `Battle on Imperial <noreply@battleonimperial.com>` |
-| `MAIL_REPLY_TO` | `info@battleonimperial.com` |
+| `MAIL_REPLY_TO` | `battleonimperial@gmail.com` |
 | `MAIL_TO_ORGANISERS` | comma-separated; who gets the alert |
 | `WEBHOOK_SECRET` | a long random string — step 4 needs the same one |
 | `ADMIN_URL` | `https://www.battleonimperial.com/admin.html` |

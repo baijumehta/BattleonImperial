@@ -484,7 +484,7 @@
       setState('empty', EMPTY[0], EMPTY[1]);
     } else {
       setState('error', 'We could not load the schedule.',
-        'Please refresh in a moment. If it keeps happening, email info@battleonimperial.com.');
+        'Please refresh in a moment. If it keeps happening, email battleonimperial@gmail.com.');
     }
   });
 })();

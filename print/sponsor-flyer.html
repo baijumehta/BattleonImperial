@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Battle on Imperial — Sponsorship Packet</title>
+<!--
+  Source for assets/battle-on-imperial-sponsorship.pdf. Two US-letter pages.
+
+  Regenerate the PDF with headless Chrome (Edge's headless mode is blocked on
+  the machine this was built on; Chrome at the usual path works). Give it a
+  scratch profile so it does not hand off to a running browser:
+
+    & "C:Program FilesGoogleChromeApplicationchrome.exe" --headless=new --disable-gpu
+      --no-first-run --no-pdf-header-footer --virtual-time-budget=10000
+      --user-data-dir=$env:TEMPchrome-flyer
+      --print-to-pdf="C:devattleofimperialassetsattle-on-imperial-sponsorship.pdf"
+      "file:///C:/dev/battleofimperial/print/sponsor-flyer.html"
+
+  Check the layout the same way with --window-size=816,2112 --screenshot=...
+  instead of --print-to-pdf: both pages must fit above their black footer.
+
+  EDIT: packages, prices, the date and the contact are the same facts as on
+  sponsors.html — change them together. The money wording here matches the
+  site deliberately (costs of the day, keeps entry affordable), not the
+  flyer's "proceeds support the booster club".
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+  @page { size: letter; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { font-family: Inter, Arial, sans-serif; color: #1d1d22; font-size: 10.5pt; line-height: 1.45; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 8.5in; height: 11in; position: relative; overflow: hidden; page-break-after: always; background: #f7f4ee; }
+  .page:last-child { page-break-after: auto; }
+  .disp { font-family: "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; letter-spacing: .02em; }
+
+  /* header */
+  .head { background: #000; color: #fff; padding: .2in .5in .18in; display: flex; align-items: center; gap: .3in; }
+  .head img { width: 1.1in; height: auto; display: block; }
+  .head__title { flex: 1; }
+  .head__kicker { font-size: 9pt; letter-spacing: .22em; text-transform: uppercase; color: #e8b93a; font-weight: 700; }
+  .head__name { font-size: 34pt; line-height: .92; font-weight: 700; margin: 4pt 0 6pt; }
+  .head__name span { color: #e8b93a; }
+  .head__tag { font-size: 11pt; font-weight: 600; color: #f0e6cd; }
+  .head__tag em { color: #e8b93a; font-style: normal; }
+  .head__when { text-align: right; border-left: 1px solid rgba(255,255,255,.22); padding-left: .3in; }
+  .head__when .d1 { font-size: 11pt; letter-spacing: .18em; color: #e8b93a; font-weight: 700; }
+  .head__when .d2 { font-size: 26pt; line-height: 1; font-weight: 700; }
+  .head__when .d3 { font-size: 10pt; color: #ddd5c4; margin-top: 5pt; line-height: 1.35; }
+
+  /* facts */
+  .facts { display: flex; gap: .12in; padding: .14in .5in 0; }
+  .fact { flex: 1; background: #fff; border: 1px solid #e6e1d6; border-radius: 8pt; padding: 7pt 10pt; }
+  .fact b { display: block; font-family: "Barlow Condensed", Impact, sans-serif; font-size: 21pt; line-height: 1; color: #8a6a10; }
+  .fact span { display: block; font-size: 8.5pt; font-weight: 600; color: #5a5a62; margin-top: 3pt; line-height: 1.3; }
+
+  /* gold band */
+  .band { margin: .14in .5in 0; background: #e8b93a; color: #0b0b0d; border-radius: 8pt; padding: 9pt 14pt; display: flex; align-items: baseline; justify-content: space-between; gap: 12pt; }
+  .band h2 { margin: 0; font-size: 19pt; line-height: 1; }
+  .band p { margin: 0; font-size: 9pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+
+  /* packages */
+  .pkgs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .12in; padding: .14in .5in 0; }
+  .pkg { background: #fff; border: 1px solid #e6e1d6; border-radius: 8pt; padding: 8pt 11pt 9pt; position: relative; }
+  .pkg--top { border: 2px solid #e8b93a; }
+  .pkg--top::before { content: "Top billing"; position: absolute; top: -8pt; left: 10pt; background: #e8b93a; color: #0b0b0d; font-size: 7pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 2pt 7pt; border-radius: 20pt; }
+  .pkg h3 { margin: 0; font-size: 14pt; line-height: 1.05; color: #1d1d22; }
+  .pkg .price { font-family: "Barlow Condensed", Impact, sans-serif; font-size: 21pt; line-height: 1; color: #8a6a10; margin: 2pt 0 5pt; }
+  .pkg ul { margin: 0; padding: 0; list-style: none; font-size: 8.2pt; line-height: 1.3; }
+  .pkg li { position: relative; padding-left: 12pt; margin-bottom: 2pt; }
+  .pkg li::before { content: "\2713"; position: absolute; left: 0; top: 0; color: #8a6a10; font-weight: 700; }
+  .pkg li b { color: #1d1d22; }
+
+  /* footer */
+  .foot { position: absolute; left: 0; right: 0; bottom: 0; background: #000; color: #fff; padding: .12in .5in; display: flex; align-items: center; gap: .3in; }
+  .foot__cta { flex: 1; }
+  .foot__cta .k { font-size: 8.5pt; letter-spacing: .2em; text-transform: uppercase; color: #e8b93a; font-weight: 700; }
+  .foot__cta .v { font-size: 12pt; font-weight: 700; margin-top: 3pt; }
+  .foot__cta .s { font-size: 9.5pt; color: #ddd5c4; margin-top: 3pt; }
+  .foot__qr { width: .8in; height: .8in; background: #fff; border-radius: 6pt; padding: 5pt; }
+  .foot__qr img, .foot__qr svg { width: 100%; height: 100%; display: block; }
+
+  /* page 2 */
+  .p2 { padding: .38in .6in .4in; }
+  .p2 .mini { display: flex; align-items: center; gap: .18in; border-bottom: 2px solid #000; padding-bottom: .1in; margin-bottom: .2in; }
+  .p2 .mini img { width: .65in; height: auto; }
+  .p2 .mini .t { font-size: 22pt; line-height: 1; font-weight: 700; }
+  .p2 .mini .t span { color: #8a6a10; }
+  .p2 .mini .r { margin-left: auto; text-align: right; font-size: 9.5pt; color: #5a5a62; line-height: 1.35; }
+  .p2 .mini .r b { color: #1d1d22; }
+  .letter p { margin: 0 0 7pt; font-size: 10pt; }
+  .letter h3 { display: inline-block; background: #000; color: #e8b93a; font-size: 10.5pt; letter-spacing: .06em; padding: 2pt 9pt; border-radius: 4pt; margin: 5pt 0 5pt; }
+  .letter ul { margin: 0 0 7pt; padding: 0; list-style: none; }
+  .letter li { position: relative; padding-left: 16pt; margin-bottom: 2pt; font-size: 10pt; }
+  .letter li::before { content: "\2713"; position: absolute; left: 0; color: #8a6a10; font-weight: 700; }
+  .sig { margin-top: 8pt; display: flex; justify-content: space-between; align-items: flex-end; gap: .3in; }
+  .sig .who b { display: block; font-size: 12pt; }
+  .sig .who span { display: block; font-size: 9.5pt; color: #5a5a62; line-height: 1.4; }
+  .sig .stamp { background: #e8b93a; color: #0b0b0d; padding: 8pt 12pt; border-radius: 8pt; font-size: 15pt; line-height: 1.05; font-weight: 700; text-align: right; transform: rotate(-2deg); }
+  .p2 .foot { padding: .1in .6in; }
+</style>
+</head>
+<body>
+
+<!-- ================================================================ PAGE 1 -->
+<section class="page">
+  <header class="head">
+    <img src="../assets/img/logo-480.png" alt="">
+    <div class="head__title">
+      <div class="head__kicker">Girls High School Lacrosse Tournament</div>
+      <div class="head__name disp">Battle on<br><span>Imperial</span></div>
+      <div class="head__tag">Skip the drive. <em>Play the game.</em></div>
+    </div>
+    <div class="head__when">
+      <div class="d1">SATURDAY</div>
+      <div class="d2 disp">March 13</div>
+      <div class="d2 disp" style="font-size:22pt;">2027</div>
+      <div class="d3"><b style="color:#fff;">Canyon High School</b><br>220 S Imperial Hwy<br>Anaheim Hills, California</div>
+    </div>
+  </header>
+
+  <div class="facts">
+    <div class="fact"><b>500+</b><span>Players, coaches &amp; families on site</span></div>
+    <div class="fact"><b>3</b><span>Full-size fields on one campus</span></div>
+    <div class="fact"><b>1</b><span>Day · one community · a first-class tournament experience</span></div>
+    <div class="fact"><b>V &amp; JV</b><span>Programs from across Southern California</span></div>
+  </div>
+
+  <div class="band">
+    <h2 class="disp">Sponsorship Opportunities</h2>
+    <p>Invest in our players · Support our community · Gain valuable exposure</p>
+  </div>
+
+  <div class="pkgs">
+    <article class="pkg pkg--top">
+      <h3 class="disp">Presenting Partner</h3>
+      <div class="price">$2,500</div>
+      <ul>
+        <li><b>“Battle on Imperial presented by [Your Business]”</b></li>
+        <li>Largest logo placement on event signage and the website</li>
+        <li>Featured on all marketing materials and social media</li>
+        <li>Vendor space at the event</li>
+        <li>PA announcements through the day</li>
+        <li>Items in every team packet</li>
+      </ul>
+    </article>
+    <article class="pkg">
+      <h3 class="disp">Field Partner</h3>
+      <div class="price">$1,250</div>
+      <ul>
+        <li><b>Exclusive naming rights to one of the three fields</b></li>
+        <li>Large signage on your field</li>
+        <li>Logo on the website and social media</li>
+        <li>PA announcements</li>
+        <li>Vendor space at the event</li>
+        <li>Items in team packets</li>
+      </ul>
+    </article>
+    <article class="pkg">
+      <h3 class="disp">Player Experience Partner</h3>
+      <div class="price">$1,000</div>
+      <ul>
+        <li><b>Logo on a player swag item</b> — lanyards, pins or similar</li>
+        <li>Logo on the website and social media</li>
+        <li>PA announcements</li>
+        <li>Vendor space at the event</li>
+        <li>Items in team packets</li>
+      </ul>
+    </article>
+    <article class="pkg">
+      <h3 class="disp">Athletic Trainer Partner</h3>
+      <div class="price">$750</div>
+      <ul>
+        <li><b>Logo at the athletic trainer station</b></li>
+        <li>Logo on the website and social media</li>
+        <li>PA announcements</li>
+        <li>Vendor space at the event</li>
+      </ul>
+    </article>
+    <article class="pkg">
+      <h3 class="disp">Coaches Zone Partner</h3>
+      <div class="price">$500</div>
+      <ul>
+        <li><b>Logo at the coaches’ hospitality area</b></li>
+        <li>Logo on the website and social media</li>
+        <li>PA announcements</li>
+        <li>Vendor space at the event</li>
+        <li>Items in team packets</li>
+      </ul>
+    </article>
+    <article class="pkg">
+      <h3 class="disp">Game Sponsor</h3>
+      <div class="price">$250</div>
+      <ul>
+        <li><b>“Game presented by [Your Business]”</b></li>
+        <li>Logo on the digital game schedule</li>
+        <li>PA announcement at your game</li>
+        <li>Social media recognition</li>
+        <li>Items in team packets</li>
+      </ul>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <div class="foot__cta">
+      <div class="k">To become a sponsor or learn more</div>
+      <div class="v">battleonimperial.com/sponsors</div>
+      <div class="s">Lydie Gutfeld, Event Organizer · 714-747-4770 · battleonimperial@gmail.com</div>
+    </div>
+    <div class="foot__qr" id="qr1"></div>
+  </footer>
+</section>
+
+<!-- ================================================================ PAGE 2 -->
+<section class="page p2">
+  <div class="mini">
+    <img src="../assets/img/logo-480.png" alt="">
+    <div class="t disp">Battle on <span>Imperial</span></div>
+    <div class="r"><b>Saturday, March 13, 2027</b><br>Canyon High School · Anaheim Hills, CA<br>battleonimperial.com</div>
+  </div>
+
+  <div class="letter">
+    <p>Dear Community Partner,</p>
+    <p>
+      We are excited to invite you to be a sponsor of the inaugural <b>Battle on Imperial Girls
+      Lacrosse Tournament</b>, happening Saturday, March 13, 2027, at Canyon High School in Anaheim
+      Hills, California.
+    </p>
+    <p>
+      Battle on Imperial brings together competitive girls lacrosse programs from across Southern
+      California for a full day of high-level competition, community spirit and a premier event
+      experience — varsity and JV, three full-size fields, one campus. With 500+ players, coaches
+      and families expected, the tournament is an incredible opportunity to showcase your business
+      while supporting youth sports and our local community.
+    </p>
+
+    <h3 class="disp">Why become a sponsor?</h3>
+    <ul>
+      <li>High-visibility exposure to local and regional families, athletes and coaches</li>
+      <li>Support the growth of girls lacrosse and youth sports in our community</li>
+      <li>Align your brand with a positive, active and community-focused event</li>
+      <li>Reach a targeted audience through event signage, social media, digital marketing and more</li>
+      <li>Be part of an event that promotes leadership, teamwork and healthy lifestyles</li>
+    </ul>
+
+    <h3 class="disp">Your support makes a difference</h3>
+    <p>
+      Battle on Imperial is put on by the Canyon High School Lacrosse Booster Club, a volunteer
+      parent organization. Sponsorships pay for the parts of the day that make it a first-class
+      event for every team that comes — field preparation, certified officials, athletic training,
+      player packets, shade and water at every field. Your support keeps entry affordable for the
+      programs that play, keeps the day free for the families who watch, and backs girls lacrosse
+      at Canyon High School.
+    </p>
+
+    <h3 class="disp">Together, we can make an impact</h3>
+    <p>
+      We would be honored to partner with you for this exciting event. The packages on the first
+      page are a starting point — our team is happy to customize one to meet your business goals,
+      and in-kind support (water, ice, food, swag) is just as welcome.
+    </p>
+    <p>
+      Thank you for considering supporting Battle on Imperial. We hope you will join us in making
+      this tournament a memorable and successful event for our players, families and community.
+    </p>
+    <p>With gratitude,</p>
+
+    <div class="sig">
+      <div class="who">
+        <b>Lydie Gutfeld</b>
+        <span>Event Organizer, Battle on Imperial Girls Lacrosse Tournament<br>
+        714-747-4770 · battleonimperial@gmail.com<br>
+        battleonimperial.com/sponsors</span>
+      </div>
+      <div class="stamp disp">More than<br>a tournament.<br>A stronger<br>community.</div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="foot__cta">
+      <div class="k">Sponsorship inquiries</div>
+      <div class="v">battleonimperial.com/sponsors</div>
+      <div class="s">Canyon High School Lacrosse Booster Club · Anaheim Hills, California</div>
+    </div>
+    <div class="foot__qr" id="qr2"></div>
+  </footer>
+</section>
+
+<script>
+  // QR codes to the sponsors page. If the library did not load, the URL is
+  // printed beside the box anyway.
+  (function () {
+    if (typeof qrcode !== 'function') return;
+    var q = qrcode(0, 'M');
+    q.addData('https://www.battleonimperial.com/sponsors.html');
+    q.make();
+    var svg = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+    document.getElementById('qr1').innerHTML = svg;
+    document.getElementById('qr2').innerHTML = svg;
+  })();
+</script>
+</body>
+</html>

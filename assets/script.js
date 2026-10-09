@@ -308,7 +308,7 @@
     };
 
     var mailtoFallback = function (note) {
-      var to = cfg.CONTACT_EMAIL || form.getAttribute('data-mailto') || 'info@battleonimperial.com';
+      var to = cfg.CONTACT_EMAIL || form.getAttribute('data-mailto') || 'battleonimperial@gmail.com';
       var school = get('school');
       var coach = function (n) {
         var name = [get('coach' + n + '_first'), get('coach' + n + '_last')].filter(Boolean).join(' ');

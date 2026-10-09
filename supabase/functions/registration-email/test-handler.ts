@@ -12,7 +12,7 @@ const SECRETS: Record<string, string> = {
   WEBHOOK_SECRET: 'test-secret',
   SMTP2GO_API_KEY: 'api-test',
   MAIL_FROM: 'Battle on Imperial <noreply@battleonimperial.com>',
-  MAIL_REPLY_TO: 'info@battleonimperial.com',
+  MAIL_REPLY_TO: 'battleonimperial@gmail.com',
   MAIL_TO_ORGANISERS: 'lydie@example.com, mike@example.com',
   ADMIN_URL: 'https://www.battleonimperial.com/admin.html'
 };
@@ -104,7 +104,7 @@ console.log('\nhappy path');
       JSON.stringify([{ header: 'Reply-To', value: 'dana@example.com' }]));
   check('coach reply-to is the tournament',
     JSON.stringify(sent[1].body.custom_headers) ===
-      JSON.stringify([{ header: 'Reply-To', value: 'info@battleonimperial.com' }]));
+      JSON.stringify([{ header: 'Reply-To', value: 'battleonimperial@gmail.com' }]));
   check('both parts are present on both mails',
     sent.every((s) => typeof s.body.text_body === 'string' && typeof s.body.html_body === 'string'));
   check('both reported ok', body.results.organisers.ok && body.results.coach.ok);

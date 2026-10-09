@@ -24,5 +24,5 @@ window.BOI_CONFIG = {
   SUPABASE_ANON_KEY: 'sb_publishable_OTUf_7xjT8ArfCMsAfzThA_thkqPgPy',
 
   // Where the mailto fallback sends, and the address shown on the site.
-  CONTACT_EMAIL: 'info@battleonimperial.com',
+  CONTACT_EMAIL: 'battleonimperial@gmail.com',
 };

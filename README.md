@@ -108,17 +108,21 @@ with a call to action and a logo band.
   CHECKs in `supabase/sponsors.sql`, the order list in `assets/sponsors.js`,
   the select in `admin.html` (and `SPONSOR_TIERS` in `admin.js`), and
   `PACKAGES` in `sponsor-templates.ts`.
+- **Sponsor packet PDF** — `assets/battle-on-imperial-sponsorship.pdf`, linked
+  from `sponsors.html` and the home page. Its source is
+  `print/sponsor-flyer.html`; the render command is in a comment at the top of
+  that file. Regenerate it after any change to packages, prices, the date or
+  the contact.
 - **Contact** — the sponsorship contact (Lydie, 714-747-4770,
   battleonimperial@gmail.com) is on `sponsors.html` and in
-  `sponsor-templates.ts`; it is the contact printed on the flyer and differs
-  from the `info@` address used elsewhere on the site.
+  `sponsor-templates.ts`. The same Gmail address is the site-wide contact.
 
 ## Things to fill in before launch
 
 | What | Where |
 |---|---|
 | Tournament date (currently Saturday, March 13, 2027) | `index.html` — hero badge, `.hero__rule`, the "When is the tournament?" FAQ, the Key Dates strip, the JSON-LD block, the `description` + `og:description` meta tags; `battle-on-imperial.ics` and the Google Calendar link in the address card; the refund-tier dates in `#policy` |
-| Contact email (currently `info@battleonimperial.com`, not yet a real mailbox) | `assets/config.js`, plus the footer and final CTA in `index.html` |
+| Contact email (currently `battleonimperial@gmail.com`) | `assets/config.js`, plus the footer and final CTA in `index.html` |
 | Supabase URL + anon key | `assets/config.js` |
 | Stock photos → real Canyon team photos | `assets/img/` (see [CREDITS.md](CREDITS.md)) |
 | Drive-time table — verify against your own routes | `index.html` — `.compare` table |
@@ -140,7 +144,7 @@ composing an email, so the site works either way.
 window.BOI_CONFIG = {
   SUPABASE_URL: 'https://YOUR-PROJECT.supabase.co',
   SUPABASE_ANON_KEY: 'eyJ...',
-  CONTACT_EMAIL: 'info@battleonimperial.com',
+  CONTACT_EMAIL: 'battleonimperial@gmail.com',
 };
 ```
 
