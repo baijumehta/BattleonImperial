@@ -915,6 +915,20 @@ h2.title {
 }
 .game__side.is-win .game__score { color: var(--ink); }
 
+/* Which jersey to wear. A swatch plus the word, never colour alone. The white
+   swatch carries a border or it vanishes against the card. */
+.game__kit {
+  display: inline-flex; align-items: center; gap: 5px; flex: none;
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted);
+}
+.game__kit::before {
+  content: ""; width: 10px; height: 10px; border-radius: 3px;
+  border: 1px solid var(--muted);
+}
+.game__kit--white::before { background: #fff; }
+.game__kit--dark::before { background: var(--black-900); border-color: var(--black-900); }
+
 /* ----------------------------------------------------------- standings -- */
 .pool {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);

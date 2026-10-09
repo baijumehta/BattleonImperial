@@ -343,6 +343,12 @@
                                     (idx === 1 && g.away_score > g.home_score));
               if (won) side.classList.add('is-win');
               side.appendChild(el('span', 'game__team', pair[0].name));
+              // Home wears white, away wears dark. Spelled out on every game
+              // rather than left to a "first team listed" rule, which coaches
+              // read differently and which this page lists home-first.
+              side.appendChild(idx === 0
+                ? el('span', 'game__kit game__kit--white', 'White')
+                : el('span', 'game__kit game__kit--dark', 'Dark'));
               var score = (st.showScore && pair[1] !== null && pair[1] !== undefined)
                 ? String(pair[1]) : '–';
               side.appendChild(el('span', 'game__score', score));
