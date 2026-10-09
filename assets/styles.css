@@ -394,6 +394,7 @@ h2.title {
 .compare__head h3 { color: #fff; margin: 0; font-family: var(--font-display); font-size: 22px; text-transform: uppercase; letter-spacing: .04em; }
 .compare__head p { margin: 4px 0 0; font-size: 13.5px; color: #9d968a; }
 .compare__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.compare__scroll:focus-visible { outline-offset: -3px; }
 .compare table { width: 100%; border-collapse: collapse; min-width: 340px; }
 .compare th, .compare td { padding: 14px clamp(18px, 3vw, 28px); text-align: left; font-size: 15.5px; border-bottom: 1px solid var(--line); }
 .compare th { font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--surface-2); }
@@ -758,7 +759,7 @@ h2.title {
 .footer { background: #050506; color: #8c867c; padding: 58px 0 34px; font-size: 14.5px; }
 .footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
 @media (max-width: 760px) { .footer__grid { grid-template-columns: 1fr; gap: 28px; } }
-.footer h4 { color: #fff; font-family: var(--font-display); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 16px; }
+.footer h3 { color: #fff; font-family: var(--font-display); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 16px; }
 .footer ul { list-style: none; padding: 0; margin: 0; }
 .footer li { margin-bottom: 9px; }
 .footer a { color: #a8a195; text-decoration: none; }
@@ -784,7 +785,7 @@ h2.title {
 .btn svg { width: 20px; height: 20px; flex: none; }
 .footer__bottom {
   border-top: 1px solid rgba(255,255,255,.09); padding-top: 24px;
-  display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; font-size: 13px; color: #79736a;
+  display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; font-size: 13px; color: #8f8a80;
 }
 .footer__brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .footer__brand svg { width: 34px; height: 34px; }
