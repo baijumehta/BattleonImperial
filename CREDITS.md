@@ -20,11 +20,9 @@ JPEG quality 78–80). Total weight on the page is about 1.7 MB.
 
 ## Before these go in front of a wider audience
 
-**Media releases.** These are identifiable minors on a public website. Most
-districts require a signed photo release before a student's image is used in
-promotional material, and some families opt out. Worth checking the roster
-against whatever release the school holds before the site is promoted beyond
-the booster club.
+**Media releases.** Confirmed 9 October 2026: the school holds releases for
+the players shown, and privacy.html says so. If a family later asks for a
+photo to come down, replace it at the same path (see below).
 
 **Two photos were deliberately left out.** The 2026 Varsity and JV banner
 portraits in the Dropbox folder carry an "EPIC IMAGES" watermark. Those are a
