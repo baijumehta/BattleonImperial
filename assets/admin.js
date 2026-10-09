@@ -495,7 +495,7 @@
     if (!rows.length) {
       var tr0 = el('tr');
       var td0 = el('td', 'muted', 'No inquiries yet.');
-      td0.colSpan = 7;
+      td0.colSpan = 8;
       tr0.appendChild(td0); body.appendChild(tr0);
       return;
     }
@@ -548,6 +548,22 @@
       });
       st.appendChild(sel);
       tr.appendChild(st);
+
+      // Spam and test inquiries can go; a real one is better marked Declined,
+      // so the history of who asked stays.
+      var act = el('td', 'nowrap');
+      var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!confirm('Remove the inquiry from ' + r.business + '? This cannot be undone. ' +
+                     'For a real inquiry you are turning down, set it to Declined instead.')) return;
+        markRow(tr, 'saving');
+        authFetch('/rest/v1/sponsor_inquiries?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE' })
+          .then(function () { say('Removed ' + r.business); return loadAll(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message, 'error'); });
+      });
+      act.appendChild(del);
+      tr.appendChild(act);
 
       body.appendChild(tr);
     });
