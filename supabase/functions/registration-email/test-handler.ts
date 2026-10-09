@@ -138,5 +138,36 @@ console.log('\nsmtp2go failures');
   smtpReply = { status: 200, body: { data: { succeeded: 1 } } };
 }
 
+console.log('\nsponsor inquiries');
+{
+  sent = [];
+  const inquiry = {
+    business: 'Anaheim Hills Orthodontics', contact_name: 'Priya Natarajan',
+    email: 'priya@example.com', tier: 'Field Partner', consent: true
+  };
+  const res = await post({ type: 'INSERT', table: 'sponsor_inquiries', record: inquiry });
+  const body = await res.json();
+  check('responds 200', res.status === 200);
+  check('sends exactly two emails', sent.length === 2, String(sent.length));
+  check('organiser alert is the sponsor one',
+    String(sent[0].body.subject).startsWith('Sponsor inquiry: Anaheim Hills Orthodontics'), String(sent[0].body.subject));
+  check('organiser reply-to is the business',
+    JSON.stringify(sent[0].body.custom_headers) ===
+      JSON.stringify([{ header: 'Reply-To', value: 'priya@example.com' }]));
+  check('confirmation goes to the business',
+    JSON.stringify(sent[1].body.to) === JSON.stringify(['priya@example.com']));
+  check('response names the business, not a school', body.business === 'Anaheim Hills Orthodontics' && !('school' in body));
+
+  sent = [];
+  const { email, ...noEmail } = inquiry;
+  const body2 = await (await post({ type: 'INSERT', table: 'sponsor_inquiries', record: noEmail })).json();
+  check('without an email only the organisers are mailed', sent.length === 1 && typeof body2.results.business === 'string');
+
+  sent = [];
+  await post({ type: 'INSERT', table: 'registrations', record: RECORD });
+  check('a registration still takes the registration path',
+    sent.length === 2 && !String(sent[0].body.subject).startsWith('Sponsor inquiry'));
+}
+
 console.log(failures ? `\n${failures} failing check(s)\n` : '\nall checks pass\n');
 process.exit(failures ? 1 : 0);

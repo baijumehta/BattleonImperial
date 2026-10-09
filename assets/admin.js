@@ -23,6 +23,13 @@
   var role = 'admin';      // narrowed at sign-in from the staff row
   var teams = [];
   var games = [];
+  var sponsors = [];
+
+  // EDIT: mirrors the tier CHECK in supabase/sponsors.sql.
+  var SPONSOR_TIERS = [
+    'Presenting Partner', 'Field Partner', 'Player Experience Partner',
+    'Athletic Trainer Partner', 'Coaches Zone Partner', 'Game Sponsor'
+  ];
 
   /* ------------------------------------------------------------- session -- */
   function loadSession() {
@@ -319,6 +326,233 @@
     });
   }
 
+  /* ------------------------------------------------------------ sponsors -- */
+  // Logos go in the public sponsor-logos bucket (supabase/sponsors.sql) and
+  // the row stores the public URL. The file name carries the sponsor id and a
+  // timestamp, so replacing a logo never serves a cached old one.
+  function uploadLogo(file, sponsorId) {
+    var ext = (file.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '') || 'png';
+    var path = sponsorId + '-' + Date.now() + '.' + ext;
+    return authFetch('/storage/v1/object/sponsor-logos/' + path, {
+      method: 'POST',
+      headers: { 'Content-Type': file.type || 'application/octet-stream', 'x-upsert': 'true' },
+      body: file
+    }).then(function () {
+      return URL_BASE + '/storage/v1/object/public/sponsor-logos/' + path;
+    });
+  }
+
+  function renderSponsors() {
+    var body = document.getElementById('sponsorRows');
+    if (!body) return;
+    body.innerHTML = '';
+
+    if (!sponsors.length) {
+      var tr0 = el('tr');
+      var td0 = el('td', 'muted', 'No sponsors yet. Add the first one above and it appears on the site.');
+      td0.colSpan = 8;
+      tr0.appendChild(td0); body.appendChild(tr0);
+      return;
+    }
+
+    sponsors.forEach(function (s) {
+      var tr = el('tr');
+      tr.dataset.id = s.id;
+
+      function save(field, value) {
+        var b = {}; b[field] = value;
+        return patch('sponsors', 'id', s.id, b, tr).then(function () { s[field] = value; });
+      }
+
+      function cell(field, type) {
+        var td = el('td');
+        var inp;
+        if (type === 'tier') {
+          inp = document.createElement('select');
+          SPONSOR_TIERS.forEach(function (o) {
+            var op = el('option', null, o); op.value = o;
+            if (s.tier === o) op.selected = true;
+            inp.appendChild(op);
+          });
+        } else if (type === 'checkbox') {
+          inp = document.createElement('input');
+          inp.type = 'checkbox';
+          inp.checked = !!s[field];
+        } else {
+          inp = document.createElement('input');
+          inp.type = type === 'number' ? 'number' : (type === 'url' ? 'url' : 'text');
+          inp.value = s[field] === null || s[field] === undefined ? '' : s[field];
+          if (type === 'url') inp.placeholder = 'https://';
+        }
+        inp.setAttribute('aria-label', field + ' for ' + s.name);
+        inp.addEventListener('change', function () {
+          var v;
+          if (type === 'checkbox') v = inp.checked;
+          else if (type === 'number') v = parseInt(inp.value, 10) || 0;
+          else v = inp.value.trim() || null;
+          save(field, v).catch(function () {
+            if (type === 'checkbox') inp.checked = !!s[field];
+            else inp.value = s[field] === null || s[field] === undefined ? '' : s[field];
+          });
+        });
+        td.appendChild(inp);
+        return td;
+      }
+
+      // Logo: a preview, and a file input to upload or replace it.
+      var logoTd = el('td', 'logocell');
+      var preview = el('span', 'logocell__preview');
+      if (s.logo_url) {
+        var img = new Image();
+        img.src = s.logo_url; img.alt = ''; preview.appendChild(img);
+      } else {
+        preview.appendChild(el('span', 'muted', 'none'));
+      }
+      logoTd.appendChild(preview);
+      var file = document.createElement('input');
+      file.type = 'file';
+      file.accept = 'image/png,image/jpeg,image/webp,image/svg+xml';
+      file.setAttribute('aria-label', 'Logo file for ' + s.name);
+      file.addEventListener('change', function () {
+        if (!file.files || !file.files[0]) return;
+        markRow(tr, 'saving');
+        uploadLogo(file.files[0], s.id)
+          .then(function (publicUrl) { return save('logo_url', publicUrl); })
+          .then(function () { renderSponsors(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message || 'Upload failed', 'error'); });
+      });
+      logoTd.appendChild(file);
+      tr.appendChild(logoTd);
+
+      tr.appendChild(cell('name', 'text'));
+      tr.appendChild(cell('tier', 'tier'));
+      tr.appendChild(cell('website', 'url'));
+      tr.appendChild(cell('blurb', 'text'));
+      tr.appendChild(cell('sort', 'number'));
+      tr.appendChild(cell('visible', 'checkbox'));
+
+      var act = el('td', 'nowrap');
+      var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!confirm('Remove ' + s.name + ' from the site? To hide them temporarily, untick Visible instead.')) return;
+        markRow(tr, 'saving');
+        authFetch('/rest/v1/sponsors?id=eq.' + encodeURIComponent(s.id), { method: 'DELETE' })
+          .then(function () { say('Removed ' + s.name); return loadAll(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message, 'error'); });
+      });
+      act.appendChild(del);
+      tr.appendChild(act);
+      body.appendChild(tr);
+    });
+  }
+
+  var addSponsorForm = document.getElementById('addSponsor');
+  if (addSponsorForm) {
+    addSponsorForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = addSponsorForm.elements.name.value.trim();
+      if (!name) return;
+      var website = addSponsorForm.elements.website.value.trim() || null;
+      var logoInput = addSponsorForm.elements.logo;
+      var logoFile = logoInput && logoInput.files && logoInput.files[0];
+      var btn = addSponsorForm.querySelector('button[type=submit]');
+      btn.disabled = true;
+
+      // Create the row first so the logo file can be named after its id.
+      authFetch('/rest/v1/sponsors', {
+        method: 'POST',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({ name: name, tier: addSponsorForm.elements.tier.value, website: website })
+      }).then(function (rows) {
+        var created = rows && rows[0];
+        if (!logoFile || !created) return null;
+        return uploadLogo(logoFile, created.id).then(function (publicUrl) {
+          return authFetch('/rest/v1/sponsors?id=eq.' + encodeURIComponent(created.id), {
+            method: 'PATCH',
+            headers: { Prefer: 'return=minimal' },
+            body: JSON.stringify({ logo_url: publicUrl })
+          });
+        });
+      }).then(function () {
+        addSponsorForm.reset();
+        say('Added ' + name);
+        return loadAll();
+      }).catch(function (err) {
+        say(err.message, 'error');
+      }).then(function () { btn.disabled = false; });
+    });
+  }
+
+  /* --------------------------------------------------- sponsor inquiries -- */
+  function renderInquiries(rows) {
+    var body = document.getElementById('inqRows');
+    var count = document.getElementById('inqCount');
+    if (!body) return;
+    body.innerHTML = '';
+    if (count) count.textContent = rows.length + (rows.length === 1 ? ' inquiry' : ' inquiries');
+
+    if (!rows.length) {
+      var tr0 = el('tr');
+      var td0 = el('td', 'muted', 'No inquiries yet.');
+      td0.colSpan = 7;
+      tr0.appendChild(td0); body.appendChild(tr0);
+      return;
+    }
+
+    rows.forEach(function (r) {
+      var tr = el('tr');
+      tr.appendChild(el('td', 'nowrap', new Date(r.created_at).toLocaleDateString(undefined,
+        { month: 'short', day: 'numeric' })));
+
+      var biz = el('td', 'strong');
+      if (r.website) {
+        var w = el('a', null, r.business);
+        w.href = /^https?:\/\//i.test(r.website) ? r.website : 'https://' + r.website;
+        w.target = '_blank'; w.rel = 'noopener';
+        biz.appendChild(w);
+      } else {
+        biz.textContent = r.business;
+      }
+      tr.appendChild(biz);
+
+      tr.appendChild(el('td', null, r.contact_name));
+
+      var contact = el('td');
+      var a = el('a', null, r.email);
+      a.href = 'mailto:' + r.email;
+      contact.appendChild(a);
+      if (r.phone) { contact.appendChild(document.createElement('br')); contact.appendChild(el('span', 'muted', r.phone)); }
+      if (r.consent === false) {
+        contact.appendChild(document.createElement('br'));
+        contact.appendChild(el('span', 'flag', 'Did not tick "OK to contact"'));
+      }
+      tr.appendChild(contact);
+
+      tr.appendChild(el('td', 'nowrap', r.tier || '—'));
+      tr.appendChild(el('td', 'notes', r.message || '—'));
+
+      var st = el('td');
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Status for ' + r.business);
+      ['new', 'contacted', 'confirmed', 'declined'].forEach(function (s) {
+        var o = el('option', null, s.charAt(0).toUpperCase() + s.slice(1));
+        o.value = s;
+        if (r.status === s) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        patch('sponsor_inquiries', 'id', r.id, { status: sel.value }, tr)
+          .then(function () { r.status = sel.value; })
+          .catch(function () { sel.value = r.status; });
+      });
+      st.appendChild(sel);
+      tr.appendChild(st);
+
+      body.appendChild(tr);
+    });
+  }
+
   /* ------------------------------------------------------- registrations -- */
   function renderRegs(rows) {
     var body = document.getElementById('regRows');
@@ -466,14 +700,39 @@
       authFetch('/rest/v1/tournament_teams?select=*&order=pool.asc,seed.asc'),
       authFetch('/rest/v1/games?select=*&order=slot.asc,field.asc'),
       isAdmin ? authFetch('/rest/v1/registrations?select=*&order=created_at.desc')
+              : Promise.resolve([]),
+      // Sponsor tables may not exist until supabase/sponsors.sql has been run.
+      // That must not take the rest of the panel down with it.
+      isAdmin ? authFetch('/rest/v1/sponsors?select=*&order=tier.asc,sort.asc,name.asc')
+                  .catch(function () { return null; })
+              : Promise.resolve([]),
+      isAdmin ? authFetch('/rest/v1/sponsor_inquiries?select=*&order=created_at.desc')
+                  .catch(function () { return null; })
               : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
       renderTeams();
       renderScores();
-      if (isAdmin) renderRegs(r[2] || []);
+      if (isAdmin) {
+        renderRegs(r[2] || []);
+        if (r[3] === null || r[4] === null) {
+          say('Sponsor tables not found — run supabase/sponsors.sql', 'error');
+        }
+        sponsors = sortSponsors(r[3] || []);
+        renderSponsors();
+        renderInquiries(r[4] || []);
+      }
       document.getElementById('counts').textContent =
-        teams.length + ' teams · ' + games.length + ' games';
+        teams.length + ' teams · ' + games.length + ' games' +
+        (isAdmin && sponsors.length ? ' · ' + sponsors.length + ' sponsors' : '');
+    });
+  }
+
+  // Package order as on the site, not alphabetical.
+  function sortSponsors(list) {
+    return list.slice().sort(function (a, b) {
+      var ta = SPONSOR_TIERS.indexOf(a.tier), tb = SPONSOR_TIERS.indexOf(b.tier);
+      return (ta - tb) || (a.sort - b.sort) || a.name.localeCompare(b.name);
     });
   }
 

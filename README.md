@@ -82,6 +82,37 @@ opens on their team. A link with either parameter replaces whatever filter the
 browser remembered. **Print** uses the print stylesheet, which drops the nav
 and footer and keeps each game card whole.
 
+## Sponsors
+
+`sponsors.html` carries the pitch, the six packages ($250 to $2,500, from the
+sponsor flyer) and an inquiry form. The home page has a `#sponsors` section
+with a call to action and a logo band.
+
+- **Listing sponsors** — Tournament Control → **Sponsors**. Add a name, pick
+  the package, paste the website and upload a logo; it appears on the home
+  page and on `sponsors.html` straight away, grouped by package with the
+  presenting partner largest. Untick *Visible* to hide one without deleting
+  it. Until the first sponsor exists the band is hidden and the home page
+  heading reads "Sponsor the Tournament" instead of "Our Sponsors".
+- **Inquiries** — the form writes to `public.sponsor_inquiries` (insert-only
+  for the public key, like registrations). Each one emails the organisers and
+  the business through the same edge function as team entries, which routes
+  on the table name. Work the list in Tournament Control → **Sponsor
+  Inquiries**.
+- **Setup** — run `supabase/sponsors.sql` (tables, policies, the
+  `sponsor-logos` storage bucket and the email trigger), then redeploy the
+  edge function so it includes `sponsor-templates.ts`. The trigger reads the
+  webhook secret out of the registration trigger, so nothing is pasted twice.
+- **Changing a package** — the names and prices live in five places that
+  must match: the cards and the form select on `sponsors.html`, the tier
+  CHECKs in `supabase/sponsors.sql`, the order list in `assets/sponsors.js`,
+  the select in `admin.html` (and `SPONSOR_TIERS` in `admin.js`), and
+  `PACKAGES` in `sponsor-templates.ts`.
+- **Contact** — the sponsorship contact (Lydie, 714-747-4770,
+  battleonimperial@gmail.com) is on `sponsors.html` and in
+  `sponsor-templates.ts`; it is the contact printed on the flyer and differs
+  from the `info@` address used elsewhere on the site.
+
 ## Things to fill in before launch
 
 | What | Where |

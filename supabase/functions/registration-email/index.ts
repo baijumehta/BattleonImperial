@@ -21,14 +21,17 @@
  * is an open relay for anyone who finds the URL.
  */
 import { coachEmail, organiserEmail, type Registration } from './templates.ts';
+import { sponsorConfirmEmail, sponsorOrganiserEmail, type SponsorInquiry } from './sponsor-templates.ts';
 
 const SMTP2GO_ENDPOINT = 'https://api.smtp2go.com/v3/email/send';
 
+// One function, two tables. The trigger names the table and the handler
+// routes on it: registrations (team entries) or sponsor_inquiries.
 interface WebhookPayload {
   type?: string;
   table?: string;
   schema?: string;
-  record?: Registration;
+  record?: Registration | SponsorInquiry;
 }
 
 function env(name: string, fallback = ''): string {
@@ -114,13 +117,37 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return json({ error: 'body was not JSON' }, 400);
   }
 
-  const record = payload.record;
-  if (!record) return json({ error: 'no record in payload' }, 400);
+  if (!payload.record) return json({ error: 'no record in payload' }, 400);
   if (payload.type && payload.type !== 'INSERT') {
     return json({ skipped: `type ${payload.type}` });
   }
 
   const results: Record<string, SendResult | string> = {};
+
+  /* ------------------------------------------------- sponsor inquiries -- */
+  if (payload.table === 'sponsor_inquiries') {
+    const inquiry = payload.record as SponsorInquiry;
+
+    if (organisers.length) {
+      // Reply-To the business, so answering the alert answers them.
+      results.organisers = await send(
+        apiKey, from, organisers, inquiry.email || replyTo, sponsorOrganiserEmail(inquiry, adminUrl)
+      );
+    } else {
+      results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
+    }
+
+    if (inquiry.email) {
+      results.business = await send(apiKey, from, [inquiry.email], replyTo, sponsorConfirmEmail(inquiry));
+    } else {
+      results.business = 'no email on the inquiry';
+    }
+
+    return json({ ok: true, business: inquiry.business ?? null, results });
+  }
+
+  /* ------------------------------------------------- team registrations -- */
+  const record = payload.record as Registration;
 
   if (organisers.length) {
     // Reply-To the coach, so answering the alert answers them.

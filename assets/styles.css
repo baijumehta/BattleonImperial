@@ -1086,3 +1086,71 @@ h2.title {
   .reveal { opacity: 1 !important; transform: none !important; }
   a[href]::after { content: none !important; }
 }
+
+/* ------------------------------------------------------------ sponsors -- */
+/* Fact strip at the top of sponsors.html. */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin: 0 0 clamp(40px, 6vw, 64px); }
+.fact { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 18px; box-shadow: var(--shadow-sm); }
+.fact__num { font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--accent); }
+.fact__label { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+
+/* Package cards. The presenting partner carries the gold ring. */
+.pkgs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.pkg {
+  position: relative; display: flex; flex-direction: column;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: 26px 24px 24px; box-shadow: var(--shadow-sm);
+}
+.pkg--featured { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,185,58,.18), var(--shadow-md); }
+.pkg--featured::before {
+  content: "Top billing"; position: absolute; top: -12px; left: 22px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--black-900); background: var(--gold); padding: 3px 10px; border-radius: 100px;
+}
+.pkg__name { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 1.1; letter-spacing: .02em; text-transform: uppercase; color: var(--ink); }
+.pkg__price { margin: 8px 0 16px; font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--accent); }
+.pkg ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 15px; line-height: 1.5; color: var(--body); }
+.pkg li { position: relative; padding-left: 26px; }
+.pkg li b { color: var(--ink); }
+.pkg li::before {
+  content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.6L12 5.6' fill='none' stroke='%230b0b0d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.pkgs__note { margin: 24px 0 0; font-size: 14.5px; color: var(--muted); max-width: 72ch; }
+
+/* The logo band: one row per package, presenting partner largest. */
+.sponsorband { margin: 0 0 clamp(36px, 5vw, 56px); }
+.sponsorband__tier { margin-bottom: 28px; }
+.sponsorband__tier:last-child { margin-bottom: 0; }
+.sponsorband__label { margin: 0 0 12px; font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-align: center; }
+.sponsorband__row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+.sponsor {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  min-width: 180px; max-width: 260px; padding: 18px 22px;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); color: var(--ink); text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+.sponsor__logo img { display: block; max-height: 64px; max-width: 200px; width: auto; height: auto; object-fit: contain; }
+.sponsor__name--text { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter-spacing: .03em; text-transform: uppercase; text-align: center; }
+.sponsor__blurb { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.4; }
+.sponsorband__tier--presenting-partner .sponsor { min-width: 260px; max-width: 440px; padding: 28px 36px; }
+.sponsorband__tier--presenting-partner .sponsor__logo img { max-height: 110px; max-width: 360px; }
+.sponsorband__tier--presenting-partner .sponsor__name--text { font-size: 30px; }
+
+/* Home page call to action. */
+.sponsorcta {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px;
+  background: var(--black-900); color: #fff; border-radius: var(--radius-lg);
+  padding: clamp(26px, 4vw, 40px) clamp(22px, 4vw, 44px);
+}
+.sponsorcta > div { flex: 1 1 420px; }
+.sponsorcta h3 { margin: 0 0 8px; font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 32px); letter-spacing: .02em; text-transform: uppercase; color: #fff; }
+.sponsorcta p { margin: 0; max-width: 62ch; font-size: 15.5px; color: #ddd5c4; }
+
+/* Plain card beside the why-sponsor list. */
+.contactcard { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow-sm); }
+.contactcard h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+.contactcard p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.6; color: var(--body); }
+.contactcard p:last-child { margin-bottom: 0; }
