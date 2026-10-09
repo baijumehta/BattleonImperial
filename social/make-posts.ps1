@@ -245,19 +245,14 @@ $TEMPLATES = @(
      sub="March 13, 2027  $DOT  Canyon High School, Anaheim Hills" },
 
   @{ key="format";   photo="gallery-draw.jpg";   focus=0.30; focusx=0.62
-     eyebrow="ONE DAY  $DOT  THREE FIELDS"
-     head=@("20 TEAMS","3 GAMES","GUARANTEED")
-     sub="Round-robin pools $DASH every game counts in the table" },
+     eyebrow="SATURDAY  $DOT  MARCH 13  $DOT  THREE FIELDS"
+     head=@("18 TEAMS","ONE DAY","POOL PLAY")
+     sub="3 games guaranteed for varsity  $DOT  2 to 3 for JV" },
 
   @{ key="register"; photo="gallery-save.jpg";   focus=0.38; focusx=0.30
      eyebrow="ENTRY IS OPEN"
-     head=@("CLAIM ONE","OF 20 SPOTS")
-     sub="A `$250 deposit holds your place  $DOT  Link in bio" },
-
-  @{ key="film";     photo="gallery-goalie.jpg"; focus=0.38; focusx=0.58
-     eyebrow="EVERY FIELD  $DOT  EVERY GAME"
-     head=@("AI CAMERAS","ON EVERY","FIELD")
-     sub="Film delivered to your coaching staff $DASH no extra fee" },
+     head=@("CLAIM ONE","OF 18 SPOTS")
+     sub="Early bird pricing through November 30  $DOT  Link in bio" },
 
   @{ key="teamin";   photo="gallery-squad.jpg";  focus=0.30; focusx=0.55
      eyebrow="TEAM CONFIRMED"

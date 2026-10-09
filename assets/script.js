@@ -164,6 +164,28 @@
     }
   }
 
+  /* ------------------------------------------------------ early bird -- */
+  /* Early bird runs to the end of 30 November 2026, Pacific. Past that,
+     everything marked data-earlybird goes, anything marked data-regular
+     appears, and the regular price column takes the large type. The static
+     markup names the deadline, so with scripts off the page still reads
+     correctly — it just keeps showing an offer that has ended.
+
+     EDIT: to extend the offer, change this date and the copy that names it
+     (the hero note, the price panel tag, the FAQ, and the coach email). */
+  var EARLY_BIRD_ENDS = new Date('2026-12-01T00:00:00-08:00');
+  if (new Date() >= EARLY_BIRD_ENDS) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-earlybird]'), function (el) {
+      el.hidden = true;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-regular]'), function (el) {
+      el.hidden = false;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.pricetable'), function (t) {
+      t.classList.add('is-regular');
+    });
+  }
+
   /* ---------------------------------------------------- interest form -- */
   var form = document.getElementById('regForm');
   var status = document.getElementById('formStatus');

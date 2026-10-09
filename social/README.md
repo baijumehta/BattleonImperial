@@ -26,12 +26,11 @@ Every template is rendered at three sizes:
 | Template | Says |
 |---|---|
 | `announce` | Battle on Imperial / March 13, 2027 / Canyon High School |
-| `format` | 20 teams, 3 games guaranteed |
-| `register` | Claim one of 20 spots |
-| `film` | AI cameras on every field |
-| `teamin` | **{TEAM} is in** - the one you will use twenty times |
+| `format` | 18 teams, one day, pool play |
+| `register` | Claim one of 18 spots, early bird through Nov 30 |
+| `teamin` | **{TEAM} is in** - the one you will use eighteen times |
 | `countdown` | **{N} days to go** |
-| `profile-1080` | Profile picture, mark on brand navy |
+| `profile-1080` | Profile picture, mark on brand black |
 
 ## Changing a photo or its crop
 

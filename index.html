@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Battle on Imperial | North Orange County's Premier Girls Lacrosse Tournament</title>
-<meta name="description" content="Battle on Imperial — a one-day, 18-team girls high school lacrosse tournament on Saturday, March 13, 2027 at Canyon High School in Anaheim Hills. Three guaranteed games, AI cameras on every field, and full game film for every coach.">
+<meta name="description" content="Battle on Imperial — a one-day, 18-team girls high school lacrosse tournament on Saturday, March 13, 2027 at Canyon High School in Anaheim Hills. Three guaranteed games for varsity, two to three for JV. Early bird pricing through November 30.">
 
 <!-- Social preview -->
 <meta property="og:title" content="Battle on Imperial — North OC's Premier Girls Lacrosse Tournament">
-<meta property="og:description" content="Saturday, March 13, 2027 in Anaheim Hills. Girls high school lacrosse — 18 teams, three guaranteed games, AI cameras on every field, with film delivered to every coaching staff.">
+<meta property="og:description" content="Saturday, March 13, 2027 in Anaheim Hills. Girls high school lacrosse — 18 teams on one campus, three guaranteed games for varsity, two to three for JV. Early bird pricing through November 30.">
 <meta property="og:type" content="website">
 <!-- EDIT: og:image and og:url must be absolute — a relative path is ignored by
      every scraper. The host is www: the apex 308s to it, and pointing a
@@ -58,7 +58,6 @@
       <li><a href="#tournament">The Tournament</a></li>
       <li><a href="schedule.html">Schedule</a></li>
       <li><a href="standings.html">Standings</a></li>
-      <li><a href="#film">Game Film</a></li>
       <li><a href="#location">Location</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a class="btn btn--primary nav__cta" href="#register">Reserve a Spot</a></li>
@@ -90,9 +89,9 @@
       </div>
 
       <p class="hero__sub">
-        North Orange County's premier girls high school lacrosse tournament. Eighteen teams,
-        three guaranteed games in a single day, and AI cameras rolling on every field
-        &mdash; with the film in your coaches' hands, not a highlight reel you have to chase.
+        North Orange County's premier girls high school lacrosse tournament. Eighteen teams
+        on one campus in a single day &mdash; three guaranteed games for every varsity
+        team, and two to three for JV.
       </p>
 
       <div class="hero__actions">
@@ -100,7 +99,11 @@
         <a class="btn btn--ghost btn--lg" href="#tournament">See the Format</a>
       </div>
 
-      <p class="hero__note">Registration opens soon &middot; Hosted by the Canyon High School Lacrosse Booster Club</p>
+      <!-- EDIT: early bird ends 30 Nov 2026. assets/script.js swaps this note
+           and the price table automatically after that date; the static text
+           states the deadline so it is still correct with scripts off. -->
+      <p class="hero__note" data-earlybird>Early bird pricing through November 30 &middot; Hosted by the Canyon High School Lacrosse Booster Club</p>
+      <p class="hero__note" data-regular hidden>Hosted by the Canyon High School Lacrosse Booster Club</p>
     </div>
 
     <div class="statbar">
@@ -110,11 +113,11 @@
       </div>
       <div class="statbar__item">
         <div class="statbar__num" data-count="3">3</div>
-        <div class="statbar__label">Guaranteed Games</div>
+        <div class="statbar__label">Varsity Games, Guaranteed</div>
       </div>
       <div class="statbar__item">
-        <div class="statbar__num">100<sup>%</sup></div>
-        <div class="statbar__label">Games Filmed</div>
+        <div class="statbar__num">2&ndash;3</div>
+        <div class="statbar__label">JV Games</div>
       </div>
       <div class="statbar__item">
         <div class="statbar__num">1</div>
@@ -166,11 +169,11 @@
             <path d="M2 12h20"/><path d="M12 2v20"/><circle cx="12" cy="12" r="10"/>
           </svg>
         </div>
-        <h3>Three Games, Guaranteed</h3>
+        <h3>Games Guaranteed</h3>
         <p>
-          Every team plays three full games &mdash; no one drives home after a single
-          loss. Divisions run as round-robin pools, so every game counts in the
-          standings and nothing on your schedule is a throwaway.
+          Every varsity team plays three full games, and every JV team two to three
+          &mdash; nobody drives home after a single loss. Divisions run as round-robin
+          pools, so every game counts in the standings.
         </p>
       </article>
 
@@ -196,7 +199,7 @@
         </div>
         <h3>A Real Field of Teams</h3>
         <p>
-          Capped at 20 programs, split into Varsity and JV divisions so you are matched
+          Capped at 18 teams, split into Varsity and JV divisions so you are matched
           against teams your own level. We would rather turn a team away than pad a
           division with lopsided games.
         </p>
@@ -210,7 +213,7 @@
       </figure>
       <figure>
         <img src="assets/img/gallery-save.jpg" alt="A Canyon goalkeeper reaches up to make a save as attackers close in." loading="lazy" decoding="async">
-        <figcaption>Three guaranteed games per team</figcaption>
+        <figcaption>Three guaranteed games for every varsity team</figcaption>
       </figure>
       <figure>
         <img src="assets/img/gallery-goalie.jpg" alt="A goalkeeper in full pads standing in front of the goal before a game." loading="lazy" decoding="async">
@@ -222,7 +225,7 @@
       </figure>
       <figure>
         <img src="assets/img/gallery-balls.jpg" alt="Lacrosse balls lined up along a chalk line on the practice field." loading="lazy" decoding="async">
-        <figcaption>Three fields, three games each, one day</figcaption>
+        <figcaption>Three fields, one campus, one day</figcaption>
       </figure>
       <figure>
         <img src="assets/img/gallery-team.jpg" alt="The Canyon High School girls lacrosse squad together in front of the school." loading="lazy" decoding="async">
@@ -238,7 +241,6 @@
           <li><b>Cut the travel day in half.</b> For most Orange County programs, Anaheim Hills is 15&ndash;40 minutes away instead of a freeway slog into Los Angeles County.</li>
           <li><b>Keep families in the stands.</b> Parents, siblings, and alumni actually show up when the drive is short. Your sideline stays loud all day.</li>
           <li><b>Less time on the bus, more in the legs.</b> Players arrive warm and rested rather than stiff after 90 minutes in traffic.</li>
-          <li><b>Film you can use Monday.</b> Every game is captured and delivered to your staff &mdash; no parent with a phone, no missing second half.</li>
         </ul>
       </div>
 
@@ -281,135 +283,6 @@
       ninety-minute drive.
     </blockquote>
     <cite>Battle on Imperial &middot; Anaheim Hills</cite>
-  </div>
-</section>
-
-<!-- ============================================================= FILM -- -->
-<section class="section section--dark film" id="film">
-  <div class="wrap">
-    <div class="film__grid">
-      <div class="reveal">
-        <p class="eyebrow">Every Field. Every Game.</p>
-        <h2 class="title">AI Cameras on All Fields</h2>
-        <p class="lede">
-          Each field runs an AI camera system that tracks play automatically for the full
-          game &mdash; no operator, no dead angles, no "we lost the second half." Footage is
-          uploaded after each game and made available to coaching staffs for review,
-          scouting, and player development.
-        </p>
-
-        <ul class="film__list">
-          <li>
-            <span class="n">01</span>
-            <div>
-              <h4>Automated tracking, sideline angle</h4>
-              <p>The camera follows the ball across the field, so you get usable possession-by-possession video instead of a fixed wide shot.</p>
-            </div>
-          </li>
-          <li>
-            <span class="n">02</span>
-            <div>
-              <h4>Uploaded after every game</h4>
-              <p>Film is processed and posted through the day &mdash; not weeks later.</p>
-            </div>
-          </li>
-          <li>
-            <span class="n">03</span>
-            <div>
-              <h4>Coach access included</h4>
-              <p>Access to your team's games is part of the entry &mdash; there is no separate film fee and no per-download charge.</p>
-            </div>
-          </li>
-          <li>
-            <span class="n">04</span>
-            <div>
-              <h4>Useful beyond the day</h4>
-              <p>Clips your players can share with college coaches, and clean footage your staff can build a film session around.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="reveal">
-        <div class="camera-viz">
-          <svg viewBox="0 0 620 440" role="img" aria-label="Diagram of a lacrosse field with AI camera coverage from the sideline">
-            <defs>
-              <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#12351f"/>
-                <stop offset="100%" stop-color="#0c2417"/>
-              </linearGradient>
-              <linearGradient id="cone" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#f2ce6b" stop-opacity=".55"/>
-                <stop offset="100%" stop-color="#f2ce6b" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-
-            <rect width="620" height="440" fill="#0d0d10"/>
-
-            <!-- field -->
-            <g transform="translate(60,86)">
-              <rect width="500" height="300" rx="4" fill="url(#turf)" stroke="#2a5f3c" stroke-width="2"/>
-              <!-- stripes -->
-              <g fill="#ffffff" opacity=".05">
-                <rect x="0"   y="0" width="62" height="300"/>
-                <rect x="125" y="0" width="62" height="300"/>
-                <rect x="250" y="0" width="62" height="300"/>
-                <rect x="375" y="0" width="62" height="300"/>
-              </g>
-              <!-- midline + center -->
-              <line x1="250" y1="0" x2="250" y2="300" stroke="#eaf3ee" stroke-width="2.5" opacity=".75"/>
-              <circle cx="250" cy="150" r="30" fill="none" stroke="#eaf3ee" stroke-width="2" opacity=".55"/>
-              <!-- goal creases -->
-              <circle cx="72"  cy="150" r="36" fill="none" stroke="#eaf3ee" stroke-width="2" opacity=".65"/>
-              <circle cx="428" cy="150" r="36" fill="none" stroke="#eaf3ee" stroke-width="2" opacity=".65"/>
-              <rect x="66"  y="142" width="12" height="16" fill="#e8b93a" opacity=".9"/>
-              <rect x="422" y="142" width="12" height="16" fill="#e8b93a" opacity=".9"/>
-              <!-- restraining lines -->
-              <line x1="150" y1="0" x2="150" y2="300" stroke="#eaf3ee" stroke-width="1.5" opacity=".35" stroke-dasharray="7 7"/>
-              <line x1="350" y1="0" x2="350" y2="300" stroke="#eaf3ee" stroke-width="1.5" opacity=".35" stroke-dasharray="7 7"/>
-
-              <!-- tracked players -->
-              <g>
-                <circle cx="196" cy="118" r="6" fill="#f2ce6b"/>
-                <circle cx="238" cy="196" r="6" fill="#f2ce6b"/>
-                <circle cx="312" cy="96"  r="6" fill="#ffffff" opacity=".85"/>
-                <circle cx="344" cy="214" r="6" fill="#ffffff" opacity=".85"/>
-                <circle cx="276" cy="152" r="6" fill="#e8b93a"/>
-                <rect x="186" y="108" width="20" height="20" fill="none" stroke="#f2ce6b" stroke-width="1.5" opacity=".8"/>
-                <rect x="266" y="142" width="20" height="20" fill="none" stroke="#e8b93a" stroke-width="1.5"/>
-                <text x="288" y="140" fill="#e8b93a" font-family="Inter,sans-serif" font-size="10" letter-spacing="1">BALL</text>
-              </g>
-            </g>
-
-            <!-- camera cone -->
-            <polygon points="310,60 90,386 530,386" fill="url(#cone)" opacity=".5"/>
-
-            <!-- camera head -->
-            <g transform="translate(310,40)">
-              <rect x="-46" y="-16" width="92" height="34" rx="9" fill="#16161a" stroke="#f2ce6b" stroke-width="1.5"/>
-              <circle cx="-22" cy="1" r="9" fill="#f2ce6b" opacity=".35"/>
-              <circle cx="-22" cy="1" r="4.5" fill="#f0e6cd"/>
-              <circle cx="22" cy="1" r="9" fill="#f2ce6b" opacity=".35"/>
-              <circle cx="22" cy="1" r="4.5" fill="#f0e6cd"/>
-              <text x="0" y="5" fill="#9c968a" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" letter-spacing="1.5">AI</text>
-            </g>
-            <line x1="310" y1="40" x2="310" y2="18" stroke="#3a352b" stroke-width="3"/>
-
-            <!-- tracking label -->
-            <g transform="translate(398,300)">
-              <rect x="0" y="0" width="150" height="26" rx="6" fill="rgba(6,16,33,.82)" stroke="rgba(91,140,255,.4)"/>
-              <circle cx="15" cy="13" r="4" fill="#e8b93a"/>
-              <text x="27" y="17" fill="#d2ccc0" font-family="Inter,sans-serif" font-size="10.5" letter-spacing=".8">AUTO-TRACKING ON</text>
-            </g>
-          </svg>
-          <div class="camera-viz__bar">
-            <span class="rec-dot" aria-hidden="true"></span>
-            <span>Field 1 &middot; Recording</span>
-            <span class="spacer">Uploading to coach portal</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -615,7 +488,7 @@
       <p>
         <b>Coaches:</b> the Vons across the street makes it simple to restock water and ice
         between rounds without leaving the site &mdash; worth knowing when you are managing a
-        roster through three games in a day.
+        roster through a full day of games.
       </p>
     </div>
   </div>
@@ -642,7 +515,7 @@
         <p class="person__bio">
           Lydie runs the tournament end to end &mdash; fields, schedule, officials, and the
           shape of the day. Years of running parks and recreation programs make her
-          well suited to putting eighteen teams through three games apiece without the day
+          well suited to running eighteen teams through a full schedule without the day
           coming apart. She has two daughters playing lacrosse.
         </p>
       </article>
@@ -664,9 +537,9 @@
         <h3>Baiju Mehta</h3>
         <p class="person__role">Event Technology</p>
         <p class="person__bio">
-          Baiju keeps the technology working &mdash; this site, the schedule, and the AI
-          cameras. Ask Baiju if something on the site is broken, if your posted schedule
-          does not look right, or if your game film has not shown up where you expect it.
+          Baiju keeps the technology working &mdash; this site, the entry form, and the
+          live schedule and standings. Ask Baiju if something on the site is broken or
+          your posted schedule does not look right.
           Baiju has a daughter playing lacrosse.
         </p>
       </article>
@@ -690,13 +563,36 @@
     <div class="reg__grid">
       <div class="reveal">
         <div class="pricebox">
+          <!-- EDIT: prices also appear in the "What does entry cost?" FAQ, the
+               deposit acknowledgement on the form, and the coach confirmation
+               email (supabase/functions/registration-email/templates.ts). -->
           <div class="pricebox__top">
-            <span class="pricebox__tag">Team Entry</span>
-            <div class="pricebox__amt">
-              <span class="n">$1,000</span>
-              <span class="per">per team</span>
-            </div>
-            <p>One flat entry for your whole program &mdash; no per-player fees and no film add-on.</p>
+            <span class="pricebox__tag" data-earlybird>Early Bird &middot; Through November 30</span>
+            <span class="pricebox__tag" data-regular hidden>Team Entry</span>
+
+            <table class="pricetable">
+              <thead>
+                <tr>
+                  <th scope="col"><span class="sr-only">Level</span></th>
+                  <th scope="col" data-earlybird>Early bird</th>
+                  <th scope="col"><span data-earlybird>From Dec 1</span><span data-regular hidden>Per team</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Varsity</th>
+                  <td class="pricetable__now" data-earlybird>$650</td>
+                  <td class="pricetable__later">$850</td>
+                </tr>
+                <tr>
+                  <th scope="row">JV</th>
+                  <td class="pricetable__now" data-earlybird>$550</td>
+                  <td class="pricetable__later">$750</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p>Per team, not per player. A program entering varsity and JV pays for each.</p>
           </div>
 
           <div class="paysplit">
@@ -709,24 +605,22 @@
             </div>
             <div class="paysplit__row">
               <div>
-                <strong>$750</strong>
-                <span>Balance</span>
+                <strong>Balance</strong>
+                <span>The rest of your entry</span>
               </div>
               <em>Due 30 days before the first game</em>
             </div>
           </div>
 
           <ul class="pricebox__list">
-            <li>Three guaranteed games</li>
-            <li>All games filmed by AI camera</li>
-            <li>Game film access for your coaching staff</li>
+            <li>Three guaranteed games for varsity, two to three for JV</li>
             <li>Certified officials on every game</li>
             <li>Athletic trainer on site</li>
             <li>Free parking for your families</li>
           </ul>
           <div class="pricebox__foot">
-            Entry fees cover the cost of running the event &mdash; field preparation, officials,
-            athletic training, the AI camera systems, insurance, and tournament operations.
+            Entry fees cover the cost of running the event &mdash; field preparation,
+            officials, athletic training, insurance, and tournament operations.
           </div>
         </div>
       </div>
@@ -933,9 +827,10 @@
             <label class="form__consent">
               <input type="checkbox" id="payment_ack" name="payment_ack" required>
               <span>
-                I understand entry is <b>$1,000 per team</b>, that a <b>$250 deposit</b>
-                holds the place once we are offered one, and that the balance is due
-                30 days before the tournament. We will invoice you &mdash; there is
+                I understand entry is <b>$850 per varsity team and $750 per JV team</b><span data-earlybird>
+                ($650 and $550 early bird, through November 30)</span>, that a <b>$250
+                deposit</b> holds the place once we are offered one, and that the balance
+                is due 30 days before the tournament. We will invoice you &mdash; there is
                 nothing to pay now and nothing to mail.
                 <a href="#policy">Deposit and refund terms</a>.
               </span>
@@ -1003,8 +898,8 @@
         <h3>Deposits, Refunds &amp; Cancellation</h3>
         <p>
           Read this before you pay. By tournament day most of the entry fee is already
-          spent &mdash; officials, athletic training, field preparation, and the camera systems
-          are all committed in advance &mdash; which is what these timelines reflect.
+          spent &mdash; officials, athletic training, field preparation and insurance are
+          all committed in advance &mdash; which is what these timelines reflect.
         </p>
       </div>
 
@@ -1052,8 +947,8 @@
       <ul class="policy__notes">
         <li>
           <b>Weather and safety.</b> Games may be shortened, delayed, or moved to keep play
-          safe. We will always try to get every team its three games before reducing the
-          schedule.
+          safe. We will always try to get every team its guaranteed games before reducing
+          the schedule.
         </li>
         <li>
           <b>Missed deadlines.</b> If a deposit or balance is not paid by its due date, we
@@ -1118,13 +1013,18 @@
       </details>
 
       <details class="reveal">
-        <summary>What does the $1,000 entry include?</summary>
+        <summary>What does entry cost, and what does it include?</summary>
         <div class="faq__body">
           <p>
-            One flat fee per team covering three guaranteed games, certified officials,
-            an athletic trainer on site, AI camera coverage of every one of your games,
-            film access for your coaching staff, and free parking for your families.
-            There are no per-player charges and no separate film fee.
+            <b>$850 per varsity team and $750 per JV team.</b>
+            <span data-earlybird>Enter by <b>November 30</b> and it's early bird pricing:
+            <b>$650 varsity, $550 JV</b>.</span>
+            A program bringing both levels pays for each team.
+          </p>
+          <p>
+            That covers three guaranteed games for varsity and two to three for JV,
+            certified officials, an athletic trainer on site, and free parking for your
+            families. There are no per-player charges.
           </p>
         </div>
       </details>
@@ -1134,8 +1034,8 @@
         <div class="faq__body">
           <p>
             A <b>$250 deposit</b> holds your spot, due within 14 days of the invoice we send
-            once a coordinator confirms you. The <b>$750 balance</b> is due 30 days before the
-            first game.
+            once a coordinator confirms you. The <b>balance</b> &mdash; the rest of your entry
+            fee &mdash; is due 30 days before the first game.
           </p>
           <p>
             We invoice rather than ask for a card at sign-up, because most school programs pay
@@ -1167,8 +1067,8 @@
         <div class="faq__body">
           <p>
             Entry fees pay for running the tournament: field preparation and striping,
-            certified officials, athletic training coverage, the AI camera systems and
-            video hosting, insurance, permits, equipment, and event-day operations. The
+            certified officials, athletic training coverage, insurance, permits,
+            equipment, and event-day operations. The
             Canyon High School Lacrosse Booster Club is a volunteer parent organization
             &mdash; the event is run by volunteers, and the fee is set to cover what the
             day costs to put on.
@@ -1177,15 +1077,19 @@
       </details>
 
       <details class="reveal">
-        <summary>Are three games actually guaranteed?</summary>
+        <summary>How many games will we play?</summary>
         <div class="faq__body">
           <p>
-            Yes, and the format guarantees it rather than promising it. Teams are drawn
-            into round-robin pools and every team plays three games &mdash; no bracket to
-            qualify for, no early exit, and nothing on your schedule that stops mattering.
-            Pool standings decide the finish. The pool draw is published with the
-            schedule once the field is set. Weather or safety cancellations are the only
-            exception, and our make-up policy is in the entry packet.
+            <b>Varsity teams are guaranteed three games. JV teams play two to three.</b>
+            The JV number depends on how many JV teams enter, since the pools are built
+            around the field we actually get. You will know your exact count when the
+            pool draw is published with the schedule.
+          </p>
+          <p>
+            Either way there is no bracket to qualify for and no early exit &mdash; every
+            game is a pool game, and pool standings decide the finish. Weather or safety
+            cancellations are the only exception, and our make-up policy is in the entry
+            packet.
           </p>
         </div>
       </details>
@@ -1237,18 +1141,6 @@
             Because each pool is a round robin, every game counts toward the table &mdash;
             there are no dead games at the end of the day. Live standings are on the
             <a href="standings.html">standings page</a> and update as results come in.
-          </p>
-        </div>
-      </details>
-
-      <details class="reveal">
-        <summary>How does the game film work?</summary>
-        <div class="faq__body">
-          <p>
-            Every field has an AI camera that records the full game and tracks play
-            automatically. Footage is uploaded through the day and shared with your
-            coaching staff. You do not need to bring your own camera, tripod, or a parent
-            volunteer to film.
           </p>
         </div>
       </details>
@@ -1354,7 +1246,6 @@
           <li><a href="#tournament">The Tournament</a></li>
           <li><a href="schedule.html">Schedule</a></li>
           <li><a href="standings.html">Standings</a></li>
-          <li><a href="#film">Game Film</a></li>
           <li><a href="#team">Meet the Team</a></li>
           <li><a href="#register">Registration</a></li>
           <li><a href="#policy">Deposits &amp; Refunds</a></li>

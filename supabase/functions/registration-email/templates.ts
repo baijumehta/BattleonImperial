@@ -45,6 +45,19 @@ export const SITE = 'https://www.battleonimperial.com';
 export const EVENT = 'Saturday, March 13, 2027';
 export const VENUE = 'Canyon High School, 220 S Imperial Hwy, Anaheim, CA 92807';
 
+/* Stated, never computed per entry. Whether a given team gets the early-bird
+   rate is the coordinator's call when the invoice goes out, so the email quotes
+   the price list and leaves the total to the invoice. A wrong number in an
+   automatic email is worse than no number.
+
+   EDIT: the same prices are on the site — index.html price panel, the entry
+   cost FAQ and the deposit acknowledgement on the form. */
+export const PRICING_TEXT =
+  '$850 per varsity team, $750 per JV team. Early bird through November 30: $650 varsity, $550 JV.';
+export const PRICING_HTML =
+  '<b>$850</b> per varsity team, <b>$750</b> per JV team. ' +
+  'Early bird through November 30: <b>$650</b> varsity, <b>$550</b> JV.';
+
 /* A coach's own words end up inside the HTML part. Escape everything. */
 function esc(v: unknown): string {
   return String(v ?? '')
@@ -223,9 +236,10 @@ export function coachEmail(r: Registration): Mail {
     'WHAT HAPPENS NEXT',
     '  1. A coordinator reviews your request. Spots are offered in the order requests arrive.',
     '  2. If we can fit you in, you get the entry packet and an invoice for the $250 deposit.',
-    '  3. The deposit holds your place. The balance of the $1,000 entry is due 30 days before the tournament.',
+    '  3. The deposit holds your place. The balance is due 30 days before the tournament.',
     '',
-    'There is nothing to pay today and nothing to post.',
+    `PRICING: ${PRICING_TEXT}`,
+    'Your invoice will show the exact amount. There is nothing to pay today and nothing to post.',
     '',
     'WHAT YOU SENT US',
     rows(summary).text,
@@ -247,9 +261,10 @@ export function coachEmail(r: Registration): Mail {
        <ol style="margin:0;padding-left:18px;color:#44444c;font-size:14px;line-height:1.7">
          <li>A coordinator reviews your request. Spots are offered in the order requests arrive.</li>
          <li>If we can fit you in, you get the entry packet and an invoice for the <b>$250 deposit</b>.</li>
-         <li>The deposit holds your place. The balance of the <b>$1,000</b> entry is due 30 days before the tournament.</li>
+         <li>The deposit holds your place. The balance is due 30 days before the tournament.</li>
        </ol>
-       <p style="margin:12px 0 0;font-size:13.5px;color:#76767e">There is nothing to pay today and nothing to post.</p>
+       <p style="margin:12px 0 0;font-size:14px;color:#44444c">${PRICING_HTML}</p>
+       <p style="margin:8px 0 0;font-size:13.5px;color:#76767e">Your invoice will show the exact amount. There is nothing to pay today and nothing to post.</p>
      </div>` +
       table('What you sent us', summary) +
       `<p style="margin:0;font-size:14px;line-height:1.6;color:#44444c">If any of that is wrong, just reply to this email and we will fix it.</p>`

@@ -43,6 +43,11 @@
 
 /* --------------------------------------------------------------- reset -- */
 *, *::before, *::after { box-sizing: border-box; }
+/* The browser's own [hidden] rule is specificity 0,1,0 — the same as a class —
+   so any class that sets display (.pricebox__tag sets inline-block) silently
+   beats it and the element stays on screen with hidden="" set. The early-bird
+   switch toggles hidden on tagged and classed elements, so this must win. */
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -495,10 +500,28 @@ h2.title {
   display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   color: var(--gold-dk); background: rgba(232,185,58,.16); padding: 5px 12px; border-radius: 100px; margin-bottom: 14px;
 }
-.pricebox__amt { display: flex; align-items: baseline; gap: 8px; }
-.pricebox__amt .n { font-family: var(--font-display); font-size: 62px; font-weight: 700; color: var(--ink); line-height: 1; }
-.pricebox__amt .per { font-size: 15px; color: var(--muted); }
 .pricebox__top p { margin: 14px 0 0; font-size: 15px; }
+
+/* Two levels, two price periods. The early-bird column carries the weight
+   while it runs; the regular column sits beside it so nobody is surprised on
+   December 1. After the deadline the script hides the early-bird cells and the
+   regular column takes the large type instead. */
+.pricetable { width: 100%; border-collapse: collapse; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.pricetable th, .pricetable td { padding: 8px 0; text-align: left; vertical-align: baseline; }
+.pricetable thead th {
+  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding-bottom: 4px;
+}
+.pricetable tbody th {
+  font-family: var(--font-display); font-size: 21px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--ink); padding-right: 14px;
+}
+.pricetable tbody tr + tr { border-top: 1px solid var(--line); }
+.pricetable__now { font-family: var(--font-display); font-size: 46px; font-weight: 700; color: var(--ink); line-height: 1; }
+.pricetable__later { font-size: 17px; font-weight: 600; color: var(--muted); }
+.pricetable.is-regular .pricetable__later {
+  font-family: var(--font-display); font-size: 46px; font-weight: 700; color: var(--ink); line-height: 1;
+}
 .pricebox__list { list-style: none; margin: 0; padding: 26px 30px 30px; }
 .pricebox__list li { position: relative; padding-left: 30px; margin-bottom: 13px; font-size: 15.5px; }
 .pricebox__list li::before {

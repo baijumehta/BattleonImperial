@@ -115,16 +115,17 @@ form submit  ->  registrations row (status: new)
              ->  coordinator reviews, confirms a spot
              ->  Stripe invoice for the $250 deposit   (status: contacted)
              ->  deposit clears                        (status: confirmed)
-             ->  Stripe invoice for the $750 balance, due 30 days out
+             ->  Stripe invoice for the balance, due 30 days out
 ```
 
 Why invoices rather than a checkout button: most public high school programs pay
 through a district purchase order, which needs an invoice and a W-9 — not a
-checkout page. Invoices also let a team pay by ACH, which on Stripe costs $5 per
-$1,000 against $29.30 for a card. Across a full 20-team field that is roughly
-$100 versus $586.
+checkout page. Invoices also let a team pay by ACH, which on Stripe is 0.8% capped
+at $5, against 2.9% plus 30c for a card. Across a full field at regular prices —
+say 12 varsity and 6 JV, each paying a deposit and a balance — that is roughly
+$120 versus $440.
 
-Use the `status` column on `registrations` to track where each team is. At 20
+Use the `status` column on `registrations` to track where each team is. At 18
 teams, reconciling Stripe against that table by hand is entirely manageable.
 
 If you later want self-serve card payment, it needs two Vercel serverless
@@ -148,7 +149,7 @@ Typography is Barlow Condensed (display) + Inter (body), loaded from Google Font
 ## A note on copy
 
 The site deliberately describes the entry fee as covering the cost of running the
-event — fields, officials, athletic training, AI cameras, insurance, and operations.
+event — fields, officials, athletic training, insurance, and operations.
 It does not describe the tournament as a fundraiser or revenue source for Canyon
 Lacrosse. Keep that framing if you edit the Registration section or the
 "Where does the entry fee go?" FAQ.
@@ -162,7 +163,7 @@ decide two things in particular:
 1. **Organizer cancellation.** As written, if the tournament is called off before
    any games are played, teams get everything back including the deposit. That is
    generous and good for goodwill, but it puts the club on the hook for costs
-   already committed — officials, trainers, and camera rental are largely spent by
+   already committed — officials, trainers and insurance are largely spent by
    then. If the club cannot absorb that, change it to a refund less the deposit,
    or offer a credit toward the following year.
 2. **The 30/60-day thresholds.** These should sit outside the dates you commit to
