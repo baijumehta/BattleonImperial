@@ -56,10 +56,8 @@ validation, which silently leaves the previous build serving.
   `vercel.json` serves it as `text/calendar` so phones open it in the calendar
   app rather than downloading it. The Google Calendar link in the address card
   carries the same details in its query string; change both with the date.
-- **`sitemap.xml`** and **`robots.txt`** — the sitemap lists only the home
-  page, because `schedule.html` and `standings.html` are `noindex` until the
-  pools are drawn. Drop the `noindex` and add them to the sitemap when the
-  schedule is published. `admin.html` is disallowed and noindexed.
+- **`sitemap.xml`** and **`robots.txt`** — every public page is listed;
+  `admin.html` is disallowed and noindexed.
 - **`404.html`** — Vercel serves it for any missing path. Its links are
   absolute because it renders at any depth.
 
