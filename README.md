@@ -124,7 +124,7 @@ with a call to action and a logo band.
 | Tournament date (currently Saturday, March 13, 2027) | `index.html` — hero badge, `.hero__rule`, the "When is the tournament?" FAQ, the Key Dates strip, the JSON-LD block, the `description` + `og:description` meta tags; `battle-on-imperial.ics` and the Google Calendar link in the address card; the refund-tier dates in `#policy` |
 | Contact email (currently `battleonimperial@gmail.com`) | `assets/config.js`, plus the footer and final CTA in `index.html` |
 | Supabase URL + anon key | `assets/config.js` |
-| Stock photos → real Canyon team photos | `assets/img/` (see [CREDITS.md](CREDITS.md)) |
+| Photo releases — the photos are Canyon players from the 2025–26 season; confirm the school holds releases for the players shown before promoting the site widely | [CREDITS.md](CREDITS.md) lists each photo |
 | Drive-time table — verify against your own routes | `index.html` — `.compare` table |
 | Main field entrance — confirm the check-in marker is in the right place | `index.html` — the location SVG, `#checkin` |
 | **Refund policy — have the board sign off** | `index.html` — the `#policy` block |
