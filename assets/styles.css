@@ -1155,3 +1155,15 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .contactcard h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
 .contactcard p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.6; color: var(--body); }
 .contactcard p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------- prose -- */
+/* Plain reading pages: the privacy note. */
+.prose { max-width: 68ch; }
+.prose h2 { font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink); margin: 34px 0 10px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p { margin: 0 0 14px; font-size: 16px; line-height: 1.65; color: var(--body); }
+.prose p b { color: var(--ink); }
+.prose a { color: var(--accent); font-weight: 600; }
+.prose__date { margin-top: 30px !important; font-size: 14px !important; color: var(--muted) !important; }
+.footer__bottom a { color: inherit; }
+.footer__bottom a:hover { color: #fff; }
