@@ -174,6 +174,61 @@
     Array.prototype.forEach.call(document.querySelectorAll('.pricetable'), function (t) {
       t.classList.add('is-regular');
     });
+  } else {
+    /* "· N days left" beside the early-bird tag. Whole days until the
+       deadline passes, so on November 30 itself it reads "1 day left". */
+    var daysLeft = Math.ceil((EARLY_BIRD_ENDS - new Date()) / 86400000);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-earlybird-days]'), function (el) {
+      el.textContent = ' · ' + daysLeft + (daysLeft === 1 ? ' day left' : ' days left');
+    });
+  }
+
+  /* --------------------------------------------------------- key dates -- */
+  /* Dates that have passed go grey and the next one up gets the "Next" tag.
+     A date counts as passed once that day is over in the visitor's own time
+     zone — close enough for deadlines stated as calendar days. */
+  var dateItems = document.querySelectorAll('.dates__list [data-date]');
+  if (dateItems.length) {
+    var today = new Date();
+    var nextTagged = false;
+    Array.prototype.forEach.call(dateItems, function (li) {
+      var p = li.getAttribute('data-date').split('-');
+      var endOfDay = new Date(+p[0], +p[1] - 1, +p[2], 23, 59, 59);
+      if (today > endOfDay) {
+        li.classList.add('is-past');
+      } else if (!nextTagged) {
+        li.classList.add('is-next');
+        nextTagged = true;
+      }
+    });
+  }
+
+  /* -------------------------------------------------------- map dialog -- */
+  /* "Enlarge map" opens the campus drawing in a modal where it is laid out
+     at least 900px wide and scrolls, so the field labels are readable on a
+     phone. The SVG is cloned from the figure, so there is one drawing to
+     maintain. Without <dialog> support the button is hidden and the inline
+     map still pinch-zooms. */
+  var mapZoom = document.getElementById('mapZoom');
+  var mapDialog = document.getElementById('mapDialog');
+  var mapBody = document.getElementById('mapDialogBody');
+  var mapSvg = document.querySelector('.mapfig__frame svg');
+  if (mapZoom && mapDialog && mapBody && mapSvg && typeof mapDialog.showModal === 'function') {
+    mapZoom.addEventListener('click', function () {
+      if (!mapBody.firstChild) {
+        var clone = mapSvg.cloneNode(true);
+        // No duplicate ids in the document; nothing in the drawing refers to them.
+        Array.prototype.forEach.call(clone.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
+        mapBody.appendChild(clone);
+      }
+      mapDialog.showModal();
+    });
+    var mapClose = document.getElementById('mapClose');
+    if (mapClose) mapClose.addEventListener('click', function () { mapDialog.close(); });
+    // A tap on the dimmed backdrop lands on the dialog element itself.
+    mapDialog.addEventListener('click', function (e) { if (e.target === mapDialog) mapDialog.close(); });
+  } else if (mapZoom) {
+    mapZoom.hidden = true;
   }
 
   /* ---------------------------------------------------- interest form -- */

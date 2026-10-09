@@ -49,17 +49,49 @@ Note that `vercel.json` is validated strictly and JSON has no comments — addin
 a `comment` key to a headers entry makes the whole deployment fail schema
 validation, which silently leaves the previous build serving.
 
+## Small files at the site root
+
+- **`battle-on-imperial.ics`** — the "Add to calendar" file. An all-day event
+  on March 13, 2027 with the address and the check-in time in the description.
+  `vercel.json` serves it as `text/calendar` so phones open it in the calendar
+  app rather than downloading it. The Google Calendar link in the address card
+  carries the same details in its query string; change both with the date.
+- **`sitemap.xml`** and **`robots.txt`** — the sitemap lists only the home
+  page, because `schedule.html` and `standings.html` are `noindex` until the
+  pools are drawn. Drop the `noindex` and add them to the sitemap when the
+  schedule is published. `admin.html` is disallowed and noindexed.
+- **`404.html`** — Vercel serves it for any missing path. Its links are
+  absolute because it renders at any depth.
+
+The home page also carries a JSON-LD `SportsEvent` block (date, address,
+organizer, team-entry prices with the early-bird `validThrough`) so Google can
+show the event in search. It duplicates facts stated in the copy — keep them in
+step or the rich result gets pulled.
+
+### Key Dates and shared schedule links
+
+The Key Dates strip in the registration section derives every date from the
+tournament date and the refund terms: November 30 (early bird), January 11
+(the last day still *more than* 60 days before March 13), February 11 (30 days
+before). `assets/script.js` greys out dates that have passed and tags the next
+one. The same three dates appear beside the refund tiers in `#policy`.
+
+On the schedule and standings pages the filter is mirrored into the address
+bar (`?team=…&level=…`), so the **Copy link** button gives a coach a link that
+opens on their team. A link with either parameter replaces whatever filter the
+browser remembered. **Print** uses the print stylesheet, which drops the nav
+and footer and keeps each game card whole.
+
 ## Things to fill in before launch
 
 | What | Where |
 |---|---|
-| Exact weekend (the site says "March 2027", weekend TBA) | `index.html` — hero badge, `.hero__rule`, `.hero__note`, the "When is the tournament?" FAQ, and the `description` + `og:description` meta tags |
-| Contact email (currently `info@battleonimperial.com`) | `assets/config.js`, plus the footer and final CTA in `index.html` |
+| Tournament date (currently Saturday, March 13, 2027) | `index.html` — hero badge, `.hero__rule`, the "When is the tournament?" FAQ, the Key Dates strip, the JSON-LD block, the `description` + `og:description` meta tags; `battle-on-imperial.ics` and the Google Calendar link in the address card; the refund-tier dates in `#policy` |
+| Contact email (currently `info@battleonimperial.com`, not yet a real mailbox) | `assets/config.js`, plus the footer and final CTA in `index.html` |
 | Supabase URL + anon key | `assets/config.js` |
 | Stock photos → real Canyon team photos | `assets/img/` (see [CREDITS.md](CREDITS.md)) |
-| Number of fields (the map schematic shows two) | `index.html` — the location SVG |
 | Drive-time table — verify against your own routes | `index.html` — `.compare` table |
-| Spectator admission policy | FAQ, "Is there a cost for spectators?" |
+| Main field entrance — confirm the check-in marker is in the right place | `index.html` — the location SVG, `#checkin` |
 | **Refund policy — have the board sign off** | `index.html` — the `#policy` block |
 
 ## Registration backend (Supabase)

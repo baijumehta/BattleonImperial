@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Battle on Imperial//Tournament 2027//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:battle-on-imperial-2027@battleonimperial.com
+DTSTAMP:20261009T030000Z
+DTSTART;VALUE=DATE:20270313
+DTEND;VALUE=DATE:20270314
+SUMMARY:Battle on Imperial - Girls Lacrosse Tournament
+LOCATION:Canyon High School\, 220 S Imperial Hwy\, Anaheim\, CA 92807
+DESCRIPTION:One-day girls high school lacrosse tournament at Canyon High S
+ chool\, Anaheim Hills. Check-in opens 7:15 AM at the main field entrance.
+  Free parking\, free for spectators.\nSchedule: https://www.battleonimper
+ ial.com/schedule.html
+URL:https://www.battleonimperial.com/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

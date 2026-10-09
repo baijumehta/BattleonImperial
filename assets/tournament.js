@@ -42,6 +42,28 @@
         filterTeam = saved.team || 'all';
       }
     } catch (e) { /* private mode, or blocked storage — just use the defaults */ }
+
+    // A link carrying ?team= or ?level= replaces the remembered choice
+    // outright. That is how a coach texts parents "here is our schedule" and
+    // it opens on their team — and a level this browser remembered from last
+    // time must not be merged in, or a varsity link opens on an empty page.
+    // The address bar always reflects the current filter (see syncUrl).
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.has('team') || params.has('level')) {
+        filterTeam = params.get('team') || 'all';
+        filterLevel = params.get('level') || 'all';
+      }
+    } catch (e) { /* very old browser: the saved filter stands */ }
+  }
+
+  function syncUrl() {
+    if (!window.history || !history.replaceState) return;
+    var q = [];
+    if (filterLevel !== 'all') q.push('level=' + encodeURIComponent(filterLevel));
+    if (filterTeam !== 'all') q.push('team=' + encodeURIComponent(filterTeam));
+    var next = location.pathname + (q.length ? '?' + q.join('&') : '') + location.hash;
+    if (next !== location.pathname + location.search + location.hash) history.replaceState(null, '', next);
   }
 
   function saveFilter() {
@@ -49,6 +71,7 @@
       if (filterLevel === 'all' && filterTeam === 'all') localStorage.removeItem(FILTER_KEY);
       else localStorage.setItem(FILTER_KEY, JSON.stringify({ level: filterLevel, team: filterTeam }));
     } catch (e) { /* not worth surfacing; the page works either way */ }
+    syncUrl();
   }
 
   // A remembered team that no longer exists would filter everything out and
@@ -66,6 +89,9 @@
   }
 
   loadFilter();
+  // Store what we start with: a filter that arrived in the link becomes the
+  // remembered one, and the address bar reflects it either way.
+  saveFilter();
 
   /* ------------------------------------------------------------ helpers -- */
   function el(tag, cls, text) {
@@ -131,6 +157,34 @@
 
     var reset = el('button', 'btn btn--outline filter__reset', 'Show all');
     bar.appendChild(reset);
+
+    // Copy link: the current address, which carries the filter, so what gets
+    // pasted into the team group chat opens on the same team. Print: the
+    // print stylesheet drops the chrome and keeps each game card whole.
+    var tools = el('div', 'filter__tools');
+    var share = el('button', 'btn btn--outline', 'Copy link');
+    share.type = 'button';
+    share.title = 'Copy a link that opens this page with the same filter';
+    var print = el('button', 'btn btn--outline', 'Print');
+    print.type = 'button';
+    tools.appendChild(share);
+    tools.appendChild(print);
+    bar.appendChild(tools);
+
+    share.addEventListener('click', function () {
+      var link = window.location.href;
+      var done = function () {
+        share.textContent = 'Link copied';
+        setTimeout(function () { share.textContent = 'Copy link'; }, 2000);
+      };
+      var manual = function () { window.prompt('Copy this link', link); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(done, manual);
+      } else {
+        manual();
+      }
+    });
+    print.addEventListener('click', function () { window.print(); });
 
     lvl.addEventListener('change', function () { filterLevel = lvl.value; saveFilter(); onChange(); });
     tm.addEventListener('change', function () { filterTeam = tm.value; saveFilter(); onChange(); });
