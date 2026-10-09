@@ -825,17 +825,6 @@ h2.title {
 .pagehead .eyebrow { color: var(--gold); }
 .pagehead .eyebrow::before { background: var(--accent-lt); }
 
-.sample-banner {
-  margin: 26px 0 0;
-  padding: 13px 18px;
-  border: 1px solid rgba(232,185,58,.5);
-  border-left: 4px solid var(--gold);
-  border-radius: 4px;
-  background: rgba(232,185,58,.09);
-  font-size: 14.5px; color: var(--body);
-}
-.sample-banner b { color: var(--ink); }
-
 /* ------------------------------------------------------------- filters -- */
 .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin: 30px 0 6px; }
 .filter { display: flex; flex-direction: column; gap: 6px; }

@@ -366,10 +366,17 @@
   }
 
   /* -------------------------------------------------------------- load -- */
+  // What a visitor sees before any teams exist. Worded per page: the standings
+  // page saying "the schedule is not published" reads like the wrong page.
+  var EMPTY = mode === 'standings'
+    ? ['Standings are not published yet.',
+       'Pool tables appear here once the pools are drawn, and update as results come in on tournament day.']
+    : ['The schedule is not published yet.',
+       'Pools and game times are posted here once entries close and the pools are drawn.'];
+
   function render(teams, games) {
     if (!teams.length) {
-      setState('empty', 'The schedule is not published yet.',
-        'Pools and game times appear here once the field is set. Teams on the interest list hear first.');
+      setState('empty', EMPTY[0], EMPTY[1]);
       return;
     }
     if (mode === 'standings') renderStandings(teams, games);
@@ -380,8 +387,7 @@
   window.__renderTournament = render;
 
   if (!url || !key) {
-    setState('empty', 'The schedule is not published yet.',
-      'Pools and game times appear here once the field is set.');
+    setState('empty', EMPTY[0], EMPTY[1]);
     return;
   }
 
@@ -421,8 +427,7 @@
     // A missing table means the schedule simply has not been set up yet —
     // that is not an error worth alarming a visiting coach about.
     if (err.status === 404 || /PGRST205|does not exist/i.test(err.body || '')) {
-      setState('empty', 'The schedule is not published yet.',
-        'Pools and game times appear here once the field is set. Teams on the interest list hear first.');
+      setState('empty', EMPTY[0], EMPTY[1]);
     } else {
       setState('error', 'We could not load the schedule.',
         'Please refresh in a moment. If it keeps happening, email info@battleonimperial.com.');
