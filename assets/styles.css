@@ -534,8 +534,6 @@ h2.title {
 .capacity__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 9px; gap: 12px; }
 .capacity__row strong { font-family: var(--font-display); font-size: 19px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
 .capacity__row span { font-size: 14px; color: var(--muted); }
-.capacity__track { display: flex; gap: 3px; height: 12px; }
-.capacity__slot { flex: 1; border-radius: 2px; background: repeating-linear-gradient(45deg, #e9e5db 0 4px, #f4f1ea 4px 8px); }
 .capacity__note { margin: 12px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
 .capacity__note b { color: var(--ink); }
 

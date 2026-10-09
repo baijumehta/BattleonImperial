@@ -245,13 +245,13 @@ $TEMPLATES = @(
      sub="March 13, 2027  $DOT  Canyon High School, Anaheim Hills" },
 
   @{ key="format";   photo="gallery-draw.jpg";   focus=0.30; focusx=0.62
-     eyebrow="SATURDAY  $DOT  MARCH 13  $DOT  THREE FIELDS"
-     head=@("18 TEAMS","ONE DAY","POOL PLAY")
+     eyebrow="SATURDAY  $DOT  MARCH 13  $DOT  VARSITY AND JV"
+     head=@("THREE FIELDS","ONE DAY","POOL PLAY")
      sub="3 games guaranteed for varsity  $DOT  2 to 3 for JV" },
 
   @{ key="register"; photo="gallery-save.jpg";   focus=0.38; focusx=0.30
      eyebrow="ENTRY IS OPEN"
-     head=@("CLAIM ONE","OF 18 SPOTS")
+     head=@("CLAIM YOUR","TEAM SPOT")
      sub="Early bird pricing through November 30  $DOT  Link in bio" },
 
   @{ key="teamin";   photo="gallery-squad.jpg";  focus=0.30; focusx=0.55

@@ -9,9 +9,8 @@ once they exist. Written to be posted as-is.
 
 > Something new is coming to North Orange County.
 >
-> Battle on Imperial. One day, eighteen girls' lacrosse teams, all on one campus
-> in Anaheim Hills. Three guaranteed games for every varsity team, two to three
-> for JV.
+> Battle on Imperial. One day, three fields, all on one campus in Anaheim Hills.
+> Three guaranteed games for every varsity team, two to three for JV.
 >
 > Saturday, March 13, 2027.
 >
@@ -24,9 +23,9 @@ once they exist. Written to be posted as-is.
 
 > Here is how the day works.
 >
-> Eighteen teams in round-robin pools. Varsity teams play three games, JV teams
-> two to three — no bracket to qualify for, no early exit, no dead games at the
-> end of the day.
+> Varsity and JV in round-robin pools across three fields. Varsity teams play
+> three games, JV teams two to three — no bracket to qualify for, no early
+> exit, no dead games at the end of the day.
 >
 > Pool standings decide it. Three points for a win, one for a tie.
 >
@@ -48,7 +47,7 @@ once they exist. Written to be posted as-is.
 
 ## 4. Registration open — `register-portrait.jpg`
 
-> Entry is open. Eighteen spots, and they go in the order requests come in.
+> Entry is open. Spots go in the order requests come in.
 >
 > Early bird through November 30: $650 per varsity team, $550 per JV team.
 > From December 1 it's $850 and $750.
@@ -72,8 +71,8 @@ once they exist. Written to be posted as-is.
 >
 > @{teamhandle}
 
-**Post one of these every time a team confirms.** It is eighteen posts of free
-content, and each school reposts it to their own followers. That reach is worth
+**Post one of these every time a team confirms.** It is a free post for every
+team, and each school reposts it to their own followers. That reach is worth
 more than anything else on this list — tag the school's account so they see it.
 
 ---
@@ -82,7 +81,7 @@ more than anything else on this list — tag the school's account so they see it
 
 > {N} days out.
 >
-> Eighteen teams. A full day of girls' lacrosse. One Saturday in Anaheim Hills.
+> Three fields. A full day of girls' lacrosse. One Saturday in Anaheim Hills.
 >
 > 🔗 Schedule in bio
 
@@ -100,9 +99,9 @@ more than anything else on this list — tag the school's account so they see it
 
 > That is a wrap on the first Battle on Imperial.
 >
-> Eighteen teams, three fields, one very long and very good Saturday. Thank you
-> to every program that made the trip, to our officials and trainers, and to the
-> parents who ran the tables all day.
+> Three fields, one very long and very good Saturday. Thank you to every program
+> that made the trip, to our officials and trainers, and to the parents who ran
+> the tables all day.
 >
 > See you next March.
 

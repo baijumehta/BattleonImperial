@@ -154,16 +154,6 @@
     });
   }
 
-  /* ---------------------------------------------- 18-slot capacity bar -- */
-  var track = document.getElementById('capacityTrack');
-  if (track) {
-    for (var i = 0; i < 18; i++) {
-      var slot = document.createElement('span');
-      slot.className = 'capacity__slot';
-      track.appendChild(slot);
-    }
-  }
-
   /* ------------------------------------------------------ early bird -- */
   /* Early bird runs to the end of 30 November 2026, Pacific. Past that,
      everything marked data-earlybird goes, anything marked data-regular
