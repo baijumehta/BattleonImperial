@@ -40,13 +40,7 @@ revoke all on public.confirmed_teams from anon;
 grant select on public.confirmed_teams to anon;
 grant select, insert, update, delete on public.confirmed_teams to authenticated;
 
--- The first four, as confirmed on 14 October 2026. Re-running does not
--- duplicate them.
-insert into public.confirmed_teams (school, level, sort) values
-  ('Canyon',         'Varsity', 0),
-  ('Canyon',         'JV',      0),
-  ('Corona del Mar', 'Varsity', 1),
-  ('Corona del Mar', 'JV',      1)
-on conflict (school, level) do nothing;
+-- No seed rows: a team goes on this list only once its entry is fully
+-- confirmed, and that is done in Tournament Control → Confirmed Teams.
 
 select school, level, visible from public.confirmed_teams order by sort, school, level;

@@ -135,7 +135,7 @@ The registration section lists the schools whose entry is confirmed
 one row per school and level, a sort order, and a Visible toggle. It is kept
 separate from `tournament_teams` on purpose: that table carries pools and
 seeds for the schedule and is filled only when the pools are drawn. Setup:
-`supabase/confirmed-teams.sql` (which also seeds the first four teams). No
+`supabase/confirmed-teams.sql`. A school goes on only once fully confirmed. No
 percentage or cap is shown — the site does not advertise a team limit.
 
 ## Things to fill in before launch
