@@ -99,9 +99,8 @@ console.log('\nhappy path');
   check('api key travels as a header, not in the body',
     sent[0].headers['X-Smtp2go-Api-Key'] === 'api-test' && !('api_key' in sent[0].body));
   check('sender is the configured from address', sent[0].body.sender === SECRETS.MAIL_FROM);
-  check('organiser reply-to is the coach',
-    JSON.stringify(sent[0].body.custom_headers) ===
-      JSON.stringify([{ header: 'Reply-To', value: 'dana@example.com' }]));
+  check('organiser alert carries no Reply-To (a foreign reply domain reads as spoofing)',
+    sent[0].body.custom_headers === undefined, JSON.stringify(sent[0].body.custom_headers));
   check('coach reply-to is the tournament',
     JSON.stringify(sent[1].body.custom_headers) ===
       JSON.stringify([{ header: 'Reply-To', value: 'battleonimperial@gmail.com' }]));
@@ -151,9 +150,7 @@ console.log('\nsponsor inquiries');
   check('sends exactly two emails', sent.length === 2, String(sent.length));
   check('organiser alert is the sponsor one',
     String(sent[0].body.subject).startsWith('Sponsor inquiry: Anaheim Hills Orthodontics'), String(sent[0].body.subject));
-  check('organiser reply-to is the business',
-    JSON.stringify(sent[0].body.custom_headers) ===
-      JSON.stringify([{ header: 'Reply-To', value: 'priya@example.com' }]));
+  check('organiser alert carries no Reply-To', sent[0].body.custom_headers === undefined);
   check('confirmation goes to the business',
     JSON.stringify(sent[1].body.to) === JSON.stringify(['priya@example.com']));
   check('response names the business, not a school', body.business === 'Anaheim Hills Orthodontics' && !('school' in body));
@@ -182,9 +179,7 @@ console.log('\nvendor registrations');
   check('sends exactly two emails', sent.length === 2, String(sent.length));
   check('organiser alert is the vendor one',
     String(sent[0].body.subject).startsWith('Vendor booth request: Canyon Coffee Cart'), String(sent[0].body.subject));
-  check('organiser reply-to is the vendor',
-    JSON.stringify(sent[0].body.custom_headers) ===
-      JSON.stringify([{ header: 'Reply-To', value: 'maria@example.com' }]));
+  check('organiser alert carries no Reply-To', sent[0].body.custom_headers === undefined);
   check('confirmation goes to the vendor',
     JSON.stringify(sent[1].body.to) === JSON.stringify(['maria@example.com']));
   check('response names the business', body.business === 'Canyon Coffee Cart' && body.results.vendor.ok === true);

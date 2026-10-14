@@ -184,7 +184,7 @@ export function organiserEmail(r: Registration, adminUrl: string): Mail {
     rows(entry).text, '',
     `Open Tournament Control: ${adminUrl}`,
     '',
-    'Reply to this email to answer the coach directly.'
+    'Email the coach at the address above to answer them.'
   ].filter((l): l is string => l !== null).join('\n');
 
   const flagBlock = flags.length
@@ -196,7 +196,7 @@ export function organiserEmail(r: Registration, adminUrl: string): Mail {
 
   const html = shell(
     `${esc(school)} wants in`,
-    `A new entry request just came in for <b>${esc(teamSummary(r))}</b>. Reply to this email to answer the coach directly.`,
+    `A new entry request just came in for <b>${esc(teamSummary(r))}</b>. The coach's address is below.`,
     flagBlock +
       table('Program', who) +
       table('Coaches', coaches) +

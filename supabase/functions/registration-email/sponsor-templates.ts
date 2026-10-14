@@ -110,7 +110,7 @@ export function sponsorOrganiserEmail(r: SponsorInquiry, adminUrl: string): Mail
     `Message:`,
     val(r.message),
     ``,
-    `Reply to this email to answer them directly.`,
+    `Email them at the address above to answer.`,
     `Work the list: ${adminUrl}`
   ].join('\n');
 
@@ -126,7 +126,7 @@ export function sponsorOrganiserEmail(r: SponsorInquiry, adminUrl: string): Mail
     ])}</table>
     <p style="margin:18px 0 6px;color:#76767e;">Message</p>
     <p style="margin:0;white-space:pre-wrap;">${esc(val(r.message))}</p>
-    <p style="margin:22px 0 0;">Reply to this email to answer them directly, or
+    <p style="margin:22px 0 0;">Email them at the address above to answer, or
       <a href="${esc(adminUrl)}" style="color:#8a6a10;">open Tournament Control</a> to work the list.</p>
   `);
 

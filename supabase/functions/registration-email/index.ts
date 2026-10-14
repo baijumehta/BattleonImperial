@@ -133,7 +133,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     if (organisers.length) {
       // Reply-To the business, so answering the alert answers them.
       results.organisers = await send(
-        apiKey, from, organisers, inquiry.email || replyTo, sponsorOrganiserEmail(inquiry, adminUrl)
+        apiKey, from, organisers, '', sponsorOrganiserEmail(inquiry, adminUrl)
       );
     } else {
       results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
@@ -154,7 +154,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     if (organisers.length) {
       results.organisers = await send(
-        apiKey, from, organisers, vendor.email || replyTo, vendorOrganiserEmail(vendor, adminUrl)
+        apiKey, from, organisers, '', vendorOrganiserEmail(vendor, adminUrl)
       );
     } else {
       results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
@@ -173,10 +173,11 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const record = payload.record as Registration;
 
   if (organisers.length) {
-    // Reply-To the coach, so answering the alert answers them.
-    const coachAddress = record.email || record.coach1_email || replyTo;
+    // No Reply-To on organiser alerts. Setting it to the coach's address —
+    // a different domain from the From — is a spoofing pattern that spam
+    // filters score against, and the alert already links their address.
     results.organisers = await send(
-      apiKey, from, organisers, coachAddress, organiserEmail(record, adminUrl)
+      apiKey, from, organisers, '', organiserEmail(record, adminUrl)
     );
   } else {
     results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
