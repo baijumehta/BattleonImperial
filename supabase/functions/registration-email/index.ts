@@ -131,20 +131,17 @@ Deno.serve(async (req: Request): Promise<Response> => {
   if (payload.table === 'sponsor_inquiries') {
     const inquiry = payload.record as SponsorInquiry;
 
-    if (organisers.length) {
-      // Reply-To the business, so answering the alert answers them.
-      results.organisers = await send(
-        apiKey, from, organisers, '', sponsorOrganiserEmail(inquiry, adminUrl)
-      );
-    } else {
-      results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
-    }
-
-    if (inquiry.email) {
-      results.business = await send(apiKey, from, [inquiry.email], replyTo, sponsorConfirmEmail(inquiry));
-    } else {
-      results.business = 'no email on the inquiry';
-    }
+    // Both sends in parallel: the trigger waits only a few seconds for this
+    // function, and a cold start plus two sequential SMTP2GO calls was enough
+    // to hit that limit once. No Reply-To on the organiser alert (see below).
+    [results.organisers, results.business] = await Promise.all([
+      organisers.length
+        ? send(apiKey, from, organisers, '', sponsorOrganiserEmail(inquiry, adminUrl))
+        : Promise.resolve('MAIL_TO_ORGANISERS is empty — nobody was alerted'),
+      inquiry.email
+        ? send(apiKey, from, [inquiry.email], replyTo, sponsorConfirmEmail(inquiry))
+        : Promise.resolve('no email on the inquiry')
+    ]);
 
     return json({ ok: true, business: inquiry.business ?? null, results });
   }
@@ -153,19 +150,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
   if (payload.table === 'vendor_registrations') {
     const vendor = payload.record as VendorRegistration;
 
-    if (organisers.length) {
-      results.organisers = await send(
-        apiKey, from, organisers, '', vendorOrganiserEmail(vendor, adminUrl)
-      );
-    } else {
-      results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
-    }
-
-    if (vendor.email) {
-      results.vendor = await send(apiKey, from, [vendor.email], replyTo, vendorConfirmEmail(vendor));
-    } else {
-      results.vendor = 'no email on the registration';
-    }
+    [results.organisers, results.vendor] = await Promise.all([
+      organisers.length
+        ? send(apiKey, from, organisers, '', vendorOrganiserEmail(vendor, adminUrl))
+        : Promise.resolve('MAIL_TO_ORGANISERS is empty — nobody was alerted'),
+      vendor.email
+        ? send(apiKey, from, [vendor.email], replyTo, vendorConfirmEmail(vendor))
+        : Promise.resolve('no email on the registration')
+    ]);
 
     return json({ ok: true, business: vendor.business ?? null, results });
   }
@@ -173,25 +165,22 @@ Deno.serve(async (req: Request): Promise<Response> => {
   /* ------------------------------------------------- team registrations -- */
   const record = payload.record as Registration;
 
-  if (organisers.length) {
-    // No Reply-To on organiser alerts. Setting it to the coach's address —
-    // a different domain from the From — is a spoofing pattern that spam
-    // filters score against, and the alert already links their address.
-    results.organisers = await send(
-      apiKey, from, organisers, '', organiserEmail(record, adminUrl)
-    );
-  } else {
-    results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
-  }
-
-  // Confirmation goes to the person who filled the form in. Never invent an
-  // address: if there is none, say so rather than mailing a coach who did not
-  // give one.
-  if (record.email) {
-    results.coach = await send(apiKey, from, [record.email], replyTo, coachEmail(record));
-  } else {
-    results.coach = 'no submitter email on the record';
-  }
+  // No Reply-To on organiser alerts. Setting it to the coach's address — a
+  // different domain from the From — is a spoofing pattern that spam filters
+  // score against, and the alert already links their address.
+  //
+  // The confirmation goes to the person who filled the form in. Never invent
+  // an address: if there is none, say so rather than mailing a coach who did
+  // not give one. Both sends run in parallel so the trigger is not kept
+  // waiting.
+  [results.organisers, results.coach] = await Promise.all([
+    organisers.length
+      ? send(apiKey, from, organisers, '', organiserEmail(record, adminUrl))
+      : Promise.resolve('MAIL_TO_ORGANISERS is empty — nobody was alerted'),
+    record.email
+      ? send(apiKey, from, [record.email], replyTo, coachEmail(record))
+      : Promise.resolve('no submitter email on the record')
+  ]);
 
   // Always 200. A webhook that retries on a partial failure would re-send the
   // email that already worked; the detail is in the body and in the logs.
