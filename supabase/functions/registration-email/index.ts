@@ -11,7 +11,8 @@
  * Secrets (supabase secrets set NAME=value):
  *   SMTP2GO_API_KEY     from the SMTP2GO dashboard
  *   MAIL_FROM           Battle on Imperial <noreply@battleonimperial.com>
- *   MAIL_REPLY_TO       battleonimperial@gmail.com
+ *   MAIL_REPLY_TO       info@battleonimperial.com (same domain as MAIL_FROM — a
+ *                       Reply-To on another domain reads as spoofing to filters)
  *   MAIL_TO_ORGANISERS  comma-separated; who gets the alert
  *   WEBHOOK_SECRET      any long random string, also set on the webhook
  *   ADMIN_URL           optional, defaults to the Vercel admin page
@@ -107,7 +108,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   const apiKey = env('SMTP2GO_API_KEY');
   const from = env('MAIL_FROM', 'Battle on Imperial <noreply@battleonimperial.com>');
-  const replyTo = env('MAIL_REPLY_TO', 'battleonimperial@gmail.com');
+  const replyTo = env('MAIL_REPLY_TO', 'info@battleonimperial.com');
   const organisers = env('MAIL_TO_ORGANISERS').split(',').map((s) => s.trim()).filter(Boolean);
   const adminUrl = env('ADMIN_URL', 'https://www.battleonimperial.com/admin.html');
   if (!apiKey) return json({ error: 'SMTP2GO_API_KEY is not set' }, 500);
