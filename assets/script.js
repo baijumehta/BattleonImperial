@@ -445,6 +445,48 @@
     });
   }
 
+  /* -------------------------------------------------- confirmed teams -- */
+  /* "Confirmed so far" in the registration section, from the confirmed_teams
+     table. One line per school with its levels, and the count in the heading
+     row. Nothing shows until the first school is confirmed, and a failed
+     fetch leaves the static "Interest list now open". */
+  var teamsIn = document.getElementById('teamsIn');
+  var teamsCount = document.getElementById('teamsCount');
+  var boi = window.BOI_CONFIG || {};
+  var boiUrl = (boi.SUPABASE_URL || '').replace(/\/+$/, '');
+  if (teamsIn && teamsCount && boiUrl && boi.SUPABASE_ANON_KEY) {
+    var renderTeamsIn = function (rows) {
+      if (!rows.length) return;
+      var bySchool = {};
+      var order = [];
+      rows.forEach(function (t) {
+        if (!bySchool[t.school]) { bySchool[t.school] = []; order.push(t.school); }
+        bySchool[t.school].push(t.level);
+      });
+      var list = teamsIn.querySelector('.teamsin__list');
+      list.innerHTML = '';
+      order.forEach(function (school) {
+        var levels = bySchool[school];
+        // Varsity before JV however they were entered.
+        levels.sort(function (a, b) { return (a === 'Varsity' ? 0 : 1) - (b === 'Varsity' ? 0 : 1); });
+        var li = document.createElement('li');
+        var name = document.createElement('b');
+        name.textContent = school;
+        li.appendChild(name);
+        li.appendChild(document.createTextNode(' ' + levels.join(' & ')));
+        list.appendChild(li);
+      });
+      teamsCount.textContent = rows.length + (rows.length === 1 ? ' team confirmed' : ' teams confirmed');
+      teamsIn.hidden = false;
+    };
+    window.__renderTeamsIn = renderTeamsIn;   // for local render testing
+    fetch(boiUrl + '/rest/v1/confirmed_teams?select=school,level,sort&visible=is.true&order=sort.asc,school.asc', {
+      headers: { apikey: boi.SUPABASE_ANON_KEY, Authorization: 'Bearer ' + boi.SUPABASE_ANON_KEY }
+    }).then(function (res) { return res.ok ? res.json() : []; })
+      .then(function (rows) { renderTeamsIn(rows || []); })
+      .catch(function () { /* static text stands */ });
+  }
+
   /* ------------------------------------------------------------ year -- */
   var year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();

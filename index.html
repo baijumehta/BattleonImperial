@@ -793,12 +793,20 @@
         <div class="capacity">
           <div class="capacity__row">
             <strong>Who Can Enter</strong>
-            <span>Interest list now open</span>
+            <!-- assets/script.js replaces this with "N teams confirmed" once
+                 the confirmed_teams table has rows. -->
+            <span id="teamsCount">Interest list now open</span>
           </div>
           <p class="capacity__note">
             Open to <b>CIF Division 2 and Division 3</b> girls' programs. Varsity and JV
             both welcome, and a program may enter more than one team.
           </p>
+          <!-- Filled from public.confirmed_teams (Tournament Control → Confirmed
+               Teams). Stays hidden until the first school is confirmed. -->
+          <div class="teamsin" id="teamsIn" hidden>
+            <p class="teamsin__label">Confirmed so far</p>
+            <ul class="teamsin__list"></ul>
+          </div>
         </div>
 
         <!--

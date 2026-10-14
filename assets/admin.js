@@ -569,6 +569,99 @@
     });
   }
 
+  /* ----------------------------------------------------- confirmed teams -- */
+  function renderConfirmed(rows) {
+    var body = document.getElementById('confirmedRows');
+    var count = document.getElementById('confirmedCount');
+    if (!body) return;
+    body.innerHTML = '';
+    if (count) count.textContent = rows.length + (rows.length === 1 ? ' team' : ' teams');
+
+    if (!rows.length) {
+      var tr0 = el('tr');
+      var td0 = el('td', 'muted', 'No confirmed teams yet. Add the first above and it appears on the site.');
+      td0.colSpan = 5;
+      tr0.appendChild(td0); body.appendChild(tr0);
+      return;
+    }
+
+    rows.forEach(function (t) {
+      var tr = el('tr');
+      tr.dataset.id = t.id;
+
+      function save(field, value) {
+        var b = {}; b[field] = value;
+        return patch('confirmed_teams', 'id', t.id, b, tr).then(function () { t[field] = value; });
+      }
+      function cell(field, type) {
+        var td = el('td');
+        var inp;
+        if (type === 'level') {
+          inp = document.createElement('select');
+          ['Varsity', 'JV'].forEach(function (o) {
+            var op = el('option', null, o); op.value = o;
+            if (t.level === o) op.selected = true;
+            inp.appendChild(op);
+          });
+        } else if (type === 'checkbox') {
+          inp = document.createElement('input'); inp.type = 'checkbox'; inp.checked = !!t[field];
+        } else {
+          inp = document.createElement('input');
+          inp.type = type === 'number' ? 'number' : 'text';
+          inp.value = t[field] === null || t[field] === undefined ? '' : t[field];
+        }
+        inp.setAttribute('aria-label', field + ' for ' + t.school);
+        inp.addEventListener('change', function () {
+          var v = type === 'checkbox' ? inp.checked : type === 'number' ? (parseInt(inp.value, 10) || 0) : inp.value.trim();
+          save(field, v).catch(function () {
+            if (type === 'checkbox') inp.checked = !!t[field]; else inp.value = t[field];
+          });
+        });
+        td.appendChild(inp);
+        return td;
+      }
+
+      tr.appendChild(cell('school', 'text'));
+      tr.appendChild(cell('level', 'level'));
+      tr.appendChild(cell('sort', 'number'));
+      tr.appendChild(cell('visible', 'checkbox'));
+
+      var act = el('td', 'nowrap');
+      var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!confirm('Remove ' + t.school + ' ' + t.level + ' from the confirmed list?')) return;
+        markRow(tr, 'saving');
+        authFetch('/rest/v1/confirmed_teams?id=eq.' + encodeURIComponent(t.id), { method: 'DELETE' })
+          .then(function () { say('Removed ' + t.school + ' ' + t.level); return loadAll(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message, 'error'); });
+      });
+      act.appendChild(del);
+      tr.appendChild(act);
+      body.appendChild(tr);
+    });
+  }
+
+  var addConfirmedForm = document.getElementById('addConfirmed');
+  if (addConfirmedForm) {
+    addConfirmedForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var school = addConfirmedForm.elements.school.value.trim();
+      if (!school) return;
+      authFetch('/rest/v1/confirmed_teams', {
+        method: 'POST',
+        headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify({ school: school, level: addConfirmedForm.elements.level.value })
+      }).then(function () {
+        addConfirmedForm.reset();
+        say('Added ' + school);
+        return loadAll();
+      }).catch(function (err) {
+        say(/duplicate|unique/i.test(err.message) ? school + ' ' + addConfirmedForm.elements.level.value + ' is already listed' : err.message, 'error');
+      });
+    });
+  }
+
   /* ------------------------------------------------------------- vendors -- */
   function renderVendors(rows) {
     var body = document.getElementById('vendorRows');
@@ -827,6 +920,9 @@
               : Promise.resolve([]),
       isAdmin ? authFetch('/rest/v1/vendor_registrations?select=*&order=created_at.desc')
                   .catch(function () { return null; })
+              : Promise.resolve([]),
+      isAdmin ? authFetch('/rest/v1/confirmed_teams?select=*&order=sort.asc,school.asc,level.desc')
+                  .catch(function () { return null; })
               : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
@@ -842,6 +938,8 @@
         renderInquiries(r[4] || []);
         if (r[5] === null) say('Vendor table not found — run supabase/vendors.sql', 'error');
         renderVendors(r[5] || []);
+        if (r[6] === null) say('Confirmed teams table not found — run supabase/confirmed-teams.sql', 'error');
+        renderConfirmed(r[6] || []);
       }
       document.getElementById('counts').textContent =
         teams.length + ' teams · ' + games.length + ' games' +

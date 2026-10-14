@@ -127,6 +127,17 @@ vendor through the same edge function (`vendor-templates.ts`). Setup: run
 `supabase/vendors.sql`, then redeploy the function. Prices live in the page
 copy and in `vendor-templates.ts` — change both.
 
+## Confirmed teams
+
+The registration section lists the schools whose entry is confirmed
+("Confirmed so far", with a count in the Who Can Enter row). The rows come from
+`public.confirmed_teams`, managed in Tournament Control → **Confirmed Teams**:
+one row per school and level, a sort order, and a Visible toggle. It is kept
+separate from `tournament_teams` on purpose: that table carries pools and
+seeds for the schedule and is filled only when the pools are drawn. Setup:
+`supabase/confirmed-teams.sql` (which also seeds the first four teams). No
+percentage or cap is shown — the site does not advertise a team limit.
+
 ## Things to fill in before launch
 
 | What | Where |

@@ -74,6 +74,7 @@
       <button class="tab" data-panel="sponsors" role="tab" aria-selected="false" type="button" data-admin-only>Sponsors</button>
       <button class="tab" data-panel="inquiries" role="tab" aria-selected="false" type="button" data-admin-only>Sponsor Inquiries</button>
       <button class="tab" data-panel="vendors" role="tab" aria-selected="false" type="button" data-admin-only>Vendors</button>
+      <button class="tab" data-panel="confirmed" role="tab" aria-selected="false" type="button" data-admin-only>Confirmed Teams</button>
     </div>
   </header>
 
@@ -261,6 +262,44 @@
             </tr>
           </thead>
           <tbody id="vendorRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------ confirmed teams -- -->
+    <section class="panel" id="panel-confirmed" role="tabpanel" hidden data-admin-only>
+      <p class="panel__hint">
+        Schools whose entry is confirmed. They appear under <b>Confirmed so far</b> in
+        the registration section of the home page, with a count. Add each level as its
+        own row. This list is separate from the <b>Teams</b> tab, which carries pools
+        and seeds for the schedule once the pools are drawn.
+        <span id="confirmedCount" class="muted"></span>
+      </p>
+
+      <form class="addteam" id="addConfirmed">
+        <div class="field">
+          <label for="c-school">Add a confirmed team</label>
+          <input type="text" id="c-school" name="school" placeholder="School name" required>
+        </div>
+        <div class="field">
+          <label for="c-level">Level</label>
+          <select id="c-level" name="level">
+            <option>Varsity</option>
+            <option>JV</option>
+          </select>
+        </div>
+        <button class="btn btn--dark" type="submit">Add</button>
+      </form>
+
+      <div class="table-scroll">
+        <table class="admtable">
+          <thead>
+            <tr>
+              <th scope="col">School</th><th scope="col">Level</th>
+              <th scope="col">Sort</th><th scope="col">Visible</th><th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody id="confirmedRows"></tbody>
         </table>
       </div>
     </section>

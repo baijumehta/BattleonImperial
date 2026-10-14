@@ -1200,3 +1200,14 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .payhow__qr img { width: 136px; height: 136px; display: block; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
 @media (max-width: 520px) { .payhow { flex-direction: column; } .payhow__qr img { width: 190px; height: 190px; } }
 @media print { .payhow__qr img { width: 160px; height: 160px; } }
+
+/* ------------------------------------------------------ confirmed teams -- */
+/* "Confirmed so far" under Who Can Enter, once the first school is in. */
+.teamsin { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.teamsin__label { margin: 0 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.teamsin__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.teamsin__list li {
+  padding: 7px 12px; border-radius: 100px; font-size: 14px; color: var(--body);
+  background: #fff; border: 1px solid var(--line);
+}
+.teamsin__list li b { color: var(--ink); font-weight: 600; }
