@@ -1019,6 +1019,33 @@
           </p>
 
           <div class="form__status" id="formStatus" role="status" aria-live="polite"></div>
+
+          <!-- EDIT: how to pay. The QR is the booster club's Zelle code
+               (assets/img/zelle-qr.png); it decodes to the enroll.zellepay.com
+               link on the image, so tapping it on a phone opens Zelle. The
+               Zelle address and the check payee are printed because a visitor
+               on a phone cannot scan their own screen. Same block on all three
+               forms — change them together. -->
+          <aside class="payhow" aria-labelledby="payhowTitle">
+            <div class="payhow__text">
+              <h4 id="payhowTitle">How to pay</h4>
+              <p>
+                Nothing is due until your invoice arrives. Then pay by <b>Zelle</b> &mdash;
+                scan the code with your banking app, or send to
+                <b>girlslacrosseboosterclub@gmail.com</b>, enrolled as Canyon Girls Lacrosse
+                Booster Club &mdash; or write a <b>check</b> payable to
+                <b>Canyon Girls Lacrosse Booster Club</b>.
+              </p>
+            </div>
+            <a class="payhow__qr" href="https://enroll.zellepay.com/qr-codes?data=eyJuYW1lIjoiQ0FOWU9OIEdJUkxTIExBQ1JPU1NFIEJPT1NURVIgQ0xVQiIsImFjdGlvbiI6InBheW1lbnQiLCJ0b2tlbiI6ImdpcmxzbGFjcm9zc2Vib29zdGVyY2x1YkBnbWFpbC5jb20ifQ==" target="_blank" rel="noopener">
+              <picture>
+                <source srcset="assets/img/zelle-qr.webp" type="image/webp">
+                <img src="assets/img/zelle-qr.png" width="776" height="776" loading="lazy" decoding="async"
+                     alt="Zelle QR code for Canyon Girls Lacrosse Booster Club">
+              </picture>
+              <span>Open in Zelle</span>
+            </a>
+          </aside>
         </form>
       </div>
     </div>
