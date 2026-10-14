@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vendor Registration | Battle on Imperial</title>
+<meta name="description" content="Vendor booths at Battle on Imperial, the girls high school lacrosse tournament at Canyon High School, Anaheim Hills, March 13, 2027. Merchant booths $200, food vendor booths $300, 10' x 10'. Sports wear, gear, swag, local businesses and food trucks welcome.">
+<meta name="theme-color" content="#0b0b0d">
+
+<meta property="og:title" content="Vendor Registration — Battle on Imperial">
+<meta property="og:description" content="Sell to 500+ players, coaches and families at a one-day girls lacrosse tournament in Anaheim Hills. Merchant booths $200, food vendor booths $300.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.battleonimperial.com/vendors.html">
+<meta property="og:image" content="https://www.battleonimperial.com/assets/img/og-battle-on-imperial.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://www.battleonimperial.com/vendors.html">
+<link rel="stylesheet" href="assets/styles.css">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html">
+      <picture>
+        <source srcset="assets/img/logo-96.webp" type="image/webp">
+        <img class="brand__mark" src="assets/img/logo-96.png" width="96" height="95" alt="" aria-hidden="true" decoding="async">
+      </picture>
+      <span class="brand__text">
+        <span class="brand__name">Battle on Imperial</span>
+        <span class="brand__sub">Anaheim Hills, CA</span>
+      </span>
+    </a>
+
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+      <span></span>
+    </button>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html#tournament">The Tournament</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="standings.html">Standings</a></li>
+      <li><a href="sponsors.html">Sponsors</a></li>
+      <li><a class="is-active" href="vendors.html">Vendors</a></li>
+      <li><a href="index.html#location">Location</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a class="btn btn--primary nav__cta" href="index.html#register">Reserve a Spot</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Vendor Registration &middot; Saturday, March 13, 2027</p>
+    <h1>Set Up Shop on Game Day</h1>
+    <p class="lede">
+      Showcase your business, support youth sports, connect with the community. We are
+      looking for sports wear, gear and equipment, swag and accessories, local businesses
+      and food vendors to be part of the inaugural Battle on Imperial &mdash; a full day
+      of girls lacrosse with 500+ players, coaches and families on one campus.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================== WHO -- -->
+<section class="section" id="who">
+  <div class="wrap">
+    <div class="facts reveal">
+      <div class="fact"><div class="fact__num">500+</div><div class="fact__label">Players, coaches &amp; families on site</div></div>
+      <div class="fact"><div class="fact__num">8 AM</div><div class="fact__label">First whistle &middot; games run all day</div></div>
+      <div class="fact"><div class="fact__num">10&times;10</div><div class="fact__label">Booth space, every vendor</div></div>
+      <div class="fact"><div class="fact__num">Free</div><div class="fact__label">Entry and parking for spectators &mdash; the crowd stays</div></div>
+    </div>
+
+    <div class="section-head reveal">
+      <p class="eyebrow">Who We Are Looking For</p>
+      <h2 class="title">Be Part of the Game</h2>
+      <p class="lede">
+        Families are on campus from check-in to the last horn, with a break between every
+        game. That is a day of browsing, snacking and shopping, right next to the fields.
+      </p>
+    </div>
+
+    <ul class="chips reveal" aria-label="Vendor categories">
+      <li>Sports wear &amp; apparel</li>
+      <li>Gear &amp; equipment</li>
+      <li>Swag &amp; accessories</li>
+      <li>Local businesses</li>
+      <li>Food trucks &amp; food vendors</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =========================================================== BOOTHS -- -->
+<section class="section section--tint" id="booths">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Booth Space</p>
+      <h2 class="title">Two Ways In</h2>
+      <p class="lede">
+        One price per booth, no commission on sales. We confirm your space and send an
+        invoice &mdash; nothing is charged at sign-up.
+      </p>
+    </div>
+
+    <!-- EDIT: booth types and prices are mirrored in supabase/vendors.sql (the
+         booth_type CHECK), the select on the form below, and the confirmation
+         email in supabase/functions/registration-email/vendor-templates.ts. -->
+    <div class="pkgs pkgs--two">
+      <article class="pkg reveal">
+        <h3 class="pkg__name">Merchant Vendor Space</h3>
+        <p class="pkg__price">$200 <small>per booth</small></p>
+        <ul>
+          <li><b>10' &times; 10' booth space</b></li>
+          <li>Perfect for sports wear, gear, swag, accessories and local businesses</li>
+          <li>High visibility with athletes, families and spectators</li>
+          <li>Be part of a premier youth sports event</li>
+        </ul>
+      </article>
+
+      <article class="pkg reveal">
+        <h3 class="pkg__name">Food Vendor Space</h3>
+        <p class="pkg__price">$300 <small>per booth</small></p>
+        <ul>
+          <li><b>10' &times; 10' booth space</b></li>
+          <li>Open to food trucks and food vendors</li>
+          <li>Must hold a valid business license</li>
+          <li>Must hold all required Orange County Health Department permits</li>
+          <li>High-traffic event with athletes, families and the community</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="pkgs__note reveal">
+      Booth fees are payment for the space, not a tax-deductible donation. Load-in time,
+      booth location and what to bring come with your confirmation. Questions first?
+      Lydie is one call away below.
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================= REGISTER -- -->
+<section class="section section--dark" id="register">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Vendor Registration</p>
+      <h2 class="title">Claim Your Booth</h2>
+      <p class="lede">
+        Tell us about your business and what you will bring. Booths are confirmed in the
+        order requests come in, and your space is held once the invoice is paid.
+      </p>
+    </div>
+
+    <div class="reg__grid">
+      <div class="reveal">
+        <div class="addr-card">
+          <h3>Questions?</h3>
+          <address>
+            Lydie Gutfeld<br>
+            <span>Event Organizer &middot; Battle on Imperial</span>
+          </address>
+          <a class="btn btn--primary btn--block" href="tel:+17147474770">714-747-4770</a>
+          <a class="btn btn--ghost btn--block" href="mailto:battleonimperial@gmail.com?subject=Vendor%20booth%20at%20Battle%20on%20Imperial">battleonimperial@gmail.com</a>
+          <hr>
+          <dl>
+            <dt>Event</dt><dd>Sat, March 13, 2027</dd>
+            <dt>Where</dt><dd>Canyon High School</dd>
+            <dt>Merchant booth</dt><dd>$200</dd>
+            <dt>Food booth</dt><dd>$300</dd>
+            <dt>Booth size</dt><dd>10' &times; 10'</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <!-- EDIT: every name= here is a column in public.vendor_registrations
+             (supabase/vendors.sql). The category and booth_type options are
+             mirrored by CHECK constraints — change one, change both. -->
+        <form class="form" id="vendorForm" data-mailto="battleonimperial@gmail.com" novalidate>
+          <fieldset class="formset">
+            <legend>Your business</legend>
+            <div class="field">
+              <label for="business">Business name <span class="req">*</span></label>
+              <input type="text" id="business" name="business" required maxlength="120" autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="category">What do you sell? <span class="req">*</span></label>
+              <select id="category" name="category" required>
+                <option value="">Select&hellip;</option>
+                <option>Sports wear &amp; apparel</option>
+                <option>Gear &amp; equipment</option>
+                <option>Swag &amp; accessories</option>
+                <option>Local business</option>
+                <option>Food truck or food vendor</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="products">What will you bring on the day? <span class="req">*</span></label>
+              <textarea id="products" name="products" required rows="2" maxlength="600"
+                placeholder="Team apparel, custom sticks, açaí bowls, coffee&hellip;"></textarea>
+            </div>
+            <div class="field">
+              <label for="website">Website or Instagram</label>
+              <input type="text" id="website" name="website" maxlength="200" autocomplete="url" placeholder="https:// or @handle">
+            </div>
+          </fieldset>
+
+          <fieldset class="formset">
+            <legend>Booth</legend>
+            <div class="form__row">
+              <div class="field">
+                <label for="booth_type">Booth type <span class="req">*</span></label>
+                <select id="booth_type" name="booth_type" required>
+                  <option value="">Select&hellip;</option>
+                  <option value="Merchant">Merchant &mdash; $200 per booth</option>
+                  <option value="Food">Food vendor &mdash; $300 per booth</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="booths">How many booths?</label>
+                <select id="booths" name="booths">
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Shown only for food vendors; required when shown. -->
+            <label class="form__consent" id="permitsField" hidden>
+              <input type="checkbox" id="permits_ack" name="permits_ack">
+              <span>
+                My business holds a <b>valid business license</b> and <b>all Orange County
+                Health Department permits</b> required to serve food at an outdoor event,
+                and I will bring copies on the day.
+              </span>
+            </label>
+          </fieldset>
+
+          <fieldset class="formset">
+            <legend>You</legend>
+            <div class="field">
+              <label for="contact_name">Your name <span class="req">*</span></label>
+              <input type="text" id="contact_name" name="contact_name" required maxlength="120" autocomplete="name">
+            </div>
+            <div class="form__row">
+              <div class="field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input type="email" id="email" name="email" required maxlength="200" autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="phone">Cell phone <span class="req">*</span></label>
+                <input type="tel" id="phone" name="phone" required maxlength="40" autocomplete="tel">
+              </div>
+            </div>
+            <div class="field">
+              <label for="notes">Anything else we should know?</label>
+              <textarea id="notes" name="notes" maxlength="2000"
+                placeholder="Power needs, a food truck's size, a preferred spot&hellip;"></textarea>
+            </div>
+            <label class="form__consent">
+              <input type="checkbox" id="payment_ack" name="payment_ack" required>
+              <span>
+                I understand a booth is <b>$200 (merchant) or $300 (food)</b>, that we will
+                send an invoice once the space is confirmed, and that the booth is held once
+                it is paid. Nothing is charged now.
+              </span>
+            </label>
+            <label class="form__consent">
+              <input type="checkbox" id="consent" name="consent" required>
+              <span>It&rsquo;s fine to contact me about my booth and game-day details.</span>
+            </label>
+          </fieldset>
+
+          <!-- Honeypot: hidden from people, irresistible to bots. -->
+          <div class="hp" aria-hidden="true">
+            <label for="company_url">Company URL</label>
+            <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn btn--primary btn--block btn--lg" type="submit">Request a Booth</button>
+
+          <p class="field__hint" style="text-align:center; margin-top:14px;">
+            Sending this does not reserve a booth or create a charge. Lydie will confirm
+            your space and send the invoice.
+          </p>
+
+          <div class="form__status" id="vendorStatus" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <picture>
+            <source srcset="assets/img/logo-240.webp" type="image/webp">
+            <img src="assets/img/logo-240.png" width="240" height="236" loading="lazy" decoding="async"
+                 alt="Battle on Imperial — Girls Lacrosse Showcase, Anaheim Hills, California.">
+          </picture>
+        </div>
+        <p style="max-width:38ch;">
+          Hosted by the Canyon High School Lacrosse Booster Club, a volunteer parent
+          organization supporting lacrosse at Canyon High School in Anaheim Hills, California.
+        </p>
+
+        <ul class="social">
+          <li>
+            <a href="https://www.instagram.com/battleonimperial" target="_blank" rel="me noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4"/>
+                <circle cx="12" cy="12" r="4.2"/>
+                <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+              </svg>
+              <span>@battleonimperial</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Tournament</h3>
+        <ul>
+          <li><a href="index.html#tournament">The Tournament</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="index.html#team">Meet the Team</a></li>
+          <li><a href="index.html#register">Registration</a></li>
+          <li><a href="sponsors.html">Sponsors</a></li>
+          <li><a href="vendors.html">Vendors</a></li>
+          <li><a href="index.html#policy">Deposits &amp; Refunds</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Location</h3>
+        <ul>
+          <li>Canyon High School</li>
+          <li>220 S Imperial Hwy</li>
+          <li>Anaheim, CA 92807</li>
+          <li><a href="https://www.google.com/maps/dir/?api=1&destination=220+S+Imperial+Hwy%2C+Anaheim%2C+CA+92807" target="_blank" rel="noopener">Get directions</a></li>
+          <li><a href="index.html#eats">Food &amp; Fans</a></li>
+          <li><a href="mailto:battleonimperial@gmail.com">battleonimperial@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; <span id="year">2026</span> Canyon High School Lacrosse Booster Club. All rights reserved.</span>
+      <span>Anaheim Hills, California &middot; <a href="privacy.html">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/script.js"></script>
+<script src="assets/vendors.js"></script>
+</body>
+</html>

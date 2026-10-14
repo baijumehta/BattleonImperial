@@ -22,16 +22,18 @@
  */
 import { coachEmail, organiserEmail, type Registration } from './templates.ts';
 import { sponsorConfirmEmail, sponsorOrganiserEmail, type SponsorInquiry } from './sponsor-templates.ts';
+import { vendorConfirmEmail, vendorOrganiserEmail, type VendorRegistration } from './vendor-templates.ts';
 
 const SMTP2GO_ENDPOINT = 'https://api.smtp2go.com/v3/email/send';
 
-// One function, two tables. The trigger names the table and the handler
-// routes on it: registrations (team entries) or sponsor_inquiries.
+// One function, three tables. The trigger names the table and the handler
+// routes on it: registrations (team entries), sponsor_inquiries, or
+// vendor_registrations.
 interface WebhookPayload {
   type?: string;
   table?: string;
   schema?: string;
-  record?: Registration | SponsorInquiry;
+  record?: Registration | SponsorInquiry | VendorRegistration;
 }
 
 function env(name: string, fallback = ''): string {
@@ -144,6 +146,27 @@ Deno.serve(async (req: Request): Promise<Response> => {
     }
 
     return json({ ok: true, business: inquiry.business ?? null, results });
+  }
+
+  /* ------------------------------------------------ vendor registrations -- */
+  if (payload.table === 'vendor_registrations') {
+    const vendor = payload.record as VendorRegistration;
+
+    if (organisers.length) {
+      results.organisers = await send(
+        apiKey, from, organisers, vendor.email || replyTo, vendorOrganiserEmail(vendor, adminUrl)
+      );
+    } else {
+      results.organisers = 'MAIL_TO_ORGANISERS is empty — nobody was alerted';
+    }
+
+    if (vendor.email) {
+      results.vendor = await send(apiKey, from, [vendor.email], replyTo, vendorConfirmEmail(vendor));
+    } else {
+      results.vendor = 'no email on the registration';
+    }
+
+    return json({ ok: true, business: vendor.business ?? null, results });
   }
 
   /* ------------------------------------------------- team registrations -- */

@@ -165,13 +165,13 @@ h2.title {
 
 .nav__links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav__links a {
-  display: block; padding: 9px 11px; border-radius: 8px;
-  font-size: 14.5px; font-weight: 500; color: #d2ccc0; text-decoration: none;
+  display: block; padding: 9px 9px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; color: #d2ccc0; text-decoration: none;
   transition: color .15s ease, background-color .15s ease;
 }
 .nav__links a:hover { color: #fff; background: rgba(255,255,255,.09); }
 .nav__links a.is-active { color: var(--gold); }
-.nav__cta { padding: 11px 22px !important; font-size: 15px; margin-left: 8px; }
+.nav__cta { padding: 10px 18px !important; font-size: 14.5px; margin-left: 6px; }
 /* .nav__links a is 0,2,0 and beats .btn--primary's 0,1,0, so the CTA inside the
    nav would take the pale link colour and sit on gold at about 1.9:1. Restate
    it at matching specificity. */
@@ -195,7 +195,7 @@ h2.title {
 
 /* Nine nav items need more room than 940px allows; below this the bar
    collapses to the hamburger. */
-@media (max-width: 1080px) {
+@media (max-width: 1240px) {
   .nav__toggle { display: block; }
   .nav__links {
     position: absolute; left: 0; right: 0; top: 72px;
@@ -1167,3 +1167,18 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .prose__date { margin-top: 30px !important; font-size: 14px !important; color: var(--muted) !important; }
 .footer__bottom a { color: inherit; }
 .footer__bottom a:hover { color: #fff; }
+
+/* ------------------------------------------------------------- vendors -- */
+/* Category chips on vendors.html. */
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.chips li {
+  padding: 9px 16px; border-radius: 100px; font-size: 14.5px; font-weight: 600; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+/* Two booth cards, not six: cap the width so they do not stretch to banners. */
+.pkgs--two { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 820px; }
+.pkg__price small { font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 4px; letter-spacing: 0; }
+/* The vendor call to action on the home page, below the sponsor one. */
+.sponsorcta--light { margin-top: 18px; background: #fff; color: var(--ink); border: 1px solid var(--line); }
+.sponsorcta--light h3 { color: var(--ink); }
+.sponsorcta--light p { color: var(--body); }

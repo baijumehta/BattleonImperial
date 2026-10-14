@@ -169,5 +169,31 @@ console.log('\nsponsor inquiries');
     sent.length === 2 && !String(sent[0].body.subject).startsWith('Sponsor inquiry'));
 }
 
+console.log('\nvendor registrations');
+{
+  sent = [];
+  const vendor = {
+    business: 'Canyon Coffee Cart', booth_type: 'Food', booths: 1, permits_ack: true,
+    contact_name: 'Maria Ortega', email: 'maria@example.com', payment_ack: true, consent: true
+  };
+  const res = await post({ type: 'INSERT', table: 'vendor_registrations', record: vendor });
+  const body = await res.json();
+  check('responds 200', res.status === 200);
+  check('sends exactly two emails', sent.length === 2, String(sent.length));
+  check('organiser alert is the vendor one',
+    String(sent[0].body.subject).startsWith('Vendor booth request: Canyon Coffee Cart'), String(sent[0].body.subject));
+  check('organiser reply-to is the vendor',
+    JSON.stringify(sent[0].body.custom_headers) ===
+      JSON.stringify([{ header: 'Reply-To', value: 'maria@example.com' }]));
+  check('confirmation goes to the vendor',
+    JSON.stringify(sent[1].body.to) === JSON.stringify(['maria@example.com']));
+  check('response names the business', body.business === 'Canyon Coffee Cart' && body.results.vendor.ok === true);
+
+  sent = [];
+  const { email, ...noEmail } = vendor;
+  const body2 = await (await post({ type: 'INSERT', table: 'vendor_registrations', record: noEmail })).json();
+  check('without an email only the organisers are mailed', sent.length === 1 && typeof body2.results.vendor === 'string');
+}
+
 console.log(failures ? `\n${failures} failing check(s)\n` : '\nall checks pass\n');
 process.exit(failures ? 1 : 0);

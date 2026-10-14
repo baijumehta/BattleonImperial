@@ -115,6 +115,18 @@ with a call to action and a logo band.
   battleonimperial@gmail.com) is on `sponsors.html` and in
   `sponsor-templates.ts`. The same Gmail address is the site-wide contact.
 
+## Vendors
+
+`vendors.html` carries the two booth types from the vendor flyer — merchant
+$200, food $300, both 10' × 10' — and a booth request form that writes to
+`public.vendor_registrations` (insert-only for the public key). Food vendors
+must tick that they hold a business licence and OC Health Department permits;
+a food request without that tick is flagged in the organiser email and in
+Tournament Control → **Vendors**. Each request emails the organisers and the
+vendor through the same edge function (`vendor-templates.ts`). Setup: run
+`supabase/vendors.sql`, then redeploy the function. Prices live in the page
+copy and in `vendor-templates.ts` — change both.
+
 ## Things to fill in before launch
 
 | What | Where |

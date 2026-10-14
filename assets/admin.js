@@ -569,6 +569,106 @@
     });
   }
 
+  /* ------------------------------------------------------------- vendors -- */
+  function renderVendors(rows) {
+    var body = document.getElementById('vendorRows');
+    var count = document.getElementById('vendorCount');
+    if (!body) return;
+    body.innerHTML = '';
+    if (count) count.textContent = rows.length + (rows.length === 1 ? ' request' : ' requests');
+
+    if (!rows.length) {
+      var tr0 = el('tr');
+      var td0 = el('td', 'muted', 'No booth requests yet.');
+      td0.colSpan = 9;
+      tr0.appendChild(td0); body.appendChild(tr0);
+      return;
+    }
+
+    rows.forEach(function (r) {
+      var tr = el('tr');
+      tr.appendChild(el('td', 'nowrap', new Date(r.created_at).toLocaleDateString(undefined,
+        { month: 'short', day: 'numeric' })));
+
+      var biz = el('td', 'strong');
+      var site = (r.website || '').trim();
+      if (site && !/^@/.test(site)) {
+        var w = el('a', null, r.business);
+        w.href = /^https?:\/\//i.test(site) ? site : 'https://' + site;
+        w.target = '_blank'; w.rel = 'noopener';
+        biz.appendChild(w);
+      } else {
+        biz.textContent = r.business;
+        if (site) { biz.appendChild(document.createElement('br')); biz.appendChild(el('span', 'muted', site)); }
+      }
+      tr.appendChild(biz);
+
+      // Booth type and count, with the permit flag where it matters.
+      var booth = el('td', 'nowrap');
+      var n = r.booths || 1;
+      booth.appendChild(el('span', null, (r.booth_type || '—') + ' × ' + n));
+      if (r.booth_type === 'Food') {
+        booth.appendChild(document.createElement('br'));
+        booth.appendChild(el('span', r.permits_ack ? 'muted' : 'flag',
+          r.permits_ack ? 'Permits confirmed' : 'Permits NOT confirmed'));
+      }
+      tr.appendChild(booth);
+
+      var sells = el('td', 'notes');
+      sells.appendChild(el('span', 'strong', r.category || '—'));
+      if (r.products) { sells.appendChild(document.createElement('br')); sells.appendChild(document.createTextNode(r.products)); }
+      tr.appendChild(sells);
+
+      tr.appendChild(el('td', null, r.contact_name));
+
+      var contact = el('td');
+      var a = el('a', null, r.email);
+      a.href = 'mailto:' + r.email;
+      contact.appendChild(a);
+      if (r.phone) { contact.appendChild(document.createElement('br')); contact.appendChild(el('span', 'muted', r.phone)); }
+      if (r.payment_ack === false) {
+        contact.appendChild(document.createElement('br'));
+        contact.appendChild(el('span', 'flag', 'Fee terms NOT acknowledged'));
+      }
+      tr.appendChild(contact);
+
+      tr.appendChild(el('td', 'notes', r.notes || '—'));
+
+      var st = el('td');
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Status for ' + r.business);
+      ['new', 'contacted', 'confirmed', 'declined'].forEach(function (s) {
+        var o = el('option', null, s.charAt(0).toUpperCase() + s.slice(1));
+        o.value = s;
+        if (r.status === s) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        patch('vendor_registrations', 'id', r.id, { status: sel.value }, tr)
+          .then(function () { r.status = sel.value; })
+          .catch(function () { sel.value = r.status; });
+      });
+      st.appendChild(sel);
+      tr.appendChild(st);
+
+      var act = el('td', 'nowrap');
+      var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!confirm('Remove the booth request from ' + r.business + '? This cannot be undone. ' +
+                     'For a real vendor you are turning down, set it to Declined instead.')) return;
+        markRow(tr, 'saving');
+        authFetch('/rest/v1/vendor_registrations?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE' })
+          .then(function () { say('Removed ' + r.business); return loadAll(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message, 'error'); });
+      });
+      act.appendChild(del);
+      tr.appendChild(act);
+
+      body.appendChild(tr);
+    });
+  }
+
   /* ------------------------------------------------------- registrations -- */
   function renderRegs(rows) {
     var body = document.getElementById('regRows');
@@ -724,6 +824,9 @@
               : Promise.resolve([]),
       isAdmin ? authFetch('/rest/v1/sponsor_inquiries?select=*&order=created_at.desc')
                   .catch(function () { return null; })
+              : Promise.resolve([]),
+      isAdmin ? authFetch('/rest/v1/vendor_registrations?select=*&order=created_at.desc')
+                  .catch(function () { return null; })
               : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
@@ -737,6 +840,8 @@
         sponsors = sortSponsors(r[3] || []);
         renderSponsors();
         renderInquiries(r[4] || []);
+        if (r[5] === null) say('Vendor table not found — run supabase/vendors.sql', 'error');
+        renderVendors(r[5] || []);
       }
       document.getElementById('counts').textContent =
         teams.length + ' teams · ' + games.length + ' games' +
