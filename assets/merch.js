@@ -56,7 +56,9 @@
   // family can order two tees in different sizes in one go; lanyards and pins
   // get a single quantity.
   PRODUCTS.forEach(function (p) {
-    var card = el('article', 'product reveal');
+    // No 'reveal' here: the scroll-in fade collects its elements at page load,
+    // and cards created afterwards would stay at opacity 0 forever.
+    var card = el('article', 'product');
     card.dataset.id = p.id;
 
     var pic = document.createElement('picture');
