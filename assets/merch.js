@@ -64,7 +64,9 @@
     src.srcset = 'assets/img/merch-' + p.img + '.webp'; src.type = 'image/webp';
     var img = new Image();
     img.src = 'assets/img/merch-' + p.img + '.jpg';
-    img.alt = p.name; img.loading = 'lazy'; img.decoding = 'async';
+    // Not lazy: five small images, and a lazy img created by script before
+    // insertion never started loading in some browsers.
+    img.alt = p.name; img.loading = 'eager'; img.decoding = 'async';
     img.width = 440; img.height = 1000;
     pic.appendChild(src); pic.appendChild(img);
     var figure = el('div', 'product__img'); figure.appendChild(pic);
