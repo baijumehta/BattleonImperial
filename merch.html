@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merchandise | Battle on Imperial</title>
+<meta name="description" content="Battle on Imperial tournament merchandise: T-shirts $15, hoodies $30, flannel PJ pants $20, lanyards $7 and tournament pins $5. Pre-order online, pay by Zelle, pick up at the tournament on March 13, 2027.">
+<meta name="theme-color" content="#0b0b0d">
+
+<meta property="og:title" content="Battle on Imperial Merchandise">
+<meta property="og:description" content="Pre-order tournament T-shirts, hoodies, flannel PJ pants, lanyards and pins. Pick up at Canyon High School on March 13, 2027.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.battleonimperial.com/merch.html">
+<meta property="og:image" content="https://www.battleonimperial.com/assets/img/og-battle-on-imperial.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://www.battleonimperial.com/merch.html">
+<link rel="stylesheet" href="assets/styles.css">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html">
+      <picture>
+        <source srcset="assets/img/logo-96.webp" type="image/webp">
+        <img class="brand__mark" src="assets/img/logo-96.png" width="96" height="95" alt="" aria-hidden="true" decoding="async">
+      </picture>
+      <span class="brand__text">
+        <span class="brand__name">Battle on Imperial</span>
+        <span class="brand__sub">Anaheim Hills, CA</span>
+      </span>
+    </a>
+
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+      <span></span>
+    </button>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html#tournament">Tournament</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="standings.html">Standings</a></li>
+      <li><a href="sponsors.html">Sponsors</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a class="is-active" href="merch.html">Merch</a></li>
+      <li><a href="index.html#location">Location</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a class="btn btn--primary nav__cta" href="index.html#register">Reserve a Spot</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Tournament Merchandise &middot; Gear &middot; Memories &middot; Game On</p>
+    <h1>Play Bolder. Together.</h1>
+    <p class="lede">
+      Pre-order your Battle on Imperial gear now and pick it up at the tournament on
+      Saturday, March 13, 2027. Pay by Zelle once your order is in &mdash; no card needed.
+      <span data-merch-open>Pre-orders close <b>February 20, 2027</b>.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ ORDER -- -->
+<section class="section" id="order">
+  <div class="wrap">
+    <!-- Shown by assets/merch.js after the pre-order deadline. -->
+    <div class="state state--empty" id="merchClosed" hidden>
+      <h2>Pre-orders have closed</h2>
+      <p>Tournament merchandise is on sale at the merchandise table on game day &mdash; cash, card or Zelle.</p>
+    </div>
+
+    <!-- EDIT: products, prices and sizes live in assets/merch.js (PRODUCTS),
+         which builds this grid, and in supabase/merch.sql (merch_total) and
+         merch-templates.ts, which must agree with it. The images are crops
+         of the merchandise artwork (assets/img/merch-*.jpg). -->
+    <form class="merch" id="merchForm" data-mailto="battleonimperial@gmail.com" novalidate>
+      <div class="section-head reveal">
+        <p class="eyebrow">Step 1</p>
+        <h2 class="title">Pick Your Gear</h2>
+        <p class="lede">Choose sizes and quantities. The total updates as you go.</p>
+      </div>
+
+      <div class="products" id="products"></div>
+
+      <div class="merch__total reveal" aria-live="polite">
+        <span>Order total</span>
+        <strong id="merchTotal">$0</strong>
+      </div>
+
+      <div class="section-head reveal" style="margin-top: clamp(40px, 6vw, 64px);">
+        <p class="eyebrow">Step 2</p>
+        <h2 class="title">Who&rsquo;s Picking It Up</h2>
+        <p class="lede">Orders are held at the merchandise table under this name on March 13.</p>
+      </div>
+
+      <div class="merch__who reveal">
+        <fieldset class="formset">
+          <legend>Your details</legend>
+          <div class="form__row">
+            <div class="field">
+              <label for="name">Name <span class="req">*</span></label>
+              <input type="text" id="name" name="name" required maxlength="120" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="school">Team or school you&rsquo;re with</label>
+              <input type="text" id="school" name="school" maxlength="120" placeholder="Optional">
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input type="email" id="email" name="email" required maxlength="200" autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="phone">Cell phone <span class="req">*</span></label>
+              <input type="tel" id="phone" name="phone" required maxlength="40" autocomplete="tel">
+            </div>
+          </div>
+          <div class="field">
+            <label for="notes">Anything else?</label>
+            <textarea id="notes" name="notes" maxlength="1000" rows="2" placeholder="Optional"></textarea>
+          </div>
+
+          <!-- EDIT: the Zelle address and payee are the same as the How-to-pay
+               block on the other forms. -->
+          <label class="form__consent">
+            <input type="checkbox" id="ack" name="ack" required>
+            <span>
+              I&rsquo;ll pay the total by <b>Zelle</b> to <b>girlslacrosseboosterclub@gmail.com</b>
+              (Canyon Girls Lacrosse Booster Club) within 7 days, with my order number in the
+              memo, and pick up at the tournament on March 13. Unpaid orders may be released.
+            </span>
+          </label>
+        </fieldset>
+
+        <!-- Honeypot: hidden from people, irresistible to bots. -->
+        <div class="hp" aria-hidden="true">
+          <label for="company_url">Company URL</label>
+          <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn btn--primary btn--block btn--lg" type="submit" id="merchSubmit">Place Pre-order</button>
+        <p class="field__hint" style="text-align:center; margin-top:14px;">
+          You&rsquo;ll get an email with your order number and the Zelle details. Nothing is
+          charged here.
+        </p>
+        <div class="form__status" id="merchStatus" role="status" aria-live="polite"></div>
+
+        <aside class="payhow" aria-labelledby="payhowTitle">
+          <div class="payhow__text">
+            <h3 id="payhowTitle">How to pay</h3>
+            <p>
+              After you place the order, pay by <b>Zelle</b> &mdash; scan the code with your
+              banking app, or send to <b>girlslacrosseboosterclub@gmail.com</b>, enrolled as
+              Canyon Girls Lacrosse Booster Club &mdash; and put your <b>order number</b> in
+              the memo. Prefer a check? Bring it, payable to Canyon Girls Lacrosse Booster
+              Club, when you pick up.
+            </p>
+          </div>
+          <a class="payhow__qr" href="https://enroll.zellepay.com/qr-codes?data=eyJuYW1lIjoiQ0FOWU9OIEdJUkxTIExBQ1JPU1NFIEJPT1NURVIgQ0xVQiIsImFjdGlvbiI6InBheW1lbnQiLCJ0b2tlbiI6ImdpcmxzbGFjcm9zc2Vib29zdGVyY2x1YkBnbWFpbC5jb20ifQ==" target="_blank" rel="noopener">
+            <picture>
+              <source srcset="assets/img/zelle-qr.webp" type="image/webp">
+              <img src="assets/img/zelle-qr.png" width="776" height="776" loading="lazy" decoding="async"
+                   alt="Zelle QR code for Canyon Girls Lacrosse Booster Club">
+            </picture>
+            <span>Open in Zelle</span>
+          </a>
+        </aside>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============================================================= FAQ -- -->
+<section class="section section--tint" id="merch-faq">
+  <div class="wrap">
+    <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="title">Merchandise Questions</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal" open>
+        <summary>How does a pre-order work?</summary>
+        <div class="faq__body">
+          <p>Place the order above and you get an email with an order number and the total.
+            Send that amount by Zelle within 7 days with the order number in the memo. We mark
+            it paid, and your gear is waiting at the merchandise table on March 13.</p>
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>Can you ship it?</summary>
+        <div class="faq__body">
+          <p>No &mdash; pickup at the tournament only. It keeps prices where they are.</p>
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>What if I don&rsquo;t pay within 7 days?</summary>
+        <div class="faq__body">
+          <p>We may release the order so the stock goes to someone else. Email us if you need
+            a little longer and we&rsquo;ll hold it.</p>
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>Can I buy on the day without pre-ordering?</summary>
+        <div class="faq__body">
+          <p>Yes, while stock lasts &mdash; the merchandise table takes cash, card and Zelle.
+            Pre-ordering is how you make sure your size is there.</p>
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>Where does the money go?</summary>
+        <div class="faq__body">
+          <p>Merchandise is sold by the Canyon High School Lacrosse Booster Club, the volunteer
+            parent group that puts the tournament on. Purchases are not tax-deductible donations.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <picture>
+            <source srcset="assets/img/logo-240.webp" type="image/webp">
+            <img src="assets/img/logo-240.png" width="240" height="236" loading="lazy" decoding="async"
+                 alt="Battle on Imperial — Girls Lacrosse Showcase, Anaheim Hills, California.">
+          </picture>
+        </div>
+        <p style="max-width:38ch;">
+          Hosted by the Canyon High School Lacrosse Booster Club, a volunteer parent
+          organization supporting lacrosse at Canyon High School in Anaheim Hills, California.
+        </p>
+        <ul class="social">
+          <li>
+            <a href="https://www.instagram.com/battleonimperial" target="_blank" rel="me noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4"/>
+                <circle cx="12" cy="12" r="4.2"/>
+                <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+              </svg>
+              <span>@battleonimperial</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Tournament</h3>
+        <ul>
+          <li><a href="index.html#tournament">The Tournament</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="index.html#team">Meet the Team</a></li>
+          <li><a href="index.html#register">Registration</a></li>
+          <li><a href="sponsors.html">Sponsors</a></li>
+          <li><a href="vendors.html">Vendors</a></li>
+          <li><a href="merch.html">Merchandise</a></li>
+          <li><a href="index.html#policy">Deposits &amp; Refunds</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Location</h3>
+        <ul>
+          <li>Canyon High School</li>
+          <li>220 S Imperial Hwy</li>
+          <li>Anaheim, CA 92807</li>
+          <li><a href="https://www.google.com/maps/dir/?api=1&destination=220+S+Imperial+Hwy%2C+Anaheim%2C+CA+92807" target="_blank" rel="noopener">Get directions</a></li>
+          <li><a href="index.html#eats">Food &amp; Fans</a></li>
+          <li><a href="mailto:battleonimperial@gmail.com">battleonimperial@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; <span id="year">2026</span> Canyon High School Lacrosse Booster Club. All rights reserved.</span>
+      <span>Anaheim Hills, California &middot; <a href="privacy.html">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/script.js"></script>
+<script src="assets/merch.js"></script>
+</body>
+</html>

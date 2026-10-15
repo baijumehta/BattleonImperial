@@ -138,6 +138,28 @@ seeds for the schedule and is filled only when the pools are drawn. Setup:
 `supabase/confirmed-teams.sql`. A school goes on only once fully confirmed. No
 percentage or cap is shown — the site does not advertise a team limit.
 
+## Merchandise pre-orders
+
+`merch.html` sells the five items from the merchandise artwork (T-shirt $15,
+hoodie $30, flannel PJ pants $20, lanyard $7, pin $5) as **pre-orders paid by
+Zelle**: the buyer picks sizes and quantities, places the order, and gets an
+email with an order number (`BOI-XXXXX`) and the Zelle details; the organisers
+get an alert. Orders land in `public.merch_orders` and are worked in
+Tournament Control → **Merch Orders** (New → Paid → Picked up), which also
+shows a size tally for ordering stock. Pickup only, at the tournament.
+
+- **Setup:** run `supabase/merch.sql`, then redeploy the edge function.
+- **Prices and products** live in three places that must agree:
+  `PRODUCTS` in `assets/merch.js`, `merch_price()` in `supabase/merch.sql`
+  (the database rejects an order whose total does not match), and `PRODUCTS`
+  in `merch-templates.ts`. The home-page teaser quotes the prices too.
+- **Pre-orders close** at the end of February 20, 2027 (`CLOSES` in
+  `assets/merch.js`, and stated on the page); after that the page shows a
+  closed notice.
+- **Sales tax:** merchandise is taxable in California. The prices are shown
+  as-is; whether they are tax-inclusive, and the seller permit, are for the
+  treasurer to settle before the first order.
+
 ## Things to fill in before launch
 
 | What | Where |

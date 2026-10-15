@@ -190,5 +190,26 @@ console.log('\nvendor registrations');
   check('without an email only the organisers are mailed', sent.length === 1 && typeof body2.results.vendor === 'string');
 }
 
+console.log('\nmerch orders');
+{
+  sent = [];
+  const order = {
+    order_no: 'BOI-7K2MX', name: 'Dana Reyes', email: 'dana@example.com', phone: '714-555-0100',
+    items: [{ id: 'hoodie', size: 'M', qty: 2 }], total: 60, ack: true
+  };
+  const res = await post({ type: 'INSERT', table: 'merch_orders', record: order });
+  const body = await res.json();
+  check('responds 200', res.status === 200);
+  check('sends exactly two emails', sent.length === 2, String(sent.length));
+  check('organiser alert is the merch one',
+    String(sent[0].body.subject).startsWith('Merch order BOI-7K2MX'), String(sent[0].body.subject));
+  check('organiser alert carries no Reply-To', sent[0].body.custom_headers === undefined);
+  check('buyer confirmation goes to the buyer with the order number',
+    JSON.stringify(sent[1].body.to) === JSON.stringify(['dana@example.com']) && String(sent[1].body.subject).includes('BOI-7K2MX'));
+  check('buyer reply-to is the tournament',
+    JSON.stringify(sent[1].body.custom_headers) === JSON.stringify([{ header: 'Reply-To', value: SECRETS.MAIL_REPLY_TO }]));
+  check('response names the order', body.order_no === 'BOI-7K2MX' && body.results.buyer.ok === true);
+}
+
 console.log(failures ? `\n${failures} failing check(s)\n` : '\nall checks pass\n');
 process.exit(failures ? 1 : 0);

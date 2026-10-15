@@ -569,6 +569,132 @@
     });
   }
 
+  /* -------------------------------------------------------- merch orders -- */
+  // EDIT: mirrors PRODUCTS in assets/merch.js.
+  var MERCH = {
+    tee: 'T-Shirt', hoodie: 'Hoodie', pants: 'Flannel PJ Pants', lanyard: 'Lanyard', pin: 'Tournament Pin'
+  };
+  var MERCH_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+  function money(n) { return '$' + Number(n || 0).toLocaleString('en-US'); }
+
+  function itemText(i) {
+    return (i.qty || 0) + ' × ' + (MERCH[i.id] || i.id) + (i.size ? ' (' + i.size + ')' : '');
+  }
+
+  // Quantities per product and size across open and paid orders — the number
+  // to hand the printer. Cancelled orders are left out; picked-up ones count.
+  function renderTally(rows) {
+    var box = document.getElementById('merchTally');
+    if (!box) return;
+    box.innerHTML = '';
+    var counts = {};
+    rows.forEach(function (o) {
+      if (o.status === 'cancelled') return;
+      (o.items || []).forEach(function (i) {
+        var k = i.id + '|' + (i.size || '');
+        counts[k] = (counts[k] || 0) + (i.qty || 0);
+      });
+    });
+    if (!Object.keys(counts).length) { box.hidden = true; return; }
+    box.hidden = false;
+    Object.keys(MERCH).forEach(function (id) {
+      var sizes = MERCH_SIZES.filter(function (s) { return counts[id + '|' + s]; });
+      var single = counts[id + '|'] || 0;
+      if (!sizes.length && !single) return;
+      var card = el('div', 'tally__item');
+      card.appendChild(el('strong', null, MERCH[id]));
+      var list = el('div', 'tally__sizes');
+      if (single) list.appendChild(el('span', null, String(single)));
+      sizes.forEach(function (s) { list.appendChild(el('span', null, s + ' × ' + counts[id + '|' + s])); });
+      card.appendChild(list);
+      box.appendChild(card);
+    });
+  }
+
+  function renderMerch(rows) {
+    var body = document.getElementById('merchRows');
+    var count = document.getElementById('merchCount');
+    if (!body) return;
+    body.innerHTML = '';
+    renderTally(rows);
+    var open = rows.filter(function (o) { return o.status === 'new'; }).length;
+    if (count) count.textContent = rows.length + (rows.length === 1 ? ' order' : ' orders') + (open ? ', ' + open + ' awaiting payment' : '');
+
+    if (!rows.length) {
+      var tr0 = el('tr');
+      var td0 = el('td', 'muted', 'No pre-orders yet.');
+      td0.colSpan = 9;
+      tr0.appendChild(td0); body.appendChild(tr0);
+      return;
+    }
+
+    rows.forEach(function (o) {
+      var tr = el('tr');
+      if (o.status === 'cancelled') tr.className = 'is-cancelled';
+
+      tr.appendChild(el('td', 'mono', o.order_no));
+      tr.appendChild(el('td', 'nowrap', new Date(o.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })));
+
+      var who = el('td', 'strong', o.name);
+      if (o.school) { who.appendChild(document.createElement('br')); who.appendChild(el('span', 'muted', o.school)); }
+      tr.appendChild(who);
+
+      var contact = el('td');
+      var a = el('a', null, o.email); a.href = 'mailto:' + o.email; contact.appendChild(a);
+      if (o.phone) { contact.appendChild(document.createElement('br')); contact.appendChild(el('span', 'muted', o.phone)); }
+      tr.appendChild(contact);
+
+      var items = el('td', 'notes');
+      (o.items || []).forEach(function (i, idx) {
+        if (idx) items.appendChild(document.createElement('br'));
+        items.appendChild(document.createTextNode(itemText(i)));
+      });
+      tr.appendChild(items);
+
+      tr.appendChild(el('td', 'strong nowrap', money(o.total)));
+      tr.appendChild(el('td', 'notes', o.notes || '—'));
+
+      var st = el('td');
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Status for order ' + o.order_no);
+      [['new', 'New'], ['paid', 'Paid'], ['picked_up', 'Picked up'], ['cancelled', 'Cancelled']].forEach(function (s) {
+        var op = el('option', null, s[1]); op.value = s[0];
+        if (o.status === s[0]) op.selected = true;
+        sel.appendChild(op);
+      });
+      sel.addEventListener('change', function () {
+        var b = { status: sel.value };
+        if (sel.value === 'paid' && !o.paid_at) b.paid_at = new Date().toISOString();
+        patch('merch_orders', 'id', o.id, b, tr)
+          .then(function () { o.status = sel.value; if (b.paid_at) o.paid_at = b.paid_at; renderTally(rows); })
+          .catch(function () { sel.value = o.status; });
+      });
+      st.appendChild(sel);
+      if (o.paid_at) {
+        st.appendChild(document.createElement('br'));
+        st.appendChild(el('span', 'muted', 'paid ' + new Date(o.paid_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })));
+      }
+      tr.appendChild(st);
+
+      var act = el('td', 'nowrap');
+      var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!confirm('Remove order ' + o.order_no + ' (' + o.name + ')? This cannot be undone. ' +
+                     'For an order that was never paid, Cancelled keeps the record.')) return;
+        markRow(tr, 'saving');
+        authFetch('/rest/v1/merch_orders?id=eq.' + encodeURIComponent(o.id), { method: 'DELETE' })
+          .then(function () { say('Removed ' + o.order_no); return loadAll(); })
+          .catch(function (e) { markRow(tr, 'failed'); say(e.message, 'error'); });
+      });
+      act.appendChild(del);
+      tr.appendChild(act);
+
+      body.appendChild(tr);
+    });
+  }
+
   /* ----------------------------------------------------- confirmed teams -- */
   function renderConfirmed(rows) {
     var body = document.getElementById('confirmedRows');
@@ -923,6 +1049,9 @@
               : Promise.resolve([]),
       isAdmin ? authFetch('/rest/v1/confirmed_teams?select=*&order=sort.asc,school.asc,level.desc')
                   .catch(function () { return null; })
+              : Promise.resolve([]),
+      isAdmin ? authFetch('/rest/v1/merch_orders?select=*&order=created_at.desc')
+                  .catch(function () { return null; })
               : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
@@ -940,6 +1069,8 @@
         renderVendors(r[5] || []);
         if (r[6] === null) say('Confirmed teams table not found — run supabase/confirmed-teams.sql', 'error');
         renderConfirmed(r[6] || []);
+        if (r[7] === null) say('Merch orders table not found — run supabase/merch.sql', 'error');
+        renderMerch(r[7] || []);
       }
       document.getElementById('counts').textContent =
         teams.length + ' teams · ' + games.length + ' games' +
