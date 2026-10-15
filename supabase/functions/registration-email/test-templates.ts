@@ -101,7 +101,7 @@ console.log('\ncoach email');
   check('states the deposit and the balance',
     m.text.includes('$250') && m.text.includes('balance is due'));
   check('quotes all four prices',
-    ['$850', '$750', '$650', '$550'].every((p) => m.text.includes(p) && m.html.includes(p)));
+    ['$850', '$750', '$650', '$500'].every((p) => m.text.includes(p) && m.html.includes(p)));
   check('names the early bird deadline', /November 30/.test(m.text));
   check('never quotes the old flat price', !m.text.includes('$1,000') && !m.html.includes('$1,000'));
   check('leaves the total to the invoice', /invoice will show the exact amount/.test(m.text));

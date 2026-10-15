@@ -53,10 +53,10 @@ export const VENUE = 'Canyon High School, 220 S Imperial Hwy, Anaheim, CA 92807'
    EDIT: the same prices are on the site — index.html price panel, the entry
    cost FAQ and the deposit acknowledgement on the form. */
 export const PRICING_TEXT =
-  '$850 per varsity team, $750 per JV team. Early bird through November 30: $650 varsity, $550 JV.';
+  '$850 per varsity team, $750 per JV team. Early bird through November 30: $650 varsity, $500 JV.';
 export const PRICING_HTML =
   '<b>$850</b> per varsity team, <b>$750</b> per JV team. ' +
-  'Early bird through November 30: <b>$650</b> varsity, <b>$550</b> JV.';
+  'Early bird through November 30: <b>$650</b> varsity, <b>$500</b> JV.';
 
 /* A coach's own words end up inside the HTML part. Escape everything. */
 function esc(v: unknown): string {
