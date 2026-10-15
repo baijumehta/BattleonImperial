@@ -21,7 +21,7 @@
     { id: 'hoodie',  name: 'Hoodie',           price: 30, sizes: SIZES, img: 'hoodie',  blurb: 'Black pullover hoodie, front pocket.' },
     { id: 'pants',   name: 'Flannel PJ Pants', price: 20, sizes: SIZES, img: 'pants',   blurb: 'Black and gold plaid, crest on the hip.' },
     { id: 'lanyard', name: 'Lanyard',          price: 7,  sizes: null,  img: 'lanyard', blurb: 'Full-print lanyard with clip.' },
-    { id: 'pin',     name: 'Tournament Pin',   price: 5,  sizes: null,  img: 'pin',     blurb: 'Enamel crest pin, first edition.' }
+    { id: 'pin',     name: 'Tournament Pin',   price: 5,  sizes: null,  img: 'pin-2',     blurb: 'Enamel crest pin, first edition.' }
   ];
 
   /* EDIT: pre-orders close at the end of this day, Pacific. Also stated in
