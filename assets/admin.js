@@ -815,6 +815,21 @@
 
   var INV_STATUS = { draft: 'Draft', sent: 'Sent', partial: 'Partial', paid: 'Paid', void: 'Void' };
 
+  // What the Registrations tab shows for payment, derived from the invoice so
+  // it can never disagree with it: Not invoiced, Draft, Invoiced, Overdue,
+  // Part-paid, Paid.
+  function invoiceFor(regId) {
+    return invoices.filter(function (i) { return i.registration_id === regId && i.status !== 'void'; })[0] || null;
+  }
+  function payState(inv) {
+    if (!inv) return { key: 'none', label: 'Not invoiced' };
+    if (inv.status === 'draft') return { key: 'draft', label: 'Draft invoice' };
+    if (inv.status === 'paid' || cents(inv.balance) <= 0) return { key: 'paid', label: 'Paid' };
+    var overdue = inv.due_on && inv.due_on < pacificDate(new Date());
+    if (inv.status === 'partial') return { key: overdue ? 'overdue' : 'partial', label: overdue ? 'Part-paid · overdue' : 'Part-paid' };
+    return { key: overdue ? 'overdue' : 'invoiced', label: overdue ? 'Overdue' : 'Invoiced' };
+  }
+
   function renderInvoices(rows) {
     invoices = rows;
     var body = document.getElementById('invRows');
@@ -1194,7 +1209,12 @@
     var body = document.getElementById('regRows');
     var count = document.getElementById('regCount');
     body.innerHTML = '';
-    count.textContent = rows.length + (rows.length === 1 ? ' submission' : ' submissions');
+    var tally = { none: 0, draft: 0, invoiced: 0, partial: 0, overdue: 0, paid: 0 };
+    rows.forEach(function (r) { if (r.status !== 'declined') tally[payState(invoiceFor(r.id)).key]++; });
+    count.textContent = rows.length + (rows.length === 1 ? ' submission' : ' submissions') +
+      ' · ' + tally.paid + ' paid · ' + (tally.invoiced + tally.partial) + ' awaiting payment' +
+      (tally.overdue ? ' · ' + tally.overdue + ' overdue' : '') +
+      (tally.none + tally.draft ? ' · ' + (tally.none + tally.draft) + ' not yet invoiced' : '');
 
     if (!rows.length) {
       var tr = el('tr');
@@ -1258,7 +1278,7 @@
       toggleCell.appendChild(toggle);
 
       // Invoice: open the existing one, or start one pre-filled from this entry.
-      var existing = invoices.filter(function (i) { return i.registration_id === r.id && i.status !== 'void'; })[0];
+      var existing = invoiceFor(r.id);
       toggleCell.appendChild(document.createElement('br'));
       var invBtn = el('button', 'linkbtn', existing ? existing.invoice_no : 'Invoice');
       invBtn.type = 'button';
@@ -1267,6 +1287,11 @@
         openInvoiceEditor(existing || invoiceFromRegistration(r));
       });
       toggleCell.appendChild(invBtn);
+      var ps = payState(existing);
+      toggleCell.appendChild(document.createElement('br'));
+      var chip = el('span', 'paychip paychip--' + ps.key, ps.label);
+      if (existing && ps.key !== 'paid' && ps.key !== 'draft') chip.title = usd(existing.balance) + ' due ' + mdyShort(existing.due_on);
+      toggleCell.appendChild(chip);
       tr.appendChild(toggleCell);
 
       body.appendChild(tr);
