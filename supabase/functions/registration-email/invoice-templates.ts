@@ -17,6 +17,7 @@ export interface InvoiceLine {
 }
 
 export interface Invoice {
+  kind?: string | null;
   token?: string;
   invoice_no?: string | null;
   issued_on?: string | null;
@@ -52,6 +53,9 @@ export const ZELLE_ADDRESS = 'girlslacrosseboosterclub@gmail.com';
 export const PAYEE = 'Canyon Girls Lacrosse Booster Club';
 export const CHECK_MAIL_TO = 'PO Box 17992, Anaheim, CA 92817';
 export const CONTACT_EMAIL = 'battleonimperial@gmail.com';
+
+export const SPONSOR_NOTE =
+  'Sponsorship is payment for the recognition described in your package, not a tax-deductible donation.';
 
 export function invoiceLink(r: Invoice): string {
   return `${SITE}/invoice.html?t=${encodeURIComponent(r.token || '')}`;
@@ -135,6 +139,7 @@ export function invoiceEmail(r: Invoice): Mail {
       `Bank transfer, W-9 or purchase-order paperwork: email ${CONTACT_EMAIL}.`,
       ``
     ]),
+    ...(r.kind === 'sponsor' ? [SPONSOR_NOTE, ``] : []),
     `Questions: reply to this email.`,
     ``,
     `Battle on Imperial`,
@@ -181,6 +186,7 @@ export function invoiceEmail(r: Invoice): Mail {
       <p style="margin:0 0 4px;"><b>Check:</b> payable to ${esc(PAYEE)}${CHECK_MAIL_TO ? `, mailed to ${esc(CHECK_MAIL_TO)}` : ` — email ${esc(CONTACT_EMAIL)} for the mailing address`}.</p>
       <p style="margin:0;"><b>Bank transfer, W-9 or PO paperwork:</b> email ${esc(CONTACT_EMAIL)}.</p>
     </div>`}
+    ${r.kind === 'sponsor' ? `<p style="margin:18px 0 0;color:#5a5a62;font-size:13.5px;">${esc(SPONSOR_NOTE)}</p>` : ''}
     <p style="margin:18px 0 0;">Questions: reply to this email.</p>
     <p style="margin:14px 0 0;color:#5a5a62;">Battle on Imperial · Canyon Girls Lacrosse Booster Club</p>
   </div>

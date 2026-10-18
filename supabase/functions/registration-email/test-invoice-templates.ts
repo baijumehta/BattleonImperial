@@ -59,6 +59,11 @@ check('paid invoice shows the payment', p.text.includes('Amount paid: −$1,100.
 
 check('no name says Hello, not "Hi ,"', invoiceEmail(noName).text.startsWith('Hello,'));
 
+const sponsor = invoiceEmail({ ...bundle, kind: 'sponsor', invoice_no: 'BOI-27-010', bill_school: 'Hills Orthodontics', bill_program: 'Field Partner sponsorship' });
+check('sponsor invoice carries the not-a-donation note', sponsor.text.includes('not a tax-deductible donation') && sponsor.html.includes('not a tax-deductible donation'));
+check('team invoice does not', !m.text.includes('tax-deductible'));
+check('sponsor invoice names the sponsorship', sponsor.text.includes('for Field Partner sponsorship at Battle on Imperial'));
+
 const h = invoiceEmail(hostile);
 check('typed HTML is escaped', !h.html.includes('<script>') && !h.html.includes('<img src=x'));
 check('subject is a single line', !h.subject.includes('\n'));

@@ -553,6 +553,7 @@
       // Spam and test inquiries can go; a real one is better marked Declined,
       // so the history of who asked stays.
       var act = el('td', 'nowrap');
+      invoiceControls(act, r, 'sponsor_inquiry_id', invoiceFromSponsor);
       var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
       del.type = 'button';
       del.addEventListener('click', function () {
@@ -638,6 +639,62 @@
     };
   }
 
+  // EDIT: sponsor packages and vendor booths, as on sponsors.html and
+  // vendors.html.
+  var SPONSOR_PRICE = {
+    'Presenting Partner': 2500, 'Field Partner': 1250, 'Player Experience Partner': 1000,
+    'Athletic Trainer Partner': 750, 'Coaches Zone Partner': 500, 'Game Sponsor': 250
+  };
+  var BOOTH_PRICE = { Merchant: 200, Food: 300 };
+
+  // Sponsors and vendors: invoiced 30 days out from today, and never later
+  // than two weeks before the tournament so signage and booths can be planned.
+  function dueNet30() {
+    var due = addDays(pacificDate(new Date()), 30);
+    return due > '2027-02-27' ? '2027-02-27' : due;
+  }
+
+  function invoiceFromSponsor(q) {
+    var price = SPONSOR_PRICE[q.tier];
+    return {
+      kind: 'sponsor',
+      sponsor_inquiry_id: q.id,
+      bill_school: q.business,
+      bill_program: price ? q.tier + ' sponsorship' : 'Sponsorship',
+      bill_contact: q.contact_name || null,
+      bill_email: q.email || null,
+      lines: [{
+        description: price ? q.tier + ' sponsorship — Battle on Imperial 2027' : 'Sponsorship — Battle on Imperial 2027 (' + (q.tier || 'package to confirm') + ')',
+        qty: 1, unit_price: price || 0, discount: 0
+      }],
+      credit: 0, credit_label: null,
+      issued_on: pacificDate(new Date()),
+      due_on: dueNet30(),
+      notes: null
+    };
+  }
+
+  function invoiceFromVendor(v) {
+    var n = Math.max(1, Math.min(3, Number(v.booths) || 1));
+    var food = v.booth_type === 'Food';
+    return {
+      kind: 'vendor',
+      vendor_registration_id: v.id,
+      bill_school: v.business,
+      bill_program: (food ? 'Food vendor' : 'Merchant') + ' booth' + (n > 1 ? 's' : '') + ' × ' + n,
+      bill_contact: v.contact_name || null,
+      bill_email: v.email || null,
+      lines: [{
+        description: (food ? 'Food vendor' : 'Merchant vendor') + ' booth, 10′ × 10′ — March 13, 2027',
+        qty: n, unit_price: BOOTH_PRICE[v.booth_type] || 0, discount: 0
+      }],
+      credit: 0, credit_label: null,
+      issued_on: pacificDate(new Date()),
+      due_on: dueNet30(),
+      notes: food ? 'Food vendors: bring your business licence and Orange County Health Department permits on the day.' : null
+    };
+  }
+
   var invForm = document.getElementById('invEditor');
   var invLinesBody = document.getElementById('invLines');
   var editing = null;   // the invoice being edited (has .id once saved)
@@ -699,7 +756,9 @@
     (inv.lines && inv.lines.length ? inv.lines : [{}]).forEach(function (l) { invLinesBody.appendChild(lineRow(l)); });
     document.getElementById('invEditorTitle').textContent = inv.id
       ? 'Invoice ' + inv.invoice_no + (inv.status === 'draft' ? ' (draft)' : '')
-      : 'New invoice' + (inv.registration_id ? ' — from registration' : '');
+      : 'New invoice' + (inv.registration_id ? ' — from registration'
+          : inv.sponsor_inquiry_id ? ' — from sponsor inquiry'
+          : inv.vendor_registration_id ? ' — from vendor request' : '');
     var locked = inv.id && (inv.status === 'paid' || inv.status === 'void');
     Array.prototype.forEach.call(invForm.querySelectorAll('input, textarea, button'), function (n) {
       if (n.id !== 'invCancel') n.disabled = !!locked;
@@ -741,7 +800,12 @@
           method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(body) })
       : authFetch('/rest/v1/invoices', {
           method: 'POST', headers: { Prefer: 'return=representation' },
-          body: JSON.stringify(Object.assign({ registration_id: editing && editing.registration_id || null }, body)) });
+          body: JSON.stringify(Object.assign({
+            kind: editing && editing.kind || 'team',
+            registration_id: editing && editing.registration_id || null,
+            sponsor_inquiry_id: editing && editing.sponsor_inquiry_id || null,
+            vendor_registration_id: editing && editing.vendor_registration_id || null
+          }, body)) });
     var btn = document.getElementById('invSave');
     btn.disabled = true;
     req.then(function (rows) {
@@ -818,8 +882,25 @@
   // What the Registrations tab shows for payment, derived from the invoice so
   // it can never disagree with it: Not invoiced, Draft, Invoiced, Overdue,
   // Part-paid, Paid.
-  function invoiceFor(regId) {
-    return invoices.filter(function (i) { return i.registration_id === regId && i.status !== 'void'; })[0] || null;
+  function invoiceFor(regId, field) {
+    field = field || 'registration_id';
+    return invoices.filter(function (i) { return i[field] === regId && i.status !== 'void'; })[0] || null;
+  }
+
+  // The Invoice button and payment chip for a sponsor or vendor row.
+  function invoiceControls(cell, row, field, make) {
+    var existing = invoiceFor(row.id, field);
+    var b = el('button', 'linkbtn', existing ? existing.invoice_no : 'Invoice');
+    b.type = 'button';
+    b.title = existing ? 'Open this invoice' : 'Create an invoice from this request';
+    b.addEventListener('click', function () { openInvoiceEditor(existing || make(row)); });
+    cell.appendChild(b);
+    var ps = payState(existing);
+    var chip = el('span', 'paychip paychip--' + ps.key, ps.label);
+    if (existing && ps.key !== 'paid' && ps.key !== 'draft') chip.title = usd(existing.balance) + ' due ' + mdyShort(existing.due_on);
+    cell.appendChild(document.createElement('br'));
+    cell.appendChild(chip);
+    cell.appendChild(document.createElement('br'));
   }
   function payState(inv) {
     if (!inv) return { key: 'none', label: 'Not invoiced' };
@@ -853,6 +934,7 @@
       tr.appendChild(el('td', 'mono', i.invoice_no));
       tr.appendChild(el('td', 'nowrap', mdyShort(i.issued_on)));
       var who = el('td', 'strong', i.bill_school);
+      if (i.kind && i.kind !== 'team') who.appendChild(el('span', 'kindtag', i.kind === 'sponsor' ? 'Sponsor' : 'Vendor'));
       if (i.bill_program) { who.appendChild(document.createElement('br')); who.appendChild(el('span', 'muted', i.bill_program)); }
       tr.appendChild(who);
       tr.appendChild(el('td', 'nowrap', usd(cents(i.subtotal) - cents(i.credit))));
@@ -1187,6 +1269,7 @@
       tr.appendChild(st);
 
       var act = el('td', 'nowrap');
+      invoiceControls(act, r, 'vendor_registration_id', invoiceFromVendor);
       var del = el('button', 'linkbtn linkbtn--danger', 'Remove');
       del.type = 'button';
       del.addEventListener('click', function () {

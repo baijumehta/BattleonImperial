@@ -40,6 +40,25 @@
   }
   var STATUS = { draft: 'Draft', sent: 'Unpaid', partial: 'Partial', paid: 'Paid', void: 'Void' };
 
+  // EDIT: wording by kind of invoice. Teams use the template as written.
+  var KIND = {
+    team: {
+      school: 'School / District', program: 'Team / Program', contact: 'Coach / Contact',
+      ft1: 'Thank you for registering for the inaugural Battle on Imperial Girls Lacrosse Tournament!',
+      ft2: 'Three games guaranteed per varsity team; two to three per JV team.'
+    },
+    sponsor: {
+      school: 'Business / Organization', program: 'Sponsorship', contact: 'Contact',
+      ft1: 'Thank you for sponsoring the inaugural Battle on Imperial Girls Lacrosse Tournament!',
+      ft2: 'Sponsorship is payment for the recognition described in your package, not a tax-deductible donation.'
+    },
+    vendor: {
+      school: 'Business', program: 'Booth', contact: 'Contact',
+      ft1: 'Thank you for joining the inaugural Battle on Imperial as a vendor!',
+      ft2: 'Load-in time and your booth location come with your confirmation.'
+    }
+  };
+
   var token = new URLSearchParams(location.search).get('t') || '';
   if (!/^[0-9a-f-]{36}$/i.test(token)) {
     problem('Invoice link not recognised.', 'Please use the link from your invoice email, or email battleonimperial@gmail.com.');
@@ -83,6 +102,13 @@
       var n = tpl.querySelector('[data-f="' + field + '"]');
       if (n) n.textContent = value === null || value === undefined || value === '' ? '—' : value;
     };
+
+    var words = KIND[inv.kind] || KIND.team;
+    ['school', 'program', 'contact'].forEach(function (k) {
+      var n = tpl.querySelector('[data-label="' + k + '"]'); if (n) n.textContent = words[k];
+    });
+    tpl.querySelector('[data-ft="1"]').textContent = words.ft1;
+    tpl.querySelector('[data-ft="2"]').textContent = words.ft2;
 
     set('invoice_no', inv.invoice_no);
     set('issued_on', mdy(inv.issued_on));

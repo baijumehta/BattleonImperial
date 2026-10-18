@@ -178,6 +178,14 @@ November 30 / after).
 - **Payments:** **Payment** on the row records amount, date, method and
   reference; the status moves to Partial or Paid by itself. Paid and void
   invoices are locked.
+- **Sponsors and vendors** (`supabase/invoices-sponsors-vendors.sql`): the
+  same invoices, with `kind` = sponsor or vendor and a link to the sponsor
+  inquiry or booth request. **Invoice** on those rows pre-fills the package
+  ($250–$2,500) or booths ($200 merchant / $300 food, × count), due 30 days
+  out but no later than Feb 27, 2027. The page and email word themselves by
+  kind (sponsors get the not-a-donation note). Paid → the inquiry or request
+  is Confirmed; a paid sponsor is also added to Sponsors **hidden**, ready for
+  its logo.
 - **Auto-confirm** (`supabase/auto-confirm.sql`): when a linked invoice
   becomes Paid, a database trigger sets the registration to Confirmed and adds
   its levels to `confirmed_teams`, so the school appears in "Confirmed so
