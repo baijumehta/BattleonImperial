@@ -46,15 +46,16 @@ check('shows subtotal, bundle credit and balance',
   m.text.includes('Subtotal: $1,150.00') && m.text.includes('Varsity + JV bundle: −$50.00') && m.text.includes('BALANCE DUE: $1,100.00'));
 check('quotes the PO reference', m.text.includes('PO-4471'));
 check('links to the invoice page in both parts', m.text.includes(invoiceLink(bundle)) && m.html.includes(invoiceLink(bundle)));
-check('gives Zelle and check instructions with the invoice number',
-  m.text.includes('girlslacrosseboosterclub@gmail.com') && m.text.includes('Canyon Girls Lacrosse Booster Club') && m.text.includes('put BOI-27-001'));
+check('names no payment account in the email (it is on the invoice page)',
+  !m.text.includes('girlslacrosseboosterclub@gmail.com') && !m.html.includes('girlslacrosseboosterclub@gmail.com') &&
+  !/bank transfer|W-9|enrolled as/i.test(m.text + m.html));
+check('points to the invoice for payment options and asks for the number', m.text.includes('Payment options and the remittance details are on the invoice') && m.text.includes('include BOI-27-001'));
 check('no zero lines for an unpaid invoice', !m.text.includes('Amount paid'));
-check('gives the mailing address for checks',
-  m.text.includes('mailed to PO Box 17992, Anaheim, CA 92817') && m.html.includes('PO Box 17992, Anaheim, CA 92817') && !m.text.includes('for the mailing address'));
+
 
 const p = invoiceEmail(paid);
 check('paid invoice says so in the subject', p.subject.endsWith('paid in full'), p.subject);
-check('paid invoice drops the how-to-pay block', !p.text.includes('HOW TO PAY') && !p.html.includes('How to pay'));
+check('paid invoice drops the payment pointer', !p.text.includes('Payment options') && !p.html.includes('Payment options'));
 check('paid invoice shows the payment', p.text.includes('Amount paid: −$1,100.00'));
 
 check('no name says Hello, not "Hi ,"', invoiceEmail(noName).text.startsWith('Hello,'));

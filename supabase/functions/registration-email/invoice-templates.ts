@@ -112,10 +112,10 @@ export function invoiceEmail(r: Invoice): Mail {
   const credit = num(r.credit);
   const paid = num(r.amount_paid);
 
-  const checkLine = CHECK_MAIL_TO
-    ? `Check: payable to ${PAYEE}, mailed to ${CHECK_MAIL_TO}.`
-    : `Check: payable to ${PAYEE}. Email ${CONTACT_EMAIL} for the mailing address.`;
-
+  /* Payment instructions live on the invoice page, not in this email. Filters
+     such as INKY flag an email that names a payment account (Zelle address,
+     bank transfer, W-9) as "sensitive content", and on a young domain that is
+     enough to quarantine it. The email says what is owed and where to look. */
   const text = [
     greeting,
     ``,
@@ -133,10 +133,7 @@ export function invoiceEmail(r: Invoice): Mail {
     `View, print or save the invoice as a PDF: ${link}`,
     ``,
     ...(paidInFull ? [] : [
-      `HOW TO PAY — please put ${no} and your team name with the payment.`,
-      `Zelle: ${ZELLE_ADDRESS} (enrolled as ${PAYEE}).`,
-      checkLine,
-      `Bank transfer, W-9 or purchase-order paperwork: email ${CONTACT_EMAIL}.`,
+      `Payment options and the remittance details are on the invoice. Please include ${no} with your payment.`,
       ``
     ]),
     ...(r.kind === 'sponsor' ? [SPONSOR_NOTE, ``] : []),
@@ -179,13 +176,7 @@ export function invoiceEmail(r: Invoice): Mail {
     <p style="margin:22px 0;text-align:center;">
       <a href="${esc(link)}" style="display:inline-block;background:#12382F;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;">View, print or save as PDF</a>
     </p>
-    ${paidInFull ? '' : `<div style="padding:14px 16px;background:#F3F1EB;border-left:4px solid #D6A928;border-radius:4px;font-size:14px;">
-      <p style="margin:0 0 6px;font-weight:700;">How to pay</p>
-      <p style="margin:0 0 6px;">Please put <b>${esc(no)}</b> and your team name with the payment.</p>
-      <p style="margin:0 0 4px;"><b>Zelle:</b> ${esc(ZELLE_ADDRESS)} (enrolled as ${esc(PAYEE)})</p>
-      <p style="margin:0 0 4px;"><b>Check:</b> payable to ${esc(PAYEE)}${CHECK_MAIL_TO ? `, mailed to ${esc(CHECK_MAIL_TO)}` : ` — email ${esc(CONTACT_EMAIL)} for the mailing address`}.</p>
-      <p style="margin:0;"><b>Bank transfer, W-9 or PO paperwork:</b> email ${esc(CONTACT_EMAIL)}.</p>
-    </div>`}
+    ${paidInFull ? '' : `<p style="margin:0;font-size:14px;color:#44444c;">Payment options and the remittance details are on the invoice. Please include <b>${esc(no)}</b> with your payment.</p>`}
     ${r.kind === 'sponsor' ? `<p style="margin:18px 0 0;color:#5a5a62;font-size:13.5px;">${esc(SPONSOR_NOTE)}</p>` : ''}
     <p style="margin:18px 0 0;">Questions: reply to this email.</p>
     <p style="margin:14px 0 0;color:#5a5a62;">Battle on Imperial · Canyon Girls Lacrosse Booster Club</p>

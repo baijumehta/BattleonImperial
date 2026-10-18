@@ -195,9 +195,10 @@ November 30 / after).
   agree. The public page reads one invoice through `get_invoice(token)`;
   drafts only show to a signed-in admin. Numbers run `BOI-27-001` upward.
 - **Layout** follows `Battle_on_Imperial_Coach_Invoice_Template.docx`
-  (`invoice.html`, `assets/invoice.css`). Payment details are in
-  `assets/invoice.js` and `invoice-templates.ts` (`CHECK_MAIL_TO`: checks go
-  to Canyon Girls Lacrosse Booster Club, PO Box 17992, Anaheim, CA 92817).
+  (`invoice.html`, `assets/invoice.css`). Payment details (Zelle, checks to Canyon Girls Lacrosse Booster Club, PO Box
+  17992, Anaheim, CA 92817) are on the invoice page only, in `assets/invoice.js`.
+  The email deliberately names no payment account: INKY flagged that as
+  "sensitive content" on the young domain.
 
 ## Things to fill in before launch
 
