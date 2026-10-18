@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Graphics | Battle on Imperial</title>
+<meta name="description" content="Make your team's Battle on Imperial graphics: add your team photo and logo to the official templates and download them for Instagram and your team group chat.">
+<meta name="theme-color" content="#0b0b0d">
+
+<meta property="og:title" content="Battle on Imperial — Team Graphics">
+<meta property="og:description" content="Add your team photo and logo to the official Battle on Imperial graphics and share that you're in.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.battleonimperial.com/media.html">
+<meta property="og:image" content="https://www.battleonimperial.com/assets/img/og-battle-on-imperial.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://www.battleonimperial.com/media.html">
+<link rel="stylesheet" href="assets/styles.css">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html">
+      <picture>
+        <source srcset="assets/img/logo-96.webp" type="image/webp">
+        <img class="brand__mark" src="assets/img/logo-96.png" width="96" height="95" alt="" aria-hidden="true" decoding="async">
+      </picture>
+      <span class="brand__text">
+        <span class="brand__name">Battle on Imperial</span>
+        <span class="brand__sub">Anaheim Hills, CA</span>
+      </span>
+    </a>
+
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+      <span></span>
+    </button>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="index.html#tournament">Tournament</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="standings.html">Standings</a></li>
+      <li><a href="sponsors.html">Sponsors</a></li>
+      <li><a href="vendors.html">Vendors</a></li>
+      <li><a href="merch.html">Merch</a></li>
+      <li><a href="index.html#location">Location</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a class="btn btn--primary nav__cta" href="index.html#register">Reserve a Spot</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Team Graphics &middot; Share That You&rsquo;re In</p>
+    <h1>Make Your Team&rsquo;s Graphic</h1>
+    <p class="lede">
+      Pick a design, add your team photo and logo, and download it ready for Instagram,
+      your team&rsquo;s stories and the parent group chat. Tag <b>@battleonimperial</b> and
+      we&rsquo;ll share it.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <!-- EDIT: the designs come from TEMPLATES in assets/media.js; each card
+         is built from that list. Add a design there, not here. -->
+    <div class="mediagrid" id="mediaGrid"></div>
+
+    <!-- The maker. assets/media.js moves this under the chosen card. -->
+    <div class="maker" id="maker" hidden>
+      <div class="maker__preview">
+        <canvas id="makerCanvas" aria-label="Preview of your graphic"></canvas>
+      </div>
+      <div class="maker__controls">
+        <h2 class="maker__title" id="makerTitle"></h2>
+
+        <div class="maker__field" data-slot="photo">
+          <label class="maker__label" for="photoInput">1. Team photo</label>
+          <input type="file" id="photoInput" accept="image/*">
+          <div class="maker__adjust">
+            <label>Zoom <input type="range" id="photoZoom" min="100" max="250" value="100"></label>
+            <label>Move up / down <input type="range" id="photoY" min="0" max="100" value="50"></label>
+            <label>Move left / right <input type="range" id="photoX" min="0" max="100" value="50"></label>
+          </div>
+        </div>
+
+        <div class="maker__field" data-slot="logo">
+          <label class="maker__label" for="logoInput"><span data-logo-step>2.</span> Team logo or mascot</label>
+          <input type="file" id="logoInput" accept="image/*">
+          <p class="maker__hint">A logo on a transparent or white background looks best.</p>
+        </div>
+
+        <div class="maker__actions">
+          <button type="button" class="btn btn--primary" id="makerDownload" disabled>Download</button>
+          <button type="button" class="btn btn--outline" id="makerShare" hidden disabled>Share</button>
+          <button type="button" class="linkbtn" id="makerClose">Close</button>
+        </div>
+        <p class="maker__hint" id="makerStatus" aria-live="polite">Add your images to finish the graphic.</p>
+        <p class="maker__privacy">
+          Your photos stay on your device &mdash; the graphic is made in your browser and
+          nothing is uploaded to us.
+        </p>
+      </div>
+    </div>
+
+    <div class="mediatips">
+      <h2 class="title" style="font-size: clamp(24px, 3.4vw, 32px);">Posting Tips</h2>
+      <ul class="checklist checklist--tight">
+        <li><b>Tag @battleonimperial</b> and use your school&rsquo;s account so we can reshare it.</li>
+        <li><b>Use a wide team shot</b> for the &ldquo;We&rsquo;re In!&rdquo; poster; the photo strip is short and wide.</li>
+        <li><b>Check the parents&rsquo; preferences</b> before posting photos of players, as your school&rsquo;s media policy requires.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <picture>
+            <source srcset="assets/img/logo-240.webp" type="image/webp">
+            <img src="assets/img/logo-240.png" width="240" height="236" loading="lazy" decoding="async"
+                 alt="Battle on Imperial — Girls Lacrosse Showcase, Anaheim Hills, California.">
+          </picture>
+        </div>
+        <p style="max-width:38ch;">
+          Hosted by the Canyon High School Lacrosse Booster Club, a volunteer parent
+          organization supporting lacrosse at Canyon High School in Anaheim Hills, California.
+        </p>
+        <ul class="social">
+          <li>
+            <a href="https://www.instagram.com/battleonimperial" target="_blank" rel="me noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4"/>
+                <circle cx="12" cy="12" r="4.2"/>
+                <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+              </svg>
+              <span>@battleonimperial</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Tournament</h3>
+        <ul>
+          <li><a href="index.html#tournament">The Tournament</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="index.html#team">Meet the Team</a></li>
+          <li><a href="index.html#register">Registration</a></li>
+          <li><a href="sponsors.html">Sponsors</a></li>
+          <li><a href="vendors.html">Vendors</a></li>
+          <li><a href="merch.html">Merchandise</a></li>
+          <li><a href="media.html">Team Graphics</a></li>
+          <li><a href="index.html#policy">Payment &amp; Refunds</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Location</h3>
+        <ul>
+          <li>Canyon High School</li>
+          <li>220 S Imperial Hwy</li>
+          <li>Anaheim, CA 92807</li>
+          <li><a href="https://www.google.com/maps/dir/?api=1&destination=220+S+Imperial+Hwy%2C+Anaheim%2C+CA+92807" target="_blank" rel="noopener">Get directions</a></li>
+          <li><a href="index.html#eats">Food &amp; Fans</a></li>
+          <li><a href="mailto:battleonimperial@gmail.com">battleonimperial@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; <span id="year">2026</span> Canyon High School Lacrosse Booster Club. All rights reserved.</span>
+      <span>Anaheim Hills, California &middot; <a href="privacy.html">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="assets/media.js"></script>
+</body>
+</html>

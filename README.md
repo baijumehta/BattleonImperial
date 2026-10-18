@@ -200,6 +200,18 @@ November 30 / after).
   The email deliberately names no payment account: INKY flagged that as
   "sensitive content" on the young domain.
 
+## Team graphics
+
+`media.html` lets a team make its social graphic: pick a design, add a team
+photo and logo, download (or Share, on phones) a finished PNG. It all runs in
+the browser — nothing is uploaded. Designs live in `TEMPLATES` in
+`assets/media.js`, images in `assets/img/media/`. Each slot is a rectangle
+given as fractions of the image (so a higher-resolution export of the same
+design needs no new numbers) and a mode: `rect` fills the rectangle, `fill`
+fills only the grey placeholder and what it encloses, keeping frames and badges
+on top. Add `canva: '<template link>'` to a design to show a "Customize in
+Canva" button for teams who want to edit more.
+
 ## Things to fill in before launch
 
 | What | Where |
