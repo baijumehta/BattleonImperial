@@ -160,6 +160,33 @@ shows a size tally for ordering stock. Pickup only, at the tournament.
   as-is; whether they are tax-inclusive, and the seller permit, are for the
   treasurer to settle before the first order.
 
+## Invoices
+
+Entry is invoiced in full — no deposit — due within 30 days of registering, or
+within 10 days for registrations after December 15. Pricing: varsity $650 /
+$850, JV $500 / $750, varsity + JV together $1,100 / $1,500 (early bird through
+November 30 / after).
+
+- **Creating one:** Tournament Control → Registrations → **Invoice** on the row.
+  It pre-fills the lines at the price that applied on the registration date,
+  the varsity + JV bundle as a credit, and the due date (never sooner than a
+  week out). **New blank invoice** on the Invoices tab is for anything else.
+- **Sending:** **Send** emails the billing address a summary and a private
+  link (`invoice.html?t=<token>`) to view, print or save the invoice as a PDF.
+  `INVOICE_CC` (Supabase secret; the treasurer and Baiju) is copied openly.
+  Edit and **Resend** if anything changes.
+- **Payments:** **Payment** on the row records amount, date, method and
+  reference; the status moves to Partial or Paid by itself. Paid and void
+  invoices are locked.
+- **Data:** `public.invoices` (`supabase/invoices.sql`). Subtotal, amount
+  paid and balance are generated columns, so the list, page and email always
+  agree. The public page reads one invoice through `get_invoice(token)`;
+  drafts only show to a signed-in admin. Numbers run `BOI-27-001` upward.
+- **Layout** follows `Battle_on_Imperial_Coach_Invoice_Template.docx`
+  (`invoice.html`, `assets/invoice.css`). Payment details are in
+  `assets/invoice.js` and `invoice-templates.ts`; set `CHECK_MAIL_TO` in
+  both once there is a mailing address for checks.
+
 ## Things to fill in before launch
 
 | What | Where |

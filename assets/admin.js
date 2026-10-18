@@ -24,6 +24,7 @@
   var teams = [];
   var games = [];
   var sponsors = [];
+  var invoices = [];
 
   // EDIT: mirrors the tier CHECK in supabase/sponsors.sql.
   var SPONSOR_TIERS = [
@@ -569,6 +570,306 @@
     });
   }
 
+  /* ------------------------------------------------------------ invoices -- */
+  // EDIT: entry pricing and payment terms, as on the site (index.html price
+  // panel and Key Dates).
+  var PRICE = {
+    early: { Varsity: 650, JV: 500, bundleCredit: 50 },     // $1,100 for both
+    regular: { Varsity: 850, JV: 750, bundleCredit: 100 }   // $1,500 for both
+  };
+  var EARLY_BIRD_ENDS = new Date('2026-12-01T00:00:00-08:00');
+  var LATE_TERMS_FROM = new Date('2026-12-16T00:00:00-08:00');   // registered after Dec 15
+  var LINE_TEXT = {
+    Varsity: 'Varsity team registration — three games guaranteed',
+    JV: 'JV team registration — two to three games'
+  };
+
+  function pacificDate(d) {
+    return d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });   // YYYY-MM-DD
+  }
+  function addDays(iso, n) {
+    var p = iso.split('-').map(Number);
+    return new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)).toISOString().slice(0, 10);
+  }
+  function cents(v) { var n = Number(v); return isFinite(n) ? Math.round(n * 100) / 100 : 0; }
+  function usd(v) {
+    return '$' + cents(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function mdyShort(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+    return m ? Number(m[2]) + '/' + Number(m[3]) + '/' + m[1].slice(2) : '—';
+  }
+
+  // A draft invoice for a registration: early bird by registration date, the
+  // Varsity + JV bundle as a credit, and due 30 days after registering (10 if
+  // registered after December 15) — never sooner than a week from today.
+  function invoiceFromRegistration(r) {
+    var created = new Date(r.created_at);
+    var p = created < EARLY_BIRD_ENDS ? PRICE.early : PRICE.regular;
+    var levels = [r.team1_level, r.team2_level].filter(Boolean);
+    if (!levels.length && (r.level === 'Varsity' || r.level === 'JV')) levels = [r.level];
+    var v = levels.filter(function (l) { return l === 'Varsity'; }).length;
+    var j = levels.filter(function (l) { return l === 'JV'; }).length;
+
+    var lines = [];
+    if (v) lines.push({ description: LINE_TEXT.Varsity, qty: v, unit_price: p.Varsity, discount: 0 });
+    if (j) lines.push({ description: LINE_TEXT.JV, qty: j, unit_price: p.JV, discount: 0 });
+    if (!lines.length) lines.push({ description: 'Team registration', qty: 1, unit_price: 0, discount: 0 });
+
+    var pairs = Math.min(v, j);
+    var regDay = pacificDate(created);
+    var due = addDays(regDay, created >= LATE_TERMS_FROM ? 10 : 30);
+    var floor = addDays(pacificDate(new Date()), 7);
+    if (due < floor) due = floor;
+
+    var name = r.contact || [r.contact_first, r.contact_last].filter(Boolean).join(' ');
+    return {
+      registration_id: r.id,
+      bill_school: r.school,
+      bill_program: r.school + ' ' + (v && j ? 'Varsity & JV' : levels.join(' & ') || ''),
+      bill_contact: name || null,
+      bill_email: r.email || null,
+      lines: lines,
+      credit: pairs ? pairs * p.bundleCredit : 0,
+      credit_label: pairs ? 'Varsity + JV bundle' + (p === PRICE.early ? ' (early bird)' : '') : null,
+      issued_on: pacificDate(new Date()),
+      due_on: due,
+      notes: null
+    };
+  }
+
+  var invForm = document.getElementById('invEditor');
+  var invLinesBody = document.getElementById('invLines');
+  var editing = null;   // the invoice being edited (has .id once saved)
+
+  function lineRow(l) {
+    var tr = el('tr');
+    [['description', 'text', l.description || ''], ['qty', 'number', l.qty === undefined ? 1 : l.qty],
+     ['unit_price', 'number', l.unit_price || 0], ['discount', 'number', l.discount || 0]].forEach(function (c) {
+      var td = el('td');
+      var inp = document.createElement('input');
+      inp.type = c[1]; inp.value = c[2]; inp.dataset.k = c[0];
+      if (c[1] === 'number') { inp.min = '0'; inp.step = c[0] === 'qty' ? '1' : '0.01'; }
+      inp.setAttribute('aria-label', c[0].replace('_', ' '));
+      inp.addEventListener('input', updateInvTotals);
+      td.appendChild(inp);
+      tr.appendChild(td);
+    });
+    tr.appendChild(el('td', 'nowrap invlines__total', '$0.00'));
+    var rm = el('td');
+    var x = el('button', 'linkbtn linkbtn--danger', 'Remove');
+    x.type = 'button';
+    x.addEventListener('click', function () { tr.remove(); updateInvTotals(); });
+    rm.appendChild(x);
+    tr.appendChild(rm);
+    return tr;
+  }
+
+  function readLines() {
+    return Array.prototype.map.call(invLinesBody.querySelectorAll('tr'), function (tr) {
+      var g = function (k) { return tr.querySelector('[data-k="' + k + '"]').value; };
+      return { description: g('description').trim(), qty: cents(g('qty')), unit_price: cents(g('unit_price')), discount: cents(g('discount')) };
+    }).filter(function (l) { return l.description || l.unit_price; });
+  }
+
+  function updateInvTotals() {
+    var sub = 0;
+    Array.prototype.forEach.call(invLinesBody.querySelectorAll('tr'), function (tr) {
+      var g = function (k) { return cents(tr.querySelector('[data-k="' + k + '"]').value); };
+      var t = cents(g('qty') * g('unit_price') - g('discount'));
+      tr.querySelector('.invlines__total').textContent = usd(t);
+      sub += t;
+    });
+    var credit = cents(invForm.elements.credit.value);
+    document.getElementById('invSubtotal').textContent = usd(sub);
+    document.getElementById('invCredit').textContent = '−' + usd(credit);
+    document.getElementById('invTotal').textContent = usd(sub - credit);
+  }
+
+  function openInvoiceEditor(inv) {
+    editing = inv;
+    var tab = document.querySelector('.tab[data-panel="invoices"]');
+    if (tab) tab.click();
+    ['bill_school', 'bill_program', 'bill_contact', 'bill_email', 'bill_address', 'po_ref',
+     'issued_on', 'due_on', 'notes', 'credit_label'].forEach(function (f) {
+      invForm.elements[f].value = inv[f] === null || inv[f] === undefined ? '' : inv[f];
+    });
+    invForm.elements.credit.value = inv.credit || 0;
+    invLinesBody.innerHTML = '';
+    (inv.lines && inv.lines.length ? inv.lines : [{}]).forEach(function (l) { invLinesBody.appendChild(lineRow(l)); });
+    document.getElementById('invEditorTitle').textContent = inv.id
+      ? 'Invoice ' + inv.invoice_no + (inv.status === 'draft' ? ' (draft)' : '')
+      : 'New invoice' + (inv.registration_id ? ' — from registration' : '');
+    var locked = inv.id && (inv.status === 'paid' || inv.status === 'void');
+    Array.prototype.forEach.call(invForm.querySelectorAll('input, textarea, button'), function (n) {
+      if (n.id !== 'invCancel') n.disabled = !!locked;
+    });
+    document.getElementById('invEditorNote').textContent = locked
+      ? 'This invoice is ' + inv.status + ' and can no longer be edited.'
+      : inv.id && inv.status !== 'draft' ? 'Already sent: after saving, use Resend so the school has the latest version.' : '';
+    invForm.hidden = false;
+    updateInvTotals();
+    invForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('invNew').addEventListener('click', function () {
+    var today = pacificDate(new Date());
+    openInvoiceEditor({ issued_on: today, due_on: addDays(today, 30), lines: [{}], credit: 0 });
+  });
+  document.getElementById('invCancel').addEventListener('click', function () { invForm.hidden = true; editing = null; });
+  document.getElementById('invAddLine').addEventListener('click', function () {
+    invLinesBody.appendChild(lineRow({})); updateInvTotals();
+  });
+  invForm.elements.credit.addEventListener('input', updateInvTotals);
+
+  invForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!invForm.checkValidity()) { invForm.reportValidity(); return; }
+    var lines = readLines();
+    if (!lines.length) { say('Add at least one line item.', 'error'); return; }
+    var f = invForm.elements;
+    var blank = function (v) { v = v.trim(); return v ? v : null; };
+    var body = {
+      bill_school: f.bill_school.value.trim(), bill_program: blank(f.bill_program.value),
+      bill_contact: blank(f.bill_contact.value), bill_email: blank(f.bill_email.value),
+      bill_address: blank(f.bill_address.value), po_ref: blank(f.po_ref.value),
+      issued_on: f.issued_on.value, due_on: f.due_on.value, notes: blank(f.notes.value),
+      lines: lines, credit: cents(f.credit.value), credit_label: blank(f.credit_label.value)
+    };
+    var req = editing && editing.id
+      ? authFetch('/rest/v1/invoices?id=eq.' + encodeURIComponent(editing.id), {
+          method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(body) })
+      : authFetch('/rest/v1/invoices', {
+          method: 'POST', headers: { Prefer: 'return=representation' },
+          body: JSON.stringify(Object.assign({ registration_id: editing && editing.registration_id || null }, body)) });
+    var btn = document.getElementById('invSave');
+    btn.disabled = true;
+    req.then(function (rows) {
+      var saved = rows && rows[0];
+      say('Saved ' + (saved ? saved.invoice_no : 'invoice'));
+      invForm.hidden = true; editing = null;
+      return loadAll();
+    }).catch(function (err) { say(err.message, 'error'); })
+      .then(function () { btn.disabled = false; });
+  });
+
+  function invoiceUrl(i) { return 'invoice.html?t=' + encodeURIComponent(i.token); }
+
+  function sendInvoice(i) {
+    if (!i.bill_email) { say('Add a billing email before sending.', 'error'); return; }
+    var again = i.send_count > 0;
+    if (!confirm((again ? 'Resend' : 'Send') + ' invoice ' + i.invoice_no + ' to ' + i.bill_email +
+                 '? The treasurer is copied.')) return;
+    authFetch('/rest/v1/invoices?id=eq.' + encodeURIComponent(i.id), {
+      method: 'PATCH', headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        status: i.status === 'draft' ? 'sent' : i.status,
+        send_count: (i.send_count || 0) + 1,
+        sent_at: new Date().toISOString(),
+        last_sent_to: i.bill_email
+      })
+    }).then(function () { say((again ? 'Resent ' : 'Sent ') + i.invoice_no); return loadAll(); })
+      .catch(function (e) { say(e.message, 'error'); });
+  }
+
+  // Inline form under the row: amount (defaults to the balance), date, method,
+  // reference. Status follows the balance.
+  function paymentForm(i, tr) {
+    var next = tr.nextSibling;
+    if (next && next.classList && next.classList.contains('detailrow')) { next.remove(); return; }
+    var row = el('tr', 'detailrow');
+    var td = el('td'); td.colSpan = 9;
+    var box = el('div', 'invpay');
+    var mk = function (label, type, value, attrs) {
+      var l = el('label', null, label);
+      var inp = document.createElement(type === 'select' ? 'select' : 'input');
+      if (type === 'select') {
+        ['Zelle', 'Check', 'Bank transfer', 'Card', 'Cash', 'Other'].forEach(function (o) { var op = el('option', null, o); inp.appendChild(op); });
+      } else { inp.type = type; inp.value = value; }
+      Object.keys(attrs || {}).forEach(function (k) { inp.setAttribute(k, attrs[k]); });
+      l.appendChild(inp); box.appendChild(l);
+      return inp;
+    };
+    var amt = mk('Amount ($)', 'number', Math.max(0, cents(i.balance)), { min: '0.01', step: '0.01' });
+    var date = mk('Date', 'date', pacificDate(new Date()));
+    var method = mk('Method', 'select');
+    var ref = mk('Reference (check no., Zelle memo)', 'text', '', { maxlength: '80' });
+    var save = el('button', 'btn btn--dark', 'Record payment');
+    save.type = 'button';
+    save.addEventListener('click', function () {
+      var a = cents(amt.value);
+      if (!(a > 0)) { say('Enter the amount received.', 'error'); return; }
+      var pays = (i.payments || []).concat([{ date: date.value, amount: a, method: method.value, ref: ref.value.trim() || null }]);
+      var balance = cents(cents(i.subtotal) - cents(i.credit) - cents(i.amount_paid) - a);
+      authFetch('/rest/v1/invoices?id=eq.' + encodeURIComponent(i.id), {
+        method: 'PATCH', headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify({ payments: pays, status: balance <= 0 ? 'paid' : 'partial' })
+      }).then(function () { say('Recorded ' + usd(a) + ' on ' + i.invoice_no); return loadAll(); })
+        .catch(function (e) { say(e.message, 'error'); });
+    });
+    box.appendChild(save);
+    td.appendChild(box); row.appendChild(td);
+    tr.parentNode.insertBefore(row, tr.nextSibling);
+    amt.focus();
+  }
+
+  var INV_STATUS = { draft: 'Draft', sent: 'Sent', partial: 'Partial', paid: 'Paid', void: 'Void' };
+
+  function renderInvoices(rows) {
+    invoices = rows;
+    var body = document.getElementById('invRows');
+    var count = document.getElementById('invCount');
+    if (!body) return;
+    body.innerHTML = '';
+    var open = rows.filter(function (i) { return i.status === 'sent' || i.status === 'partial'; });
+    var outstanding = open.reduce(function (s, i) { return s + cents(i.balance); }, 0);
+    if (count) count.textContent = rows.length + (rows.length === 1 ? ' invoice' : ' invoices') +
+      (open.length ? ' · ' + usd(outstanding) + ' outstanding' : '');
+
+    if (!rows.length) {
+      var tr0 = el('tr'); var td0 = el('td', 'muted', 'No invoices yet.'); td0.colSpan = 9;
+      tr0.appendChild(td0); body.appendChild(tr0); return;
+    }
+
+    var today = pacificDate(new Date());
+    rows.forEach(function (i) {
+      var tr = el('tr');
+      if (i.status === 'void') tr.className = 'is-cancelled';
+      tr.appendChild(el('td', 'mono', i.invoice_no));
+      tr.appendChild(el('td', 'nowrap', mdyShort(i.issued_on)));
+      var who = el('td', 'strong', i.bill_school);
+      if (i.bill_program) { who.appendChild(document.createElement('br')); who.appendChild(el('span', 'muted', i.bill_program)); }
+      tr.appendChild(who);
+      tr.appendChild(el('td', 'nowrap', usd(cents(i.subtotal) - cents(i.credit))));
+      tr.appendChild(el('td', 'nowrap', usd(i.amount_paid)));
+      tr.appendChild(el('td', 'nowrap strong', usd(i.balance)));
+      var overdue = (i.status === 'sent' || i.status === 'partial') && i.due_on && i.due_on < today;
+      tr.appendChild(el('td', 'nowrap' + (overdue ? ' flag' : ''), mdyShort(i.due_on) + (overdue ? ' · overdue' : '')));
+      var st = el('td', 'nowrap', INV_STATUS[i.status] || i.status);
+      if (i.sent_at) { st.appendChild(document.createElement('br')); st.appendChild(el('span', 'muted', 'sent ' + mdyShort(pacificDate(new Date(i.sent_at))) + (i.send_count > 1 ? ' ×' + i.send_count : ''))); }
+      tr.appendChild(st);
+
+      var act = el('td', 'nowrap invactions');
+      var add = function (label, fn, cls) {
+        var b = el('button', 'linkbtn' + (cls ? ' ' + cls : ''), label);
+        b.type = 'button'; b.addEventListener('click', fn); act.appendChild(b);
+      };
+      add('View', function () { window.open(invoiceUrl(i), '_blank', 'noopener'); });
+      if (i.status !== 'void' && i.status !== 'paid') add('Edit', function () { openInvoiceEditor(i); });
+      if (i.status !== 'void') add(i.send_count ? 'Resend' : 'Send', function () { sendInvoice(i); });
+      if (i.status !== 'void' && i.status !== 'draft' && cents(i.balance) > 0) add('Payment', function () { paymentForm(i, tr); });
+      if (i.status !== 'void' && !cents(i.amount_paid)) add('Void', function () {
+        if (!confirm('Void invoice ' + i.invoice_no + '? It stays on record, marked void.')) return;
+        authFetch('/rest/v1/invoices?id=eq.' + encodeURIComponent(i.id), {
+          method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ status: 'void' })
+        }).then(function () { say('Voided ' + i.invoice_no); return loadAll(); })
+          .catch(function (e) { say(e.message, 'error'); });
+      }, 'linkbtn--danger');
+      tr.appendChild(act);
+      body.appendChild(tr);
+    });
+  }
+
   /* -------------------------------------------------------- merch orders -- */
   // EDIT: mirrors PRODUCTS in assets/merch.js.
   var MERCH = {
@@ -955,6 +1256,17 @@
       toggle.type = 'button';
       toggle.setAttribute('aria-expanded', 'false');
       toggleCell.appendChild(toggle);
+
+      // Invoice: open the existing one, or start one pre-filled from this entry.
+      var existing = invoices.filter(function (i) { return i.registration_id === r.id && i.status !== 'void'; })[0];
+      toggleCell.appendChild(document.createElement('br'));
+      var invBtn = el('button', 'linkbtn', existing ? existing.invoice_no : 'Invoice');
+      invBtn.type = 'button';
+      invBtn.title = existing ? 'Open this invoice' : 'Create an invoice from this registration';
+      invBtn.addEventListener('click', function () {
+        openInvoiceEditor(existing || invoiceFromRegistration(r));
+      });
+      toggleCell.appendChild(invBtn);
       tr.appendChild(toggleCell);
 
       body.appendChild(tr);
@@ -1052,12 +1364,18 @@
               : Promise.resolve([]),
       isAdmin ? authFetch('/rest/v1/merch_orders?select=*&order=created_at.desc')
                   .catch(function () { return null; })
+              : Promise.resolve([]),
+      isAdmin ? authFetch('/rest/v1/invoices?select=*&order=created_at.desc')
+                  .catch(function () { return null; })
               : Promise.resolve([])
     ]).then(function (r) {
       teams = r[0] || []; games = r[1] || [];
       renderTeams();
       renderScores();
       if (isAdmin) {
+        // Invoices first: the registration rows link to theirs.
+        if (r[8] === null) say('Invoices table not found — run supabase/invoices.sql', 'error');
+        renderInvoices(r[8] || []);
         renderRegs(r[2] || []);
         if (r[3] === null || r[4] === null) {
           say('Sponsor tables not found — run supabase/sponsors.sql', 'error');

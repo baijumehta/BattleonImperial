@@ -1,0 +1,130 @@
+/* ==========================================================================
+   Battle on Imperial — printable invoice
+   Colours and layout follow Lydie's Word template: near-black header, cream
+   cells, dark green rules, gold accents. Prints on US letter.
+   ========================================================================== */
+:root {
+  --ink: #171717;
+  --green: #12382F;
+  --gold: #D6A928;
+  --cream: #F3F1EB;
+  --line: #e2ded3;
+  --muted: #5f5f66;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: #e9e6de; color: var(--ink);
+  font-family: Inter, Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.45;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+.toolbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 16px; padding: 10px 18px;
+  background: var(--ink); color: #fff;
+}
+.toolbar__home { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 14px; }
+.toolbar__note { flex: 1; font-size: 13px; color: #d8d3c7; }
+.toolbar__btn {
+  font: inherit; font-weight: 700; font-size: 14px; cursor: pointer;
+  padding: 9px 16px; border-radius: 8px; border: 0; background: var(--gold); color: var(--ink);
+}
+
+.sheet {
+  position: relative; max-width: 8.5in; margin: 24px auto; background: #fff;
+  padding: .5in .55in; box-shadow: 0 8px 30px rgba(0,0,0,.12); overflow: hidden;
+}
+.loading, .problem { text-align: center; padding: 60px 0; color: var(--muted); font-size: 16px; }
+.problem b { display: block; color: var(--ink); font-size: 20px; margin-bottom: 6px; }
+
+/* header */
+.hd { display: flex; justify-content: space-between; align-items: center; gap: 20px; background: var(--ink); color: #fff; padding: 16px 20px; margin: -.5in -.55in 0; padding-left: .55in; padding-right: .55in; }
+.hd__brand { display: flex; align-items: center; gap: 14px; }
+.hd__brand img { width: 64px; height: auto; display: block; }
+.hd__name { font-family: "Barlow Condensed", Arial, sans-serif; font-weight: 700; font-size: 28px; letter-spacing: .03em; text-transform: uppercase; line-height: 1; }
+.hd__sub { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-top: 4px; }
+.hd__right { text-align: right; }
+.hd__title { font-family: "Barlow Condensed", Arial, sans-serif; font-weight: 700; font-size: 38px; color: var(--gold); letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+.hd__date { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+.tag { background: var(--green); color: #fff; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; padding: 7px; margin: 0 -.55in 18px; }
+
+/* meta grid */
+.meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 0 18px; }
+.meta div { background: var(--cream); padding: 8px 10px; border-left: 3px solid var(--green); }
+.meta dt { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+.meta dd { margin: 2px 0 0; font-weight: 600; }
+
+/* parties */
+.parties { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: 18px; }
+.party h2, .pay h2, .payments h2, .notes h2 {
+  margin: 0; background: var(--green); color: #fff; font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase; padding: 6px 10px;
+}
+.party dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 10px; border: 1px solid var(--line); border-top: 0; }
+.party dt { color: var(--muted); font-size: 12px; }
+.party dd { margin: 0; font-weight: 600; min-height: 1.2em; }
+.party--us p { margin: 0; padding: 10px; border: 1px solid var(--line); border-top: 0; font-size: 13px; line-height: 1.6; }
+.pre { white-space: pre-line; }
+
+/* lines */
+.lines { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+.lines th { background: var(--ink); color: #fff; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; text-align: left; padding: 8px 10px; }
+.lines td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.lines tbody tr:nth-child(even) td { background: var(--cream); }
+.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+th.n { text-align: right; }
+
+/* payment + totals */
+.bottom { display: grid; grid-template-columns: 1fr 260px; gap: 16px; align-items: start; margin-bottom: 16px; }
+.pay__body { display: flex; gap: 12px; padding: 10px; border: 1px solid var(--line); border-top: 0; }
+.pay__text { flex: 1; font-size: 13px; }
+.pay__text p { margin: 0 0 7px; }
+.pay__qr { width: 104px; height: 104px; flex: 0 0 auto; }
+.muted { color: var(--muted); }
+.totals { width: 100%; border-collapse: collapse; }
+.totals th { text-align: left; font-weight: 600; color: var(--muted); padding: 7px 10px; background: var(--cream); }
+.totals td { text-align: right; padding: 7px 10px; font-variant-numeric: tabular-nums; background: var(--cream); }
+.totals tr + tr th, .totals tr + tr td { border-top: 2px solid #fff; }
+.totals__due th, .totals__due td { background: var(--green) !important; color: #fff; font-size: 16px; font-weight: 700; padding: 10px; }
+
+.payments, .notes { margin-bottom: 14px; }
+.payments table { width: 100%; border-collapse: collapse; border: 1px solid var(--line); border-top: 0; }
+.payments td { padding: 6px 10px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.notes p { margin: 0; padding: 10px; border: 1px solid var(--line); border-top: 0; }
+
+.ft { border-top: 3px solid var(--gold); padding-top: 10px; text-align: center; font-size: 13px; }
+.ft p { margin: 0 0 4px; }
+
+/* PAID / VOID / DRAFT stamp */
+.stamp {
+  position: absolute; top: 2.3in; right: .5in; transform: rotate(-12deg);
+  border: 4px solid currentColor; border-radius: 8px; padding: 4px 16px;
+  font-family: "Barlow Condensed", Arial, sans-serif; font-weight: 700; font-size: 42px;
+  letter-spacing: .1em; text-transform: uppercase; opacity: .8; pointer-events: none;
+}
+.stamp--paid { color: #1f7a4d; }
+.stamp--void { color: #b3364a; }
+.stamp--draft { color: #8a6a10; }
+
+@media (max-width: 720px) {
+  .sheet { margin: 0; padding: 20px 16px; box-shadow: none; }
+  .hd { margin: -20px -16px 0; padding: 14px 16px; }
+  .tag { margin: 0 -16px 14px; }
+  .hd__name { font-size: 22px; } .hd__title { font-size: 28px; }
+  .meta { grid-template-columns: repeat(2, 1fr); }
+  .parties, .bottom { grid-template-columns: 1fr; }
+  .lines th:nth-child(4), .lines td:nth-child(4) { display: none; }
+  .stamp { top: 1.6in; right: 16px; font-size: 30px; }
+}
+
+@page { size: letter; margin: .4in; }
+@media print {
+  body { background: #fff; }
+  .toolbar { display: none !important; }
+  .sheet { margin: 0; max-width: none; box-shadow: none; padding: 0; }
+  .hd { margin: 0; padding: 14px 18px; }
+  .tag { margin: 0 0 14px; }
+  .stamp { top: 2in; right: .2in; }
+}

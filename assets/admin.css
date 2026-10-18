@@ -243,3 +243,35 @@
 .logocell input[type=file] { width: 120px; font-size: 11.5px; padding: 0; border: 0; }
 .admtable input[type=checkbox] { width: 18px; height: 18px; padding: 0; }
 .addteam input[type=file] { font-size: 13px; padding: 7px 0; border: 0; }
+
+/* ------------------------------------------------------------ invoices -- */
+.invbar { margin: 0 0 16px; }
+.inveditor {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px 20px; margin: 0 0 22px; box-shadow: var(--shadow-sm);
+}
+.inveditor__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.inveditor__head h3 { margin: 0; font-family: var(--font-display); font-size: 22px; text-transform: uppercase; letter-spacing: .03em; }
+.inveditor__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.inveditor fieldset { border: 0; padding: 0; margin: 0 0 14px; }
+.inveditor legend { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.inveditor label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.inveditor input, .inveditor textarea, .invpay input, .invpay select {
+  display: block; width: 100%; margin-top: 4px; font: inherit; font-size: 14px; font-weight: 400;
+  padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink);
+}
+.inveditor input:focus, .inveditor textarea:focus { outline: none; border-color: var(--accent); }
+.invlines { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.invlines th { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 4px 6px; }
+.invlines td { padding: 4px 6px; vertical-align: middle; }
+.invlines td:first-child { width: 46%; }
+.invlines input { margin-top: 0; }
+.invlines__total { font-weight: 700; text-align: right; }
+.invtotals { display: grid; grid-template-columns: 1fr 160px; gap: 12px; align-items: end; margin-top: 10px; }
+.invtotals__sum { grid-column: 1 / -1; text-align: right; font-size: 14px; color: var(--muted); }
+.invtotals__sum b { color: var(--ink); }
+.inveditor__actions { display: flex; align-items: center; gap: 14px; }
+.invactions .linkbtn { margin-right: 10px; }
+.invpay { display: grid; grid-template-columns: 140px 160px 160px 1fr auto; gap: 12px; align-items: end; padding: 6px 0; }
+.invpay label { font-size: 12.5px; font-weight: 600; }
+@media (max-width: 800px) { .inveditor__grid, .invpay { grid-template-columns: 1fr; } }

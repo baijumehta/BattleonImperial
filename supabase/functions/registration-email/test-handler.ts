@@ -14,7 +14,8 @@ const SECRETS: Record<string, string> = {
   MAIL_FROM: 'Battle on Imperial <noreply@battleonimperial.com>',
   MAIL_REPLY_TO: 'info@battleonimperial.com',
   MAIL_TO_ORGANISERS: 'lydie@example.com, mike@example.com',
-  ADMIN_URL: 'https://www.battleonimperial.com/admin.html'
+  ADMIN_URL: 'https://www.battleonimperial.com/admin.html',
+  INVOICE_CC: 'treasurer@example.com, admin@example.com'
 };
 
 let handler: (req: Request) => Promise<Response>;
@@ -209,6 +210,37 @@ console.log('\nmerch orders');
   check('buyer reply-to is the tournament',
     JSON.stringify(sent[1].body.custom_headers) === JSON.stringify([{ header: 'Reply-To', value: SECRETS.MAIL_REPLY_TO }]));
   check('response names the order', body.order_no === 'BOI-7K2MX' && body.results.buyer.ok === true);
+}
+
+console.log('\ninvoices');
+{
+  sent = [];
+  const inv = {
+    token: 'tok-1', invoice_no: 'BOI-27-001', due_on: '2026-11-19', bill_school: 'Orange Lutheran',
+    bill_contact: 'Allie Kyte', bill_email: 'billing@example.com',
+    lines: [{ description: 'Varsity', qty: 1, unit_price: 650, discount: 0 }],
+    credit: 0, subtotal: 650, amount_paid: 0, balance: 650, send_count: 1
+  };
+  const res = await post({ type: 'SEND', table: 'invoices', record: inv });
+  const body = await res.json();
+  check('SEND is accepted, not skipped', res.status === 200 && body.skipped === undefined, JSON.stringify(body));
+  check('sends exactly one email', sent.length === 1, String(sent.length));
+  check('goes to the billing address', JSON.stringify(sent[0].body.to) === JSON.stringify(['billing@example.com']));
+  check('treasurer and admin are copied openly',
+    JSON.stringify(sent[0].body.cc) === JSON.stringify(['treasurer@example.com', 'admin@example.com']) && sent[0].body.bcc === undefined,
+    JSON.stringify(sent[0].body.cc));
+  check('subject is the invoice', String(sent[0].body.subject).startsWith('Invoice BOI-27-001'));
+  check('reply-to is the tournament',
+    JSON.stringify(sent[0].body.custom_headers) === JSON.stringify([{ header: 'Reply-To', value: SECRETS.MAIL_REPLY_TO }]));
+
+  sent = [];
+  const { bill_email, ...noEmail } = inv;
+  const body2 = await (await post({ type: 'SEND', table: 'invoices', record: noEmail })).json();
+  check('no billing email means nothing is sent', sent.length === 0 && typeof body2.results.invoice === 'string');
+
+  sent = [];
+  const body3 = await (await post({ type: 'UPDATE', table: 'invoices', record: inv })).json();
+  check('a plain UPDATE is still skipped', body3.skipped !== undefined && sent.length === 0);
 }
 
 console.log(failures ? `\n${failures} failing check(s)\n` : '\nall checks pass\n');

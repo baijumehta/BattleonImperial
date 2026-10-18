@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoice | Battle on Imperial</title>
+<!-- Private page: each invoice is reached only through its emailed link
+     (invoice.html?t=<token>). Never indexed. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#171717">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/invoice.css">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+</head>
+<body>
+
+<div class="toolbar" id="toolbar" hidden>
+  <a href="index.html" class="toolbar__home">Battle on Imperial</a>
+  <span class="toolbar__note" id="toolbarNote"></span>
+  <button type="button" class="toolbar__btn" id="printBtn">Print / Save as PDF</button>
+</div>
+
+<main class="sheet" id="sheet" aria-live="polite">
+  <p class="loading" id="loading">Loading invoice&hellip;</p>
+</main>
+
+<!-- EDIT: the invoice layout follows Battle_on_Imperial_Coach_Invoice_Template.docx.
+     Payment details are mirrored in invoice-templates.ts (the email) and the
+     How-to-pay block on the site's forms. -->
+<template id="invoiceTpl">
+  <div class="stamp" data-stamp hidden></div>
+
+  <header class="hd">
+    <div class="hd__brand">
+      <img src="assets/img/logo-240.png" width="240" height="236" alt="">
+      <div>
+        <div class="hd__name">Battle on Imperial</div>
+        <div class="hd__sub">Girls Lacrosse Tournament</div>
+      </div>
+    </div>
+    <div class="hd__right">
+      <div class="hd__title">Invoice</div>
+      <div class="hd__date">March 13, 2027</div>
+    </div>
+  </header>
+  <div class="tag">Skip the drive. Play the game.</div>
+
+  <dl class="meta">
+    <div><dt>Invoice No.</dt><dd data-f="invoice_no"></dd></div>
+    <div><dt>Invoice Date</dt><dd data-f="issued_on"></dd></div>
+    <div><dt>Payment Due</dt><dd data-f="due_on"></dd></div>
+    <div><dt>Status</dt><dd data-f="status"></dd></div>
+    <div><dt>Event Date</dt><dd>Saturday, March 13, 2027</dd></div>
+    <div><dt>Location</dt><dd>Canyon High School, Anaheim Hills, CA</dd></div>
+  </dl>
+
+  <div class="parties">
+    <section class="party">
+      <h2>Bill To</h2>
+      <dl>
+        <dt>School / District</dt><dd data-f="bill_school"></dd>
+        <dt>Team / Program</dt><dd data-f="bill_program"></dd>
+        <dt>Coach / Contact</dt><dd data-f="bill_contact"></dd>
+        <dt>Email</dt><dd data-f="bill_email"></dd>
+        <dt>Billing Address</dt><dd data-f="bill_address" class="pre"></dd>
+        <dt>PO / Reference No.</dt><dd data-f="po_ref"></dd>
+      </dl>
+    </section>
+    <section class="party party--us">
+      <h2>Tournament Contact</h2>
+      <p>
+        <b>Battle on Imperial Tournament</b><br>
+        Canyon Girls Lacrosse Booster Club<br>
+        Attn: Lydie Gutfeld, Tournament Director<br>
+        battleonimperial@gmail.com<br>
+        Call/text: 714-747-4770<br>
+        www.battleonimperial.com
+      </p>
+    </section>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr><th>Description</th><th class="n">Qty.</th><th class="n">Unit Price</th><th class="n">Discount</th><th class="n">Line Total</th></tr>
+    </thead>
+    <tbody data-lines></tbody>
+  </table>
+
+  <div class="bottom">
+    <section class="pay">
+      <h2>Payment Information</h2>
+      <div class="pay__body">
+        <div class="pay__text">
+          <p><b>Zelle:</b> girlslacrosseboosterclub@gmail.com<br><span class="muted">Enrolled as Canyon Girls Lacrosse Booster Club</span></p>
+          <p data-check><b>Check:</b> payable to Canyon Girls Lacrosse Booster Club.</p>
+          <p class="muted">Please reference the invoice number and team name with payment. For purchase orders or additional billing documentation, contact battleonimperial@gmail.com.</p>
+        </div>
+        <img class="pay__qr" src="assets/img/zelle-qr.png" width="776" height="776" alt="Zelle QR code for Canyon Girls Lacrosse Booster Club">
+      </div>
+    </section>
+
+    <table class="totals">
+      <tr><th>Subtotal</th><td data-f="subtotal"></td></tr>
+      <tr data-credit-row><th data-f="credit_label"></th><td data-f="credit"></td></tr>
+      <tr><th>Amount Paid</th><td data-f="amount_paid"></td></tr>
+      <tr class="totals__due"><th>Balance Due</th><td data-f="balance"></td></tr>
+    </table>
+  </div>
+
+  <section class="payments" data-payments hidden>
+    <h2>Payments Received</h2>
+    <table><tbody data-payment-rows></tbody></table>
+  </section>
+
+  <section class="notes" data-notes hidden>
+    <h2>Notes / Billing Requirements</h2>
+    <p data-f="notes" class="pre"></p>
+  </section>
+
+  <footer class="ft">
+    <p><b>Thank you for registering for the inaugural Battle on Imperial Girls Lacrosse Tournament!</b></p>
+    <p>Three games guaranteed per varsity team; two to three per JV team.</p>
+  </footer>
+</template>
+
+<script src="assets/config.js"></script>
+<script src="assets/invoice.js"></script>
+</body>
+</html>

@@ -16,6 +16,7 @@
  *   MAIL_TO_ORGANISERS  comma-separated; who gets the alert
  *   WEBHOOK_SECRET      any long random string, also set on the webhook
  *   ADMIN_URL           optional, defaults to the Vercel admin page
+ *   INVOICE_CC          comma-separated; copied openly on every invoice email
  *
  * --no-verify-jwt is deliberate: the database webhook cannot mint a user JWT,
  * so WEBHOOK_SECRET is the gate instead. Without one of the two this endpoint
@@ -25,6 +26,7 @@ import { coachEmail, organiserEmail, type Registration } from './templates.ts';
 import { sponsorConfirmEmail, sponsorOrganiserEmail, type SponsorInquiry } from './sponsor-templates.ts';
 import { vendorConfirmEmail, vendorOrganiserEmail, type VendorRegistration } from './vendor-templates.ts';
 import { merchConfirmEmail, merchOrganiserEmail, type MerchOrder } from './merch-templates.ts';
+import { invoiceEmail, type Invoice } from './invoice-templates.ts';
 
 const SMTP2GO_ENDPOINT = 'https://api.smtp2go.com/v3/email/send';
 
@@ -61,7 +63,8 @@ async function send(
   from: string,
   to: string[],
   replyTo: string,
-  mail: { subject: string; text: string; html: string }
+  mail: { subject: string; text: string; html: string },
+  copies: { cc?: string[]; bcc?: string[] } = {}
 ): Promise<SendResult> {
   const body: Record<string, unknown> = {
     sender: from,
@@ -70,6 +73,8 @@ async function send(
     text_body: mail.text,
     html_body: mail.html
   };
+  if (copies.cc && copies.cc.length) body.cc = copies.cc;
+  if (copies.bcc && copies.bcc.length) body.bcc = copies.bcc;
   if (replyTo) body.custom_headers = [{ header: 'Reply-To', value: replyTo }];
 
   const res = await fetch(SMTP2GO_ENDPOINT, {
@@ -122,7 +127,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
   }
 
   if (!payload.record) return json({ error: 'no record in payload' }, 400);
-  if (payload.type && payload.type !== 'INSERT') {
+  // INSERT from the form tables; SEND when Tournament Control sends an invoice.
+  if (payload.type && payload.type !== 'INSERT' && payload.type !== 'SEND') {
     return json({ skipped: `type ${payload.type}` });
   }
 
@@ -161,6 +167,20 @@ Deno.serve(async (req: Request): Promise<Response> => {
     ]);
 
     return json({ ok: true, business: vendor.business ?? null, results });
+  }
+
+  /* ------------------------------------------------------------ invoices -- */
+  // One email to the school's billing address. INVOICE_CC (the treasurer and
+  // the site admin) are copied openly, so the school can reply-all to the
+  // treasurer about payment.
+  if (payload.table === 'invoices') {
+    const inv = payload.record as Invoice;
+    const cc = env('INVOICE_CC').split(',').map((s) => s.trim()).filter(Boolean)
+      .filter((a) => a.toLowerCase() !== (inv.bill_email || '').toLowerCase());
+    results.invoice = inv.bill_email
+      ? await send(apiKey, from, [inv.bill_email], replyTo, invoiceEmail(inv), { cc })
+      : 'no billing email on the invoice';
+    return json({ ok: true, invoice_no: inv.invoice_no ?? null, results });
   }
 
   /* ------------------------------------------------------- merch orders -- */
