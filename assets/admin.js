@@ -800,12 +800,7 @@
           method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify(body) })
       : authFetch('/rest/v1/invoices', {
           method: 'POST', headers: { Prefer: 'return=representation' },
-          body: JSON.stringify(Object.assign({
-            kind: editing && editing.kind || 'team',
-            registration_id: editing && editing.registration_id || null,
-            sponsor_inquiry_id: editing && editing.sponsor_inquiry_id || null,
-            vendor_registration_id: editing && editing.vendor_registration_id || null
-          }, body)) });
+          body: JSON.stringify(Object.assign(invoiceLinks(editing), body)) });
     var btn = document.getElementById('invSave');
     btn.disabled = true;
     req.then(function (rows) {
@@ -816,6 +811,16 @@
     }).catch(function (err) { say(err.message, 'error'); })
       .then(function () { btn.disabled = false; });
   });
+
+  // Only the link fields that apply, so a team invoice never depends on the
+  // sponsor/vendor columns (supabase/invoices-sponsors-vendors.sql).
+  function invoiceLinks(e) {
+    var out = { registration_id: e && e.registration_id || null };
+    if (e && e.kind && e.kind !== 'team') out.kind = e.kind;
+    if (e && e.sponsor_inquiry_id) out.sponsor_inquiry_id = e.sponsor_inquiry_id;
+    if (e && e.vendor_registration_id) out.vendor_registration_id = e.vendor_registration_id;
+    return out;
+  }
 
   function invoiceUrl(i) { return 'invoice.html?t=' + encodeURIComponent(i.token); }
 
