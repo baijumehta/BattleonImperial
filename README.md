@@ -178,6 +178,10 @@ November 30 / after).
 - **Payments:** **Payment** on the row records amount, date, method and
   reference; the status moves to Partial or Paid by itself. Paid and void
   invoices are locked.
+- **Auto-confirm** (`supabase/auto-confirm.sql`): when a linked invoice
+  becomes Paid, a database trigger sets the registration to Confirmed and adds
+  its levels to `confirmed_teams`, so the school appears in "Confirmed so
+  far" on the home page. Voiding a paid invoice does not undo it.
 - **Data:** `public.invoices` (`supabase/invoices.sql`). Subtotal, amount
   paid and balance are generated columns, so the list, page and email always
   agree. The public page reads one invoice through `get_invoice(token)`;
