@@ -243,5 +243,17 @@ console.log('\ninvoices');
   check('a plain UPDATE is still skipped', body3.skipped !== undefined && sent.length === 0);
 }
 
+console.log('\nsame From and Reply-To');
+{
+  const saved = SECRETS.MAIL_FROM;
+  SECRETS.MAIL_FROM = 'Battle on Imperial <info@battleonimperial.com>';
+  sent = [];
+  await post({ type: 'SEND', table: 'invoices', record: { token: 't', invoice_no: 'BOI-27-009', bill_school: 'X', bill_email: 'x@example.com', lines: [], subtotal: 1, credit: 0, amount_paid: 0, balance: 1 } });
+  check('no Reply-To header when it would equal the From address', sent.length === 1 && sent[0].body.custom_headers === undefined,
+    JSON.stringify(sent[0] && sent[0].body.custom_headers));
+  check('sender is info@', sent[0].body.sender === 'Battle on Imperial <info@battleonimperial.com>');
+  SECRETS.MAIL_FROM = saved;
+}
+
 console.log(failures ? `\n${failures} failing check(s)\n` : '\nall checks pass\n');
 process.exit(failures ? 1 : 0);

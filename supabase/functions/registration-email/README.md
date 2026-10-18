@@ -32,7 +32,7 @@ Dashboard → **Project Settings → Edge Functions → Secrets**, six rows:
 | Name | Value |
 |---|---|
 | `SMTP2GO_API_KEY` | the send key from step 1 |
-| `MAIL_FROM` | `Battle on Imperial <noreply@battleonimperial.com>` |
+| `MAIL_FROM` | `Battle on Imperial <info@battleonimperial.com>` — a real mailbox, so no Reply-To is needed |
 | `MAIL_REPLY_TO` | `info@battleonimperial.com` — keep this on the sending domain; a Reply-To elsewhere (a Gmail address) is a spam signal |
 | `MAIL_TO_ORGANISERS` | comma-separated; who gets the alert |
 | `WEBHOOK_SECRET` | a long random string — step 4 needs the same one |

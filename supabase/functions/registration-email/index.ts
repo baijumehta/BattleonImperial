@@ -10,7 +10,7 @@
  *
  * Secrets (supabase secrets set NAME=value):
  *   SMTP2GO_API_KEY     from the SMTP2GO dashboard
- *   MAIL_FROM           Battle on Imperial <noreply@battleonimperial.com>
+ *   MAIL_FROM           Battle on Imperial <info@battleonimperial.com>
  *   MAIL_REPLY_TO       info@battleonimperial.com (same domain as MAIL_FROM — a
  *                       Reply-To on another domain reads as spoofing to filters)
  *   MAIL_TO_ORGANISERS  comma-separated; who gets the alert
@@ -113,8 +113,13 @@ Deno.serve(async (req: Request): Promise<Response> => {
   if (req.headers.get('x-boi-secret') !== secret) return json({ error: 'forbidden' }, 403);
 
   const apiKey = env('SMTP2GO_API_KEY');
-  const from = env('MAIL_FROM', 'Battle on Imperial <noreply@battleonimperial.com>');
-  const replyTo = env('MAIL_REPLY_TO', 'info@battleonimperial.com');
+  const from = env('MAIL_FROM', 'Battle on Imperial <info@battleonimperial.com>');
+  // A Reply-To that differs from the From address is flagged by filters such
+  // as INKY as "misleading Reply-To". When they are the same mailbox, send no
+  // Reply-To at all — replies go to the From address anyway.
+  const bare = (v: string) => (/<([^>]+)>/.exec(v)?.[1] || v).trim().toLowerCase();
+  const replyToRaw = env('MAIL_REPLY_TO', 'info@battleonimperial.com');
+  const replyTo = bare(replyToRaw) === bare(from) ? '' : replyToRaw;
   const organisers = env('MAIL_TO_ORGANISERS').split(',').map((s) => s.trim()).filter(Boolean);
   const adminUrl = env('ADMIN_URL', 'https://www.battleonimperial.com/admin.html');
   if (!apiKey) return json({ error: 'SMTP2GO_API_KEY is not set' }, 500);
