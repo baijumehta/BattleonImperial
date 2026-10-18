@@ -13,7 +13,7 @@
 
   /* EDIT: set once the club has a mailing address for checks. Also
      CHECK_MAIL_TO in supabase/functions/registration-email/invoice-templates.ts. */
-  var CHECK_MAIL_TO = '';
+  var CHECK_MAIL_TO = 'PO Box 17992, Anaheim, CA 92817';
 
   var sheet = document.getElementById('sheet');
   var toolbar = document.getElementById('toolbar');

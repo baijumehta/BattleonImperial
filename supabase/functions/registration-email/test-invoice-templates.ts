@@ -49,6 +49,8 @@ check('links to the invoice page in both parts', m.text.includes(invoiceLink(bun
 check('gives Zelle and check instructions with the invoice number',
   m.text.includes('girlslacrosseboosterclub@gmail.com') && m.text.includes('Canyon Girls Lacrosse Booster Club') && m.text.includes('put BOI-27-001'));
 check('no zero lines for an unpaid invoice', !m.text.includes('Amount paid'));
+check('gives the mailing address for checks',
+  m.text.includes('mailed to PO Box 17992, Anaheim, CA 92817') && m.html.includes('PO Box 17992, Anaheim, CA 92817') && !m.text.includes('for the mailing address'));
 
 const p = invoiceEmail(paid);
 check('paid invoice says so in the subject', p.subject.endsWith('paid in full'), p.subject);

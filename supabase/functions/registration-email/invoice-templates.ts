@@ -46,11 +46,11 @@ export const SITE = 'https://www.battleonimperial.com';
 export const EVENT = 'Saturday, March 13, 2027';
 
 /* EDIT: payment details — the same as invoice.html and the site's How-to-pay
-   block. CHECK_MAIL_TO stays empty until the club has a mailing address for
-   checks; the email then tells them to ask. */
+   block. CHECK_MAIL_TO is where checks are mailed; if it is ever emptied, the
+   email tells them to ask instead. */
 export const ZELLE_ADDRESS = 'girlslacrosseboosterclub@gmail.com';
 export const PAYEE = 'Canyon Girls Lacrosse Booster Club';
-export const CHECK_MAIL_TO = '';
+export const CHECK_MAIL_TO = 'PO Box 17992, Anaheim, CA 92817';
 export const CONTACT_EMAIL = 'battleonimperial@gmail.com';
 
 export function invoiceLink(r: Invoice): string {

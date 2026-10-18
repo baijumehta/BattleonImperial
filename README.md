@@ -184,8 +184,8 @@ November 30 / after).
   drafts only show to a signed-in admin. Numbers run `BOI-27-001` upward.
 - **Layout** follows `Battle_on_Imperial_Coach_Invoice_Template.docx`
   (`invoice.html`, `assets/invoice.css`). Payment details are in
-  `assets/invoice.js` and `invoice-templates.ts`; set `CHECK_MAIL_TO` in
-  both once there is a mailing address for checks.
+  `assets/invoice.js` and `invoice-templates.ts` (`CHECK_MAIL_TO`: checks go
+  to Canyon Girls Lacrosse Booster Club, PO Box 17992, Anaheim, CA 92817).
 
 ## Things to fill in before launch
 
