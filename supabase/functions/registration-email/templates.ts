@@ -51,12 +51,13 @@ export const VENUE = 'Canyon High School, 220 S Imperial Hwy, Anaheim, CA 92807'
    automatic email is worse than no number.
 
    EDIT: the same prices are on the site — index.html price panel, the entry
-   cost FAQ and the deposit acknowledgement on the form. */
+   cost FAQ and the payment acknowledgement on the form. */
 export const PRICING_TEXT =
-  '$850 per varsity team, $750 per JV team. Early bird through November 30: $650 varsity, $500 JV.';
+  '$850 per varsity team, $750 per JV team, $1,500 for both. ' +
+  'Early bird through November 30: $650 varsity, $500 JV, $1,100 for both.';
 export const PRICING_HTML =
-  '<b>$850</b> per varsity team, <b>$750</b> per JV team. ' +
-  'Early bird through November 30: <b>$650</b> varsity, <b>$500</b> JV.';
+  '<b>$850</b> per varsity team, <b>$750</b> per JV team, <b>$1,500</b> for both. ' +
+  'Early bird through November 30: <b>$650</b> varsity, <b>$500</b> JV, <b>$1,100</b> for both.';
 
 /* A coach's own words end up inside the HTML part. Escape everything. */
 function esc(v: unknown): string {
@@ -90,7 +91,7 @@ export function reviewFlags(r: Registration): string[] {
   if (!div) flags.push('No CIF division given.');
   else if (div === 'Another division') flags.push(`CIF division is "${div}" — outside the D2/D3 field.`);
   else if (div === 'Not sure') flags.push('Coach is not sure of their CIF division — needs checking.');
-  if (r.payment_ack === false) flags.push('Deposit terms were NOT acknowledged.');
+  if (r.payment_ack === false) flags.push('Payment terms were NOT acknowledged.');
   if (!r.coach1_email && !r.email) flags.push('No email address to reply to.');
   return flags;
 }
@@ -162,7 +163,7 @@ export function organiserEmail(r: Registration, adminUrl: string): Mail {
   }
 
   const entry: [string, string][] = [
-    ['Deposit terms', r.payment_ack ? 'Acknowledged' : 'NOT acknowledged'],
+    ['Payment terms', r.payment_ack ? 'Acknowledged' : 'NOT acknowledged'],
     ['Updates opt-in', r.consent ? 'Yes' : 'No'],
     ['Notes', val(r.notes)]
   ];
@@ -235,8 +236,8 @@ export function coachEmail(r: Registration): Mail {
     '',
     'WHAT HAPPENS NEXT',
     '  1. A coordinator reviews your request. Spots are offered in the order requests arrive.',
-    '  2. If we can fit you in, you get the entry packet and an invoice for the $250 deposit.',
-    '  3. The deposit holds your place. The balance is due 30 days before the tournament.',
+    '  2. If we can fit you in, you get the entry packet and one invoice for the full entry fee. There is no deposit.',
+    '  3. The invoice is due within 30 days of registering, or within 10 days if you register after December 15. Your place is confirmed once it is paid.',
     '',
     `PRICING: ${PRICING_TEXT}`,
     'Your invoice will show the exact amount. There is nothing to pay today and nothing to post.',
@@ -260,8 +261,8 @@ export function coachEmail(r: Registration): Mail {
        <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#76767e;margin-bottom:8px">What happens next</div>
        <ol style="margin:0;padding-left:18px;color:#44444c;font-size:14px;line-height:1.7">
          <li>A coordinator reviews your request. Spots are offered in the order requests arrive.</li>
-         <li>If we can fit you in, you get the entry packet and an invoice for the <b>$250 deposit</b>.</li>
-         <li>The deposit holds your place. The balance is due 30 days before the tournament.</li>
+         <li>If we can fit you in, you get the entry packet and <b>one invoice for the full entry fee</b>. There is no deposit.</li>
+         <li>The invoice is due <b>within 30 days</b> of registering, or within 10 days if you register after December 15. Your place is confirmed once it is paid.</li>
        </ol>
        <p style="margin:12px 0 0;font-size:14px;color:#44444c">${PRICING_HTML}</p>
        <p style="margin:8px 0 0;font-size:13.5px;color:#76767e">Your invoice will show the exact amount. There is nothing to pay today and nothing to post.</p>

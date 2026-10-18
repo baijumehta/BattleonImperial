@@ -1273,3 +1273,7 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .chips li small { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-left: 6px; }
 .reach__note { margin: 16px 0 18px !important; font-size: 14px !important; color: var(--muted) !important; }
 @media (max-width: 860px) { .reach { grid-template-columns: 1fr; } }
+
+/* Varsity + JV bundle row in the price table. */
+.pricetable tr.pricetable__bundle th, .pricetable tr.pricetable__bundle td { border-top: 1px dashed var(--line); padding-top: 12px; }
+.pricetable__bundle th small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }

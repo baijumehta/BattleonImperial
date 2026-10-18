@@ -49,10 +49,10 @@ once they exist. Written to be posted as-is.
 
 > Entry is open. Spots go in the order requests come in.
 >
-> Early bird through November 30: $650 per varsity team, $500 per JV team.
-> From December 1 it's $850 and $750.
+> Early bird through November 30: $650 per varsity team, $500 per JV team, or
+> $1,100 for both. From December 1 it's $850, $750, or $1,500 for both.
 >
-> A $250 deposit holds your place, balance due 30 days out. That covers your
+> One invoice, no deposit. That covers your
 > games, certified officials, an athletic trainer on site, and parking for your
 > families.
 >

@@ -98,10 +98,11 @@ console.log('\ncoach email');
   check('greets safely with no first name', s.text.startsWith('Hi,'), s.text.slice(0, 20));
   check('subject carries the date', m.subject.includes('March 13, 2027'), m.subject);
   check('says it is not yet a place', /not yet a place in the field/.test(m.text));
-  check('states the deposit and the balance',
-    m.text.includes('$250') && m.text.includes('balance is due'));
-  check('quotes all four prices',
-    ['$850', '$750', '$650', '$500'].every((p) => m.text.includes(p) && m.html.includes(p)));
+  check('says there is no deposit and one invoice',
+    m.text.includes('no deposit') && m.text.includes('one invoice') && !m.text.includes('$250'));
+  check('states both payment windows', m.text.includes('within 30 days') && m.text.includes('within 10 days') && m.text.includes('December 15'));
+  check('quotes all six prices',
+    ['$850', '$750', '$1,500', '$650', '$500', '$1,100'].every((p) => m.text.includes(p) && m.html.includes(p)));
   check('names the early bird deadline', /November 30/.test(m.text));
   check('never quotes the old flat price', !m.text.includes('$1,000') && !m.html.includes('$1,000'));
   check('leaves the total to the invoice', /invoice will show the exact amount/.test(m.text));

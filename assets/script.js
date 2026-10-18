@@ -332,7 +332,7 @@
         'Team 2: ' + (get('team2_level') || 'not entering a second team'),
         '  ' + (get('team2_strength') || 'no notes'),
         '',
-        'Deposit terms acknowledged: ' +
+        'Payment terms acknowledged: ' +
           (form.elements.payment_ack && form.elements.payment_ack.checked ? 'yes' : 'no'),
         '',
         'Notes:',

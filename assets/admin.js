@@ -1005,7 +1005,7 @@
         ['Team 2 notes', r.team2_strength]
       ]],
       ['Entry', [
-        ['Deposit terms', r.payment_ack === true ? 'Acknowledged'
+        ['Payment terms', r.payment_ack === true ? 'Acknowledged'
           : r.payment_ack === false ? 'NOT acknowledged' : null],
         ['Updates opt-in', r.consent ? 'Yes' : 'No'],
         ['Notes', r.notes]

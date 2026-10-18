@@ -70,7 +70,9 @@
     { "@type": "Offer", "name": "Varsity team entry, early bird", "price": "650", "priceCurrency": "USD", "validFrom": "2026-10-01T00:00:00-07:00", "validThrough": "2026-11-30T23:59:59-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" },
     { "@type": "Offer", "name": "JV team entry, early bird", "price": "500", "priceCurrency": "USD", "validFrom": "2026-10-01T00:00:00-07:00", "validThrough": "2026-11-30T23:59:59-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" },
     { "@type": "Offer", "name": "Varsity team entry", "price": "850", "priceCurrency": "USD", "validFrom": "2026-12-01T00:00:00-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" },
-    { "@type": "Offer", "name": "JV team entry", "price": "750", "priceCurrency": "USD", "validFrom": "2026-12-01T00:00:00-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" }
+    { "@type": "Offer", "name": "JV team entry", "price": "750", "priceCurrency": "USD", "validFrom": "2026-12-01T00:00:00-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" },
+    { "@type": "Offer", "name": "Varsity and JV teams together, early bird", "price": "1100", "priceCurrency": "USD", "validFrom": "2026-10-01T00:00:00-07:00", "validThrough": "2026-11-30T23:59:59-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" },
+    { "@type": "Offer", "name": "Varsity and JV teams together", "price": "1500", "priceCurrency": "USD", "validFrom": "2026-12-01T00:00:00-08:00", "availability": "https://schema.org/InStock", "url": "https://www.battleonimperial.com/#register" }
   ]
 }
 </script>
@@ -668,7 +670,7 @@
         <p class="person__role">Event Treasurer</p>
         <p class="person__bio">
           Mike handles the money side. Come to him with anything financial &mdash; invoices,
-          deposits, and the paperwork your district needs. <b>Need a W-9 or an ACH form?
+          payments, and the paperwork your district needs. <b>Need a W-9 or an ACH form?
           He is the one to ask.</b> He played lacrosse in high school and has a daughter
           playing now.
         </p>
@@ -747,8 +749,8 @@
       <h2 class="title">Claim Your Team's Spot</h2>
       <p class="lede">
         Spots are offered in the order requests come in. Submit your team below and a
-        coordinator will follow up with the entry packet &mdash; a <b>$250 deposit</b> holds
-        your place, with the balance due before the tournament.
+        coordinator will follow up with the entry packet and <b>one invoice for the full
+        entry fee</b> &mdash; no deposit, no second payment.
       </p>
     </div>
 
@@ -756,8 +758,9 @@
       <div class="reveal">
         <div class="pricebox">
           <!-- EDIT: prices also appear in the "What does entry cost?" FAQ, the
-               deposit acknowledgement on the form, and the coach confirmation
-               email (supabase/functions/registration-email/templates.ts). -->
+               payment acknowledgement on the form, Key Dates, the JSON-LD offers,
+               and the coach confirmation email
+               (supabase/functions/registration-email/templates.ts). -->
           <div class="pricebox__top">
             <!-- assets/script.js fills the span with "· N days left" while the
                  offer runs; with scripts off the deadline still reads. -->
@@ -783,26 +786,35 @@
                   <td class="pricetable__now" data-earlybird>$500</td>
                   <td class="pricetable__later">$750</td>
                 </tr>
+                <tr class="pricetable__bundle">
+                  <th scope="row">Varsity + JV <small>both teams</small></th>
+                  <td class="pricetable__now" data-earlybird>$1,100</td>
+                  <td class="pricetable__later">$1,500</td>
+                </tr>
               </tbody>
             </table>
 
-            <p>Per team, not per player. A program entering varsity and JV pays for each.</p>
+            <p>Per team, not per player. Bring both your varsity and your JV and the pair is
+              <span data-earlybird>$1,100 through November 30, $1,500 after</span><span data-regular hidden>$1,500</span>.</p>
           </div>
 
+          <!-- EDIT: payment terms. Also in Key Dates, the form acknowledgement,
+               How Entry Works, the "How and when do we pay?" FAQ, the policy
+               notes, and the coach confirmation email. -->
           <div class="paysplit">
             <div class="paysplit__row">
               <div>
-                <strong>$250</strong>
-                <span>Deposit &mdash; holds your spot</span>
+                <strong>One invoice</strong>
+                <span>The full entry fee &mdash; no deposit</span>
               </div>
-              <em>Due within 14 days of your invoice</em>
+              <em>Due within 30 days of registering</em>
             </div>
             <div class="paysplit__row">
               <div>
-                <strong>Balance</strong>
-                <span>The rest of your entry</span>
+                <strong>After Dec 15</strong>
+                <span>Registering late in the season</span>
               </div>
-              <em>Due 30 days before the first game</em>
+              <em>Due within 10 days of registering</em>
             </div>
           </div>
 
@@ -1017,7 +1029,7 @@
 
           <!-- --------------------------------------------------- the money -- -->
           <fieldset class="formset">
-            <legend>Deposit &amp; payment</legend>
+            <legend>Payment</legend>
 
             <div class="field">
               <label for="notes">Anything else we should know?</label>
@@ -1028,12 +1040,13 @@
             <label class="form__consent">
               <input type="checkbox" id="payment_ack" name="payment_ack" required>
               <span>
-                I understand entry is <b>$850 per varsity team and $750 per JV team</b><span data-earlybird>
-                ($650 and $500 early bird, through November 30)</span>, that a <b>$250
-                deposit</b> holds the place once we are offered one, and that the balance
-                is due 30 days before the tournament. We will invoice you &mdash; there is
-                nothing to pay now and nothing to mail.
-                <a href="#policy">Deposit and refund terms</a>.
+                I understand entry is <b>$850 per varsity team and $750 per JV team</b>, or
+                <b>$1,500</b> for both<span data-earlybird> ($650, $500 and $1,100 early bird,
+                through November 30)</span>, and that once a place is offered we will receive
+                <b>one invoice for the full amount</b>, due within <b>30 days</b> of registering
+                (<b>10 days</b> for registrations after December 15). There is nothing to pay now
+                and nothing to mail.
+                <a href="#policy">Payment and refund terms</a>.
               </span>
             </label>
 
@@ -1091,27 +1104,33 @@
     <!-- -------------------------------------------------------- key dates -- -->
     <!-- EDIT: every date here is derived from the tournament date and the
          terms below. Nov 30 is the early-bird deadline (script.js and the price
-         panel); Jan 11 is the last day that is still "more than 60 days
-         before" March 13; Feb 11 is 30 days before. Move the tournament and
-         these all move. assets/script.js greys out dates that have passed and
-         highlights the next one. -->
+         panel); Dec 15 is when the payment window shortens to 10 days; Jan 11
+         is the last day that is still "more than 60 days before" March 13;
+         Feb 11 is 30 days before. Move the tournament and these all move.
+         assets/script.js greys out dates that have passed and highlights the
+         next one. -->
     <div class="dates reveal" id="dates">
       <h3 class="dates__title">Key Dates</h3>
       <ol class="dates__list">
         <li data-date="2026-11-30">
           <time datetime="2026-11-30">Nov 30, 2026</time>
           <b>Early bird ends</b>
-          <span>$650 varsity and $500 JV through this date; $850 and $750 after.</span>
+          <span>$650 varsity, $500 JV, $1,100 for both through this date; $850, $750 and $1,500 after.</span>
+        </li>
+        <li data-date="2026-12-15">
+          <time datetime="2026-12-15">Dec 15, 2026</time>
+          <b>Payment window shortens</b>
+          <span>Register by this date: invoice due within 30 days. After it: within 10 days.</span>
         </li>
         <li data-date="2027-01-11">
           <time datetime="2027-01-11">Jan 11, 2027</time>
           <b>Last day for a full refund</b>
-          <span>Withdraw by this date and everything comes back, deposit included.</span>
+          <span>Withdraw by this date and everything comes back.</span>
         </li>
         <li data-date="2027-02-11">
           <time datetime="2027-02-11">Feb 11, 2027</time>
-          <b>Balance due</b>
-          <span>30 days before the first game. Pools and the schedule follow.</span>
+          <b>Last day for a partial refund</b>
+          <span>Through this date, a refund less the $250 cancellation fee. Pools and the schedule follow.</span>
         </li>
         <li data-date="2027-03-13">
           <time datetime="2027-03-13">Mar 13, 2027</time>
@@ -1137,13 +1156,13 @@
         </li>
         <li>
           <span class="steps__n">3</span>
-          <h4>$250 deposit holds it</h4>
-          <p>We send an invoice payable by check, bank transfer, or card. Your spot is confirmed once the deposit clears.</p>
+          <h4>One invoice, full amount</h4>
+          <p>We send a single invoice for your entry fee &mdash; no deposit. Pay by Zelle, check, bank transfer, or card.</p>
         </li>
         <li>
           <span class="steps__n">4</span>
-          <h4>Balance before the whistle</h4>
-          <p>The rest of your entry fee is due 30 days before the first game &mdash; February 11, 2027. Rosters and schedules go out after that.</p>
+          <h4>Paid and confirmed</h4>
+          <p>Payment is due within 30 days of registering, or 10 days if you register after December 15. Your spot is confirmed once it clears.</p>
         </li>
       </ol>
       <p class="steps__foot">
@@ -1156,7 +1175,7 @@
     <!-- --------------------------------------------- refunds + policy -- -->
     <div class="policy reveal" id="policy">
       <div class="policy__head">
-        <h3>Deposits, Refunds &amp; Cancellation</h3>
+        <h3>Payment, Refunds &amp; Cancellation</h3>
         <p>
           Read this before you pay. By tournament day most of the entry fee is already
           spent &mdash; officials, athletic training, field preparation and insurance are
@@ -1170,17 +1189,17 @@
           <dl class="tiers">
             <div>
               <dt>More than 60 days before the first game <span class="tiers__date">through Jan 11, 2027</span></dt>
-              <dd><b>Full refund</b>, deposit included.</dd>
+              <dd><b>Full refund.</b></dd>
             </div>
             <div>
               <dt>30 to 60 days before <span class="tiers__date">Jan 12 &ndash; Feb 11, 2027</span></dt>
-              <dd>Full refund <b>less the $250 deposit</b>.</dd>
+              <dd>Full refund <b>less a $250 cancellation fee</b>.</dd>
             </div>
             <div>
               <dt>Fewer than 30 days before <span class="tiers__date">from Feb 12, 2027</span></dt>
               <dd>
                 <b>No refund</b> &mdash; unless we fill your spot from the waitlist, in which
-                case you receive everything back except the deposit.
+                case you receive everything back less a $250 cancellation fee.
               </dd>
             </div>
           </dl>
@@ -1191,7 +1210,7 @@
           <dl class="tiers">
             <div>
               <dt>Cancelled before any games are played</dt>
-              <dd><b>Full refund</b>, deposit included.</dd>
+              <dd><b>Full refund.</b></dd>
             </div>
             <div>
               <dt>Stopped after one game</dt>
@@ -1212,8 +1231,8 @@
           the schedule.
         </li>
         <li>
-          <b>Missed deadlines.</b> If a deposit or balance is not paid by its due date, we
-          may release the spot to a team on the waitlist.
+          <b>Missed deadlines.</b> If an invoice is not paid by its due date, we may release
+          the spot to a team on the waitlist.
         </li>
         <li>
           <b>No-shows and leaving early.</b> Pools are drawn before the day and cannot be
@@ -1307,7 +1326,8 @@
             <b>$850 per varsity team and $750 per JV team.</b>
             <span data-earlybird>Enter by <b>November 30</b> and it's early bird pricing:
             <b>$650 varsity, $500 JV</b>.</span>
-            A program bringing both levels pays for each team.
+            Bringing both your varsity and your JV? The pair is <b><span data-earlybird>$1,100
+            through November 30 and </span>$1,500<span data-earlybird> after</span></b>.
           </p>
           <p>
             That covers three guaranteed games for varsity and two to three for JV,
@@ -1321,14 +1341,14 @@
         <summary>How and when do we pay?</summary>
         <div class="faq__body">
           <p>
-            A <b>$250 deposit</b> holds your spot, due within 14 days of the invoice we send
-            once a coordinator confirms you. The <b>balance</b> &mdash; the rest of your entry
-            fee &mdash; is due 30 days before the first game.
+            Once a coordinator confirms your spot, we send <b>one invoice for the full entry
+            fee</b> &mdash; there is no deposit. It is due <b>within 30 days of registering</b>,
+            or <b>within 10 days</b> if you register after December 15.
           </p>
           <p>
             We invoice rather than ask for a card at sign-up, because most school programs pay
             through a district purchase order. Invoices can be paid by check, bank transfer, or
-            card. Need a W-9 or an ACH form for your district's paperwork?
+            card, or by Zelle. Need a W-9 or an ACH form for your district's paperwork?
             <a href="#team">Mike Labroad</a>, our event treasurer, handles that.
           </p>
         </div>
@@ -1339,9 +1359,9 @@
         <div class="faq__body">
           <p>
             Withdraw more than 60 days out and you get everything back. Between 30 and 60 days,
-            everything except the deposit. Inside 30 days there is no refund unless we fill your
-            spot from the waitlist. If we cancel before any games are played, you get a full
-            refund including the deposit.
+            everything less a $250 cancellation fee. Inside 30 days there is no refund unless we
+            fill your spot from the waitlist, in which case the same fee applies. If we cancel
+            before any games are played, you get a full refund.
           </p>
           <p>
             The <a href="#policy">full terms are here</a>, including what happens if weather
@@ -1572,7 +1592,7 @@
           <li><a href="sponsors.html">Sponsors</a></li>
           <li><a href="vendors.html">Vendors</a></li>
           <li><a href="merch.html">Merchandise</a></li>
-          <li><a href="#policy">Deposits &amp; Refunds</a></li>
+          <li><a href="#policy">Payment &amp; Refunds</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
       </div>
