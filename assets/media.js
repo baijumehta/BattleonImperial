@@ -16,6 +16,9 @@
    card shows "Customize in Canva" too, for teams that want to change more
    than the photo and logo. In Canva: Share → Template link.
 
+   Each design is for one audience — for: 'teams' | 'sponsors' | 'vendors' —
+   and shows under that tab. A tab with no designs shows a coming-soon card.
+
    EDIT: to add a design, put the image in assets/img/media/ and add an entry.
    ========================================================================== */
 (function () {
@@ -23,6 +26,7 @@
 
   var TEMPLATES = [
     {
+      for: 'teams',
       id: 'were-in-poster',
       title: 'We’re In! — Team Poster',
       blurb: 'Team photo strip and logo. Best for an Instagram post.',
@@ -35,6 +39,7 @@
       ]
     },
     {
+      for: 'teams',
       id: 'see-you-at-the-battle',
       title: 'See You at the Battle!',
       blurb: 'Logo only — no team photo needed. Great for a story.',
@@ -46,6 +51,7 @@
       ]
     },
     {
+      for: 'teams',
       id: 'were-in-frame',
       title: 'We’re In! — Photo Frame',
       blurb: 'A big team photo with your logo on top.',
@@ -58,6 +64,27 @@
       ]
     }
   ];
+
+  // Wording per audience: the page lede, the maker's field labels, the text
+  // offered with Share, and the coming-soon card.
+  var AUDIENCE = {
+    teams: {
+      lede: 'Pick a design, add your team photo and logo, and download it ready for Instagram, your team’s stories and the parent group chat. Tag @battleonimperial and we’ll share it.',
+      photo: 'Team photo', logo: 'Team logo or mascot', share: 'We’re in! @battleonimperial',
+      soon: 'Team designs are on their way.'
+    },
+    sponsors: {
+      lede: 'Proud to back Battle on Imperial? Add your business logo to an official graphic and announce your sponsorship. Tag @battleonimperial and we’ll share it with the tournament’s families.',
+      photo: 'Photo', logo: 'Business logo', share: 'Proud to sponsor @battleonimperial — March 13, 2027',
+      soon: 'Sponsor graphics are on their way. Each package will have its own “Proud Sponsor” design — check back soon.'
+    },
+    vendors: {
+      lede: 'Coming to Battle on Imperial with a booth? Add your logo to an official graphic and let families know where to find you. Tag @battleonimperial and we’ll share it.',
+      photo: 'Product or booth photo', logo: 'Business logo', share: 'Find us at @battleonimperial — March 13, 2027',
+      soon: 'Vendor graphics are on their way — check back soon.'
+    }
+  };
+  var audience = 'teams';
 
   var grid = document.getElementById('mediaGrid');
   var maker = document.getElementById('maker');
@@ -87,7 +114,7 @@
   }
 
   /* ----------------------------------------------------------- the cards -- */
-  TEMPLATES.forEach(function (t) {
+  function cardFor(t) {
     var card = el('article', 'mediacard');
     var pic = new Image();
     pic.src = t.thumb; pic.alt = t.title + ' design'; pic.loading = 'lazy'; pic.decoding = 'async';
@@ -106,7 +133,46 @@
       body.appendChild(c);
     }
     card.appendChild(body);
-    grid.appendChild(card);
+    return card;
+  }
+
+  function soonCard(a) {
+    var card = el('article', 'mediacard mediacard--soon');
+    var body = el('div', 'mediacard__body');
+    body.appendChild(el('h2', 'mediacard__title', 'Coming soon'));
+    body.appendChild(el('p', 'mediacard__blurb', AUDIENCE[a].soon));
+    var mail = el('a', 'btn btn--outline btn--block', 'Ask us about it');
+    mail.href = 'mailto:battleonimperial@gmail.com?subject=' + encodeURIComponent('Battle on Imperial ' + a + ' graphics');
+    body.appendChild(mail);
+    card.appendChild(body);
+    return card;
+  }
+
+  /* ------------------------------------------------------------- tabs -- */
+  function showTab(a, push) {
+    if (!AUDIENCE[a]) a = 'teams';
+    audience = a;
+    maker.hidden = true;
+    grid.after(maker);   // park the maker outside the grid while it is rebuilt
+    grid.innerHTML = '';
+    var list = TEMPLATES.filter(function (t) { return t.for === a; });
+    if (list.length) list.forEach(function (t) { grid.appendChild(cardFor(t)); });
+    else grid.appendChild(soonCard(a));
+
+    document.getElementById('mediaLede').textContent = AUDIENCE[a].lede;
+    Array.prototype.forEach.call(document.querySelectorAll('.mediatab'), function (b) {
+      b.setAttribute('aria-selected', b.getAttribute('data-for') === a ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tips]'), function (n) {
+      n.hidden = n.getAttribute('data-tips') !== a;
+    });
+    if (push && window.history && history.replaceState) {
+      history.replaceState(null, '', location.pathname + (a === 'teams' ? '' : '?for=' + a));
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.mediatab'), function (b) {
+    b.addEventListener('click', function () { showTab(b.getAttribute('data-for'), true); });
   });
 
   /* ------------------------------------------------------------- loading -- */
@@ -256,6 +322,9 @@
     var hasPhoto = t.slots.some(function (s) { return s.kind === 'photo'; });
     maker.querySelector('[data-slot="photo"]').hidden = !hasPhoto;
     maker.querySelector('[data-logo-step]').textContent = hasPhoto ? '2.' : '1.';
+    var words = AUDIENCE[t.for] || AUDIENCE.teams;
+    maker.querySelector('[data-photo-label]').textContent = words.photo;
+    maker.querySelector('[data-logo-label]').textContent = words.logo;
     document.getElementById('makerTitle').textContent = t.title;
     card.after(maker);
     maker.hidden = false;
@@ -308,8 +377,12 @@
   shareBtn.addEventListener('click', function () {
     canvas.toBlob(function (blob) {
       var file = new File([blob], fileName(), { type: 'image/png' });
-      navigator.share({ files: [file], title: 'Battle on Imperial', text: 'We’re in! @battleonimperial' })
+      navigator.share({ files: [file], title: 'Battle on Imperial', text: (AUDIENCE[current.for] || AUDIENCE.teams).share })
         .catch(function () { /* cancelled */ });
     }, 'image/png');
   });
+  /* --------------------------------------------------------------- start -- */
+  var startFor = 'teams';
+  try { startFor = new URLSearchParams(location.search).get('for') || 'teams'; } catch (e) { /* old browser */ }
+  showTab(startFor, false);
 })();

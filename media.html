@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Team Graphics | Battle on Imperial</title>
-<meta name="description" content="Make your team's Battle on Imperial graphics: add your team photo and logo to the official templates and download them for Instagram and your team group chat.">
+<title>Graphics | Battle on Imperial</title>
+<meta name="description" content="Make your Battle on Imperial graphic: teams, sponsors and vendors add their photo and logo to the official templates and download them for Instagram and group chats.">
 <meta name="theme-color" content="#0b0b0d">
 
 <meta property="og:title" content="Battle on Imperial — Team Graphics">
@@ -64,9 +64,11 @@
 
 <section class="pagehead">
   <div class="wrap">
-    <p class="eyebrow">Team Graphics &middot; Share That You&rsquo;re In</p>
-    <h1>Make Your Team&rsquo;s Graphic</h1>
-    <p class="lede">
+    <p class="eyebrow">Graphics &middot; Share That You&rsquo;re In</p>
+    <h1>Make Your Graphic</h1>
+    <!-- The lede changes with the tab; this is the Teams wording, which also
+         shows with scripts off. -->
+    <p class="lede" id="mediaLede">
       Pick a design, add your team photo and logo, and download it ready for Instagram,
       your team&rsquo;s stories and the parent group chat. Tag <b>@battleonimperial</b> and
       we&rsquo;ll share it.
@@ -76,9 +78,17 @@
 
 <section class="section">
   <div class="wrap">
+    <!-- Teams / Sponsors / Vendors. media.html?for=sponsors opens a tab
+         directly; the address bar follows the tab. -->
+    <div class="mediatabs" role="tablist" aria-label="Who the graphic is for">
+      <button type="button" role="tab" class="mediatab" data-for="teams" aria-selected="true">Teams</button>
+      <button type="button" role="tab" class="mediatab" data-for="sponsors" aria-selected="false">Sponsors</button>
+      <button type="button" role="tab" class="mediatab" data-for="vendors" aria-selected="false">Vendors</button>
+    </div>
+
     <!-- EDIT: the designs come from TEMPLATES in assets/media.js; each card
          is built from that list. Add a design there, not here. -->
-    <div class="mediagrid" id="mediaGrid"></div>
+    <div class="mediagrid" id="mediaGrid" role="tabpanel"></div>
 
     <!-- The maker. assets/media.js moves this under the chosen card. -->
     <div class="maker" id="maker" hidden>
@@ -89,7 +99,7 @@
         <h2 class="maker__title" id="makerTitle"></h2>
 
         <div class="maker__field" data-slot="photo">
-          <label class="maker__label" for="photoInput">1. Team photo</label>
+          <label class="maker__label" for="photoInput">1. <span data-photo-label>Team photo</span></label>
           <input type="file" id="photoInput" accept="image/*">
           <div class="maker__adjust">
             <label>Zoom <input type="range" id="photoZoom" min="100" max="250" value="100"></label>
@@ -99,7 +109,7 @@
         </div>
 
         <div class="maker__field" data-slot="logo">
-          <label class="maker__label" for="logoInput"><span data-logo-step>2.</span> Team logo or mascot</label>
+          <label class="maker__label" for="logoInput"><span data-logo-step>2.</span> <span data-logo-label>Team logo or mascot</span></label>
           <input type="file" id="logoInput" accept="image/*">
           <p class="maker__hint">A logo on a transparent or white background looks best.</p>
         </div>
@@ -117,12 +127,28 @@
       </div>
     </div>
 
-    <div class="mediatips">
+    <div class="mediatips" data-tips="teams">
       <h2 class="title" style="font-size: clamp(24px, 3.4vw, 32px);">Posting Tips</h2>
       <ul class="checklist checklist--tight">
         <li><b>Tag @battleonimperial</b> and use your school&rsquo;s account so we can reshare it.</li>
         <li><b>Use a wide team shot</b> for the &ldquo;We&rsquo;re In!&rdquo; poster; the photo strip is short and wide.</li>
         <li><b>Check the parents&rsquo; preferences</b> before posting photos of players, as your school&rsquo;s media policy requires.</li>
+      </ul>
+    </div>
+    <div class="mediatips" data-tips="sponsors" hidden>
+      <h2 class="title" style="font-size: clamp(24px, 3.4vw, 32px);">Posting Tips</h2>
+      <ul class="checklist checklist--tight">
+        <li><b>Tag @battleonimperial</b> so we can reshare it to the tournament&rsquo;s families.</li>
+        <li><b>Use your logo file</b>, not a screenshot &mdash; a PNG on a transparent or white background looks sharpest.</li>
+        <li><b>Post it twice:</b> once when you sign on, and again the week of the tournament.</li>
+      </ul>
+    </div>
+    <div class="mediatips" data-tips="vendors" hidden>
+      <h2 class="title" style="font-size: clamp(24px, 3.4vw, 32px);">Posting Tips</h2>
+      <ul class="checklist checklist--tight">
+        <li><b>Tag @battleonimperial</b> so families know to look for your booth.</li>
+        <li><b>Post the week before</b> with what you&rsquo;ll be bringing on the day.</li>
+        <li><b>Use your logo file</b>, not a screenshot, for the sharpest result.</li>
       </ul>
     </div>
   </div>
@@ -170,7 +196,7 @@
           <li><a href="sponsors.html">Sponsors</a></li>
           <li><a href="vendors.html">Vendors</a></li>
           <li><a href="merch.html">Merchandise</a></li>
-          <li><a href="media.html">Team Graphics</a></li>
+          <li><a href="media.html">Graphics</a></li>
           <li><a href="index.html#policy">Payment &amp; Refunds</a></li>
           <li><a href="index.html#faq">FAQ</a></li>
         </ul>

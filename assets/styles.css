@@ -1322,3 +1322,15 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .shareband__text .title { color: #fff; }
 .shareband__text .lede { color: #ddd5c4; margin-bottom: 22px; }
 @media (max-width: 760px) { .shareband { grid-template-columns: 1fr; } .shareband__pics { max-width: 360px; } }
+
+/* Graphics page tabs: Teams / Sponsors / Vendors. */
+.mediatabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 22px; border-bottom: 2px solid var(--line); }
+.mediatab {
+  font: inherit; font-family: var(--font-display); font-size: 19px; letter-spacing: .04em; text-transform: uppercase;
+  padding: 10px 18px; border: 0; background: none; color: var(--muted); cursor: pointer;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+}
+.mediatab:hover { color: var(--ink); }
+.mediatab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gold); }
+.mediacard--soon { border-style: dashed; background: var(--surface-2); max-width: 420px; }
+.mediacard--soon .mediacard__body { padding: 24px 22px; }
