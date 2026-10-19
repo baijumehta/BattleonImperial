@@ -1305,3 +1305,20 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .maker__privacy { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); }
 .mediatips { margin-top: clamp(40px, 6vw, 64px); max-width: 760px; }
 @media (max-width: 760px) { .maker { grid-template-columns: 1fr; } .maker__adjust label { grid-template-columns: 1fr; } }
+
+/* Home page band pointing registered teams at the graphics maker. */
+.section--tight { padding-top: 0; }
+.shareband {
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 48px); align-items: center;
+  background: linear-gradient(135deg, #12382F, #0b0b0d 70%); color: #fff;
+  border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 44px);
+}
+.shareband__pics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.shareband__pics img { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 10px; display: block; box-shadow: 0 10px 24px rgba(0,0,0,.35); }
+.shareband__pics img:last-child { transform: translateY(18px) rotate(2deg); }
+.shareband__pics img:first-child { transform: rotate(-2deg); }
+.shareband__text .eyebrow { color: var(--gold); }
+.shareband__text .eyebrow::before { background: var(--accent-lt); }
+.shareband__text .title { color: #fff; }
+.shareband__text .lede { color: #ddd5c4; margin-bottom: 22px; }
+@media (max-width: 760px) { .shareband { grid-template-columns: 1fr; } .shareband__pics { max-width: 360px; } }
