@@ -17,11 +17,11 @@
      rejects an order whose total does not agree with these prices. */
   var SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
   var PRODUCTS = [
-    { id: 'tee',     name: 'T-Shirt',          price: 15, sizes: SIZES, img: 'tee',     blurb: 'Black tee, full-colour crest.' },
-    { id: 'hoodie',  name: 'Hoodie',           price: 30, sizes: SIZES, img: 'hoodie',  blurb: 'Black pullover hoodie, front pocket.' },
-    { id: 'pants',   name: 'Flannel PJ Pants', price: 20, sizes: SIZES, img: 'pants',   blurb: 'Black and gold plaid, crest on the hip.' },
-    { id: 'lanyard', name: 'Lanyard',          price: 7,  sizes: null,  img: 'lanyard', blurb: 'Full-print lanyard with clip.' },
-    { id: 'pin',     name: 'Tournament Pin',   price: 5,  sizes: null,  img: 'pin-2',     blurb: 'Enamel crest pin, first edition.' }
+    { id: 'tee',     name: 'T-Shirt',          price: 15, sizes: SIZES, img: 'sq-tee',     blurb: 'Black tee, full-colour crest.' },
+    { id: 'hoodie',  name: 'Hoodie',           price: 30, sizes: SIZES, img: 'sq-hoodie',  blurb: 'Black pullover hoodie, front pocket.' },
+    { id: 'pants',   name: 'Flannel PJ Pants', price: 20, sizes: SIZES, img: 'sq-pants',   blurb: 'Black and gold plaid, crest on the hip.' },
+    { id: 'lanyard', name: 'Lanyard',          price: 7,  sizes: null,  img: 'sq-lanyard', blurb: 'Full-print lanyard with clip.' },
+    { id: 'pin',     name: 'Tournament Pin',   price: 5,  sizes: null,  img: 'sq-pin',     blurb: 'Enamel crest pin, first edition.' }
   ];
 
   /* EDIT: pre-orders close at the end of this day, Pacific. Also stated in
@@ -69,7 +69,7 @@
     // Not lazy: five small images, and a lazy img created by script before
     // insertion never started loading in some browsers.
     img.alt = p.name; img.loading = 'eager'; img.decoding = 'async';
-    img.width = 440; img.height = 1000;
+    img.width = 720; img.height = 720;
     pic.appendChild(src); pic.appendChild(img);
     var figure = el('div', 'product__img'); figure.appendChild(pic);
     card.appendChild(figure);

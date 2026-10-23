@@ -619,18 +619,33 @@
 <section class="section" id="merch">
   <div class="wrap">
     <div class="merchteaser reveal">
-      <div class="merchteaser__pics" aria-hidden="true">
-        <picture><source srcset="assets/img/merch-tee.webp" type="image/webp"><img src="assets/img/merch-tee.jpg" width="440" height="1000" loading="lazy" decoding="async" alt=""></picture>
-        <picture><source srcset="assets/img/merch-hoodie.webp" type="image/webp"><img src="assets/img/merch-hoodie.jpg" width="440" height="1000" loading="lazy" decoding="async" alt=""></picture>
-        <picture><source srcset="assets/img/merch-pants.webp" type="image/webp"><img src="assets/img/merch-pants.jpg" width="440" height="1000" loading="lazy" decoding="async" alt=""></picture>
-      </div>
+      <!-- Square product shots (assets/img/merch-sq-*.jpg); the whole grid
+           links to the pre-order page, which the button also does. -->
+      <a class="merchteaser__pics" href="merch.html" tabindex="-1" aria-hidden="true">
+        <figure class="merchtile">
+          <div class="merchtile__img"><picture><source srcset="assets/img/merch-sq-tee.webp" type="image/webp"><img src="assets/img/merch-sq-tee.jpg" width="720" height="720" loading="lazy" decoding="async" alt=""></picture></div>
+          <figcaption><span>T-Shirt</span><b>$15</b></figcaption>
+        </figure>
+        <figure class="merchtile">
+          <div class="merchtile__img"><picture><source srcset="assets/img/merch-sq-hoodie.webp" type="image/webp"><img src="assets/img/merch-sq-hoodie.jpg" width="720" height="720" loading="lazy" decoding="async" alt=""></picture></div>
+          <figcaption><span>Hoodie</span><b>$30</b></figcaption>
+        </figure>
+        <figure class="merchtile">
+          <div class="merchtile__img"><picture><source srcset="assets/img/merch-sq-pants.webp" type="image/webp"><img src="assets/img/merch-sq-pants.jpg" width="720" height="720" loading="lazy" decoding="async" alt=""></picture></div>
+          <figcaption><span>Flannel PJ Pants</span><b>$20</b></figcaption>
+        </figure>
+        <figure class="merchtile">
+          <div class="merchtile__img"><picture><source srcset="assets/img/merch-sq-pin.webp" type="image/webp"><img src="assets/img/merch-sq-pin.jpg" width="720" height="720" loading="lazy" decoding="async" alt=""></picture></div>
+          <figcaption><span>Tournament Pin</span><b>$5</b></figcaption>
+        </figure>
+      </a>
       <div class="merchteaser__text">
         <p class="eyebrow">Tournament Merchandise</p>
         <h2 class="title">Play Bolder. Together.</h2>
         <p class="lede">
-          T-shirts $15, hoodies $30, flannel PJ pants $20, lanyards $7, tournament pins $5.
-          Pre-order now, pay by Zelle, and pick it up at the merchandise table on game day
-          &mdash; so your size is there when you are.
+          Tees, hoodies, flannel PJ pants, lanyards and a first-edition tournament pin, all
+          carrying the Battle on Imperial crest. Pre-order now, pay by Zelle, and pick it up
+          at the merchandise table on game day &mdash; so your size is there when you are.
         </p>
         <a class="btn btn--primary btn--lg" href="merch.html">Pre-order Merchandise</a>
       </div>
