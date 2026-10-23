@@ -837,8 +837,24 @@
         sent_at: new Date().toISOString(),
         last_sent_to: i.bill_email
       })
-    }).then(function () { say((again ? 'Resent ' : 'Sent ') + i.invoice_no); return loadAll(); })
+    }).then(function () { return markContacted(i); })
+      .then(function () { say((again ? 'Resent ' : 'Sent ') + i.invoice_no); return loadAll(); })
       .catch(function (e) { say(e.message, 'error'); });
+  }
+
+  // Sending an invoice moves the request it came from from New to Contacted;
+  // payment then confirms it (supabase/auto-confirm.sql). Only New moves, so a
+  // resend never pulls a Confirmed or Declined entry back.
+  function markContacted(i) {
+    var link = i.registration_id ? ['registrations', i.registration_id]
+      : i.sponsor_inquiry_id ? ['sponsor_inquiries', i.sponsor_inquiry_id]
+      : i.vendor_registration_id ? ['vendor_registrations', i.vendor_registration_id]
+      : null;
+    if (!link) return Promise.resolve();
+    return authFetch('/rest/v1/' + link[0] + '?id=eq.' + encodeURIComponent(link[1]) + '&status=eq.new', {
+      method: 'PATCH', headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ status: 'contacted' })
+    });
   }
 
   // Inline form under the row: amount (defaults to the balance), date, method,

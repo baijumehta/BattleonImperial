@@ -153,8 +153,9 @@
     <!-- -------------------------------------------------- registrations -- -->
     <section class="panel" id="panel-regs" role="tabpanel" hidden data-admin-only>
       <p class="panel__hint">
-        Teams that submitted the form on the site. Move a team through
-        <b>New &rarr; Contacted &rarr; Confirmed</b> as Mike invoices them.
+        Teams that submitted the form on the site. Status follows the invoice:
+        <b>New &rarr; Contacted</b> when it is sent, <b>&rarr; Confirmed</b> when it is
+        paid. Change it by hand only for an exception.
         <span id="regCount" class="muted"></span>
       </p>
       <div class="table-scroll">
@@ -178,7 +179,8 @@
         Create an invoice from a registration, a sponsor inquiry or a vendor request
         (the <b>Invoice</b> button on those tabs fills in the prices and due date), or
         start a blank one. <b>Send</b> emails the school a link to view, print or save
-        it as a PDF, copying the treasurer. Record each payment as it arrives; the status
+        it as a PDF, copying the treasurer, and moves the request it came from to
+        Contacted. Record each payment as it arrives; the status
         moves to Partial or Paid on its own. <b>When an invoice is paid, its registration
         is confirmed and the team is listed under Confirmed so far on the home page.</b>
         <span id="invCount" class="muted"></span>
