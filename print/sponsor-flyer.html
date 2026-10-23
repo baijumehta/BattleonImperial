@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Battle on Imperial — Sponsorship Packet</title>
 <!--
-  Source for assets/battle-on-imperial-sponsorship.pdf. Two US-letter pages.
+  Source for assets/battle-on-imperial-sponsorship.pdf. Three US-letter pages.
 
   Regenerate the PDF with headless Chrome (Edge's headless mode is blocked on
   the machine this was built on; Chrome at the usual path works). Give it a
@@ -17,7 +17,8 @@
       "file:///C:/dev/battleofimperial/print/sponsor-flyer.html"
 
   Check the layout the same way with --window-size=816,2112 --screenshot=...
-  instead of --print-to-pdf: both pages must fit above their black footer.
+  instead of --print-to-pdf (height 3168): every page must fit above its
+  black footer.
 
   EDIT: packages, prices, the date and the contact are the same facts as on
   sponsors.html — change them together. The money wording here matches the
@@ -74,6 +75,11 @@
   .pkg li::before { content: "\2713"; position: absolute; left: 0; top: 0; color: #8a6a10; font-weight: 700; }
   .pkg li b { color: #1d1d22; }
 
+  /* page 1: audience teaser under the packages */
+  .teaser { margin: .14in .5in 0; background: #000; color: #f0e6cd; border-radius: 8pt; padding: 9pt 14pt; display: flex; align-items: center; gap: 14pt; font-size: 9.4pt; line-height: 1.4; }
+  .teaser b.big { font-family: "Barlow Condensed", Impact, sans-serif; font-size: 24pt; line-height: 1; color: #e8b93a; white-space: nowrap; }
+  .teaser strong { color: #fff; }
+
   /* footer */
   .foot { position: absolute; left: 0; right: 0; bottom: 0; background: #000; color: #fff; padding: .12in .5in; display: flex; align-items: center; gap: .3in; }
   .foot__cta { flex: 1; }
@@ -124,6 +130,20 @@
   .reach-list li { position: relative; padding-left: 15pt; margin-bottom: 6pt; line-height: 1.4; }
   .reach-list li::before { content: "\2713"; position: absolute; left: 0; color: #8a6a10; font-weight: 700; }
   .reach-list b { color: #1d1d22; }
+  .reach-table--wide { font-size: 9pt; }
+  .reach-table--wide td { padding: 3.3pt 9pt; white-space: nowrap; }
+  .reach-table--wide th { padding: 5pt 9pt; }
+  .reach-table--wide th.n, .reach-table--wide th:not(:first-child) { text-align: right; }
+  .reach-table--wide small { display: inline; margin-left: 4pt; font-size: 7.6pt; }
+  .reach-table--wide td.n small { display: block; margin: 0; }
+  .reach-table tr.host td { background: #fbf6e6; }
+  .reach-table tr.split td { border-top: 2px solid #d9d2c2; }
+  .wins { display: grid; grid-template-columns: repeat(3, 1fr); gap: .12in; margin: .1in 0 .13in; }
+  .win { background: #000; color: #fff; border-radius: 8pt; padding: 6pt 11pt; display: flex; align-items: center; gap: 9pt; }
+  .win b { font-family: "Barlow Condensed", Impact, sans-serif; font-size: 22pt; line-height: 1; color: #e8b93a; white-space: nowrap; }
+  .win span { font-size: 8.4pt; line-height: 1.3; color: #f0e6cd; }
+  .reach-cols--close { grid-template-columns: 1fr 1fr; }
+  .reach-cols h3 { margin: 0 0 7pt; }
   .reach-note { margin-top: .16in; padding: 9pt 12pt; background: #fff; border-left: 4px solid #e8b93a; border-radius: 4pt; font-size: 9.2pt; line-height: 1.45; }
 </style>
 </head>
@@ -147,10 +167,10 @@
   </header>
 
   <div class="facts">
-    <div class="fact"><b>500+</b><span>Players, coaches &amp; families on site</span></div>
+    <div class="fact"><b>800+</b><span>Players, coaches &amp; families expected on site</span></div>
     <div class="fact"><b>3</b><span>Full-size fields on one campus</span></div>
     <div class="fact"><b>1</b><span>Day · one community · a first-class tournament experience</span></div>
-    <div class="fact"><b>V &amp; JV</b><span>Programs from across Southern California</span></div>
+    <div class="fact"><b>15</b><span>Varsity &amp; JV teams entered, from three counties</span></div>
   </div>
 
   <div class="band">
@@ -228,6 +248,13 @@
     </article>
   </div>
 
+  <div class="teaser">
+    <b class="big">8 of 8</b>
+    <div>Families travel from <strong>Corona del Mar, Yorba Linda, El Segundo, Irvine</strong> and more, and every
+      one of the teams' home communities is above the U.S. median household income.
+      <strong>The full community profile is on page 3.</strong></div>
+  </div>
+
   <footer class="foot">
     <div class="foot__cta">
       <div class="k">To become a sponsor or learn more</div>
@@ -256,7 +283,7 @@
     <p>
       Battle on Imperial brings together competitive girls lacrosse programs from across Southern
       California for a full day of high-level competition, community spirit and a premier event
-      experience — varsity and JV, three full-size fields, one campus. With 500+ players, coaches
+      experience — varsity and JV, three full-size fields, one campus. With 800+ players, coaches
       and families expected, the tournament is an incredible opportunity to showcase your business
       while supporting youth sports and our local community.
     </p>
@@ -314,12 +341,20 @@
 </section>
 
 <!-- ================================================================ PAGE 3 -->
-<!-- EDIT: "Who You'll Reach". Communities are those of the programs expected
-     in the field as of the date shown; update the table and the date as
-     entries confirm. Income and degree figures are U.S. Census ACS 2024 via
-     censusreporter.org — cities and county are 1-year estimates, ZIP codes
-     5-year. Never state anything about the families themselves; this is
-     community data. -->
+<!-- EDIT: "Who You'll Reach". Communities are the home towns of the programs
+     entered as of the date shown; update the table, the counts and the date as
+     entries come in. Name communities, never schools: entries are listed on the
+     site only once they are paid and confirmed.
+
+     Figures: U.S. Census Bureau, ACS 2024 5-year, via api.censusreporter.org
+     (tables B19013 income, B15003 bachelor's or higher, B25077 home value).
+     All rows use the same release so they compare. $2,000,000+ is the Census
+     top code. "Typical home community" is the median of the eight community
+     incomes (Anaheim Hills at 92807, Corona del Mar at 92625): $137,730, which
+     is 1.7x the U.S. $80,734. Recount the "of 8" claims if a row changes.
+
+     Never state anything about the families themselves; this is community
+     data. -->
 <section class="page p2 p3" id="page-reach">
   <div class="mini">
     <img src="../assets/img/logo-480.png" alt="">
@@ -329,51 +364,58 @@
 
   <div class="reach-band">
     <h2 class="disp">Who You'll Reach</h2>
-    <p>A full day · one campus · families who stay</p>
+    <p>15 teams · 8 home communities · 3 counties</p>
   </div>
 
   <div class="tiles">
-    <div class="tile"><b>500+</b><span>Players, coaches &amp; families on site</span></div>
-    <div class="tile"><b>8+ hrs</b><span>First whistle 8 AM to the last horn, with a break between every game</span></div>
-    <div class="tile"><b>3</b><span>Fields on one campus, so every family walks the same paths all day</span></div>
-    <div class="tile"><b>Free</b><span>Admission and parking: siblings, grandparents and friends come too</span></div>
+    <div class="tile"><b>15</b><span>Varsity &amp; JV teams entered by late October</span></div>
+    <div class="tile"><b>800+</b><span>Players, coaches &amp; families expected on site</span></div>
+    <div class="tile"><b>1.7&times;</b><span>U.S. median household income, in the typical home community</span></div>
+    <div class="tile"><b>8+ hrs</b><span>8 AM to the last horn: a full day in front of your name</span></div>
   </div>
 
-  <div class="reach-cols">
-    <div>
-      <h3 class="disp">Where families travel from</h3>
-      <table class="reach-table">
-        <thead>
-          <tr><th>Community</th><th style="text-align:right">Median household income</th><th style="text-align:right">College degree, 25+</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Anaheim Hills <small>host community, ZIP 92807</small></td><td class="n">$138,741</td><td class="n">49%</td></tr>
-          <tr><td>Anaheim Hills <small>ZIP 92808</small></td><td class="n">$158,462</td><td class="n">59%</td></tr>
-          <tr><td>Newport Beach <small>Corona del Mar, ZIP 92625</small></td><td class="n">$132,670 <small>$174,904</small></td><td class="n">70% <small>72%</small></td></tr>
-          <tr><td>El Segundo</td><td class="n">$150,737</td><td class="n">63%</td></tr>
-          <tr><td>Orange</td><td class="n">$111,059</td><td class="n">39%</td></tr>
-          <tr class="ref"><td>Orange County</td><td class="n">$115,229</td><td class="n">&mdash;</td></tr>
-          <tr class="ref"><td>United States</td><td class="n">$81,604</td><td class="n">&mdash;</td></tr>
-        </tbody>
-      </table>
-      <p class="reach-src">Communities of the programs expected in the field as of October 2026; updated as entries confirm.
-        Source: U.S. Census Bureau, American Community Survey 2024 (1-year estimates for cities and county, 5-year for ZIP codes), via censusreporter.org.
-        Community figures, not a description of any family.</p>
-    </div>
+  <h3 class="disp" style="margin:0 0 7pt;">Where families travel from</h3>
+  <table class="reach-table reach-table--wide">
+    <thead>
+      <tr><th>Home community</th><th>Median household income</th><th>College degree, 25+</th><th>Median home value</th></tr>
+    </thead>
+    <tbody>
+      <tr class="host"><td>Anaheim Hills <small>host · ZIPs 92807 / 92808</small></td><td class="n">$138,741 / $158,462</td><td class="n">49% / 59%</td><td class="n">$963,200 / $1,069,300</td></tr>
+      <tr><td>Corona del Mar <small>Newport Beach · ZIP 92625</small></td><td class="n">$174,904</td><td class="n">72%</td><td class="n">$2,000,000+</td></tr>
+      <tr><td>Yorba Linda</td><td class="n">$157,582</td><td class="n">56%</td><td class="n">$1,147,100</td></tr>
+      <tr><td>El Segundo <small>Los Angeles County</small></td><td class="n">$150,737</td><td class="n">63%</td><td class="n">$1,587,500</td></tr>
+      <tr><td>Irvine <small>two programs</small></td><td class="n">$136,719</td><td class="n">71%</td><td class="n">$1,191,500</td></tr>
+      <tr><td>Orange</td><td class="n">$117,113</td><td class="n">40%</td><td class="n">$945,800</td></tr>
+      <tr><td>Placentia</td><td class="n">$115,929</td><td class="n">44%</td><td class="n">$921,000</td></tr>
+      <tr><td>Corona <small>Riverside County</small></td><td class="n">$109,242</td><td class="n">32%</td><td class="n">$700,700</td></tr>
+      <tr class="ref split"><td>Orange County</td><td class="n">$116,289</td><td class="n">44%</td><td class="n">$962,600</td></tr>
+      <tr class="ref"><td>United States</td><td class="n">$80,734</td><td class="n">36%</td><td class="n">$332,700</td></tr>
+    </tbody>
+  </table>
+  <p class="reach-src">Home communities of the programs entered as of October 2026; updated as entries come in.
+    Source: U.S. Census Bureau, American Community Survey 2024 5-year estimates, via censusreporter.org.
+    Community figures, not a description of any family.</p>
 
+  <div class="wins">
+    <div class="win"><b>8 of 8</b><span>home communities above the U.S. median household income</span></div>
+    <div class="win"><b>6 of 8</b><span>above the Orange County median household income</span></div>
+    <div class="win"><b>4 of 8</b><span>with a median home value over $1 million</span></div>
+  </div>
+
+  <div class="reach-cols reach-cols--close">
     <div>
       <h3 class="disp">The audience</h3>
       <ul class="reach-list">
-        <li><b>Parents of high-school athletes</b>: typically 35 to 55, the household decision-makers on sports gear, food, health care, home and auto.</li>
-        <li><b>They stay.</b> Teams arrive before their first game and leave after their last; families spend the gaps browsing, eating and watching other games.</li>
-        <li><b>They are local to you.</b> Most Orange County programs are within a 40-minute drive of Anaheim Hills: your customers, not tourists.</li>
-        <li><b>They notice.</b> Field signage is in view for every minute of every game; the PA reaches all three fields; the schedule and standings pages are checked on phones all day.</li>
-        <li><b>Coaches and officials</b> from across Southern California, who see dozens of events a season and talk to each other.</li>
+        <li><b>Parents of high-school athletes</b>, typically 35 to 55: the household decision-makers on gear, food, health care, home, auto and finance.</li>
+        <li><b>Local to you.</b> Most home communities are within a 40-minute drive: customers, not tourists, who stay from first game to last.</li>
       </ul>
-
-      <div class="reach-note">
-        <b>Three ways your name travels home:</b> on the signage families photograph, in the team packets every player takes back to school, and on battleonimperial.com and @battleonimperial before and after the day.
-      </div>
+    </div>
+    <div>
+      <h3 class="disp">What your sponsorship delivers</h3>
+      <ul class="reach-list">
+        <li><b>Hours, not seconds.</b> Your name in view all day, and PA and social media recognition in every package.</li>
+        <li><b>Before and after.</b> On battleonimperial.com and @battleonimperial, plus a ready-made graphic to announce it to your own customers.</li>
+      </ul>
     </div>
   </div>
 

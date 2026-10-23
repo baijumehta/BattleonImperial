@@ -1282,6 +1282,11 @@ a.sponsor:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); bor
 .checklist--tight li::before { width: 24px; height: 24px; }
 .chips li small { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-left: 6px; }
 .reach__note { margin: 16px 0 18px !important; font-size: 14px !important; color: var(--muted) !important; }
+.reachstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0 0; }
+.reachstats div { background: var(--black-900); color: #ddd5c4; border-radius: var(--radius); padding: 12px 14px; }
+.reachstats b { display: block; font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--gold); margin-bottom: 6px; }
+.reachstats span { display: block; font-size: 13px; line-height: 1.35; }
+@media (max-width: 520px) { .reachstats { grid-template-columns: 1fr; } .reachstats div { display: flex; align-items: center; gap: 12px; } .reachstats b { margin: 0; white-space: nowrap; } }
 @media (max-width: 860px) { .reach { grid-template-columns: 1fr; } }
 
 /* Varsity + JV bundle row in the price table. */
